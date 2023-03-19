@@ -3,6 +3,7 @@ import { Header } from '../components/Header';
 import { SideBar } from '../components/SideBar';
 import styles from './LayoutSideBar.module.scss';
 import classNames from 'classnames/bind';
+import { ScrollTop } from '../components/ScrollTop';
 
 type TProps = {
     children: React.ReactElement;
@@ -21,6 +22,7 @@ function LayoutSideBar(props: TProps) {
                 </div>
                 <Footer />
             </div>
+            <ScrollTop />
         </div>
     );
 }

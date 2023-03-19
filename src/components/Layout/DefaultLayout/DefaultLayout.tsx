@@ -2,6 +2,7 @@ import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
 import styles from './DefaultLayout.module.scss';
 import classNames from 'classnames/bind';
+import { ScrollTop } from '../components/ScrollTop';
 
 type TProps = {
     children: React.ReactElement;
@@ -17,6 +18,7 @@ function DefaultLayout(props: TProps) {
                 <div className={cx('content')}>{props.children}</div>
                 <Footer />
             </div>
+            <ScrollTop />
         </div>
     );
 }

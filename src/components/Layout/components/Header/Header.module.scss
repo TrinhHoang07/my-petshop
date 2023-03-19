@@ -10,6 +10,7 @@
     left: 0;
     right: 0;
     background-color: #ffffff;
+    z-index: 999;
 }
 
 .logo-header {
@@ -18,7 +19,6 @@
     align-items: center;
     width: 132px;
     height: 100%;
-    margin-right: 48px;
 
     .logo-to-home {
         height: 100%;
@@ -36,6 +36,7 @@
 }
 
 .header-nav {
+    text-align: center;
     flex: 1;
 }
 
@@ -61,10 +62,29 @@
         display: flex;
         color: var(--primary-color);
         padding: 4px 18px;
+        position: relative;
 
         &:hover {
             opacity: 0.88;
             cursor: pointer;
+        }
+
+        .count-item {
+            position: absolute;
+            top: -8px;
+            right: 5px;
+
+            span {
+                display: inline-block;
+                width: 24px;
+                height: 24px;
+                background-color: red;
+                color: var(--white-color);
+                text-align: center;
+                line-height: 24px;
+                border-radius: 999px;
+                font-size: 12px;
+            }
         }
     }
 }
