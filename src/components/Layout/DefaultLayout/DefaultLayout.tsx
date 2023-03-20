@@ -3,6 +3,7 @@ import { Header } from '../components/Header';
 import styles from './DefaultLayout.module.scss';
 import classNames from 'classnames/bind';
 import { ScrollTop } from '../components/ScrollTop';
+import { ChatBox } from '../components/ChatBox';
 
 type TProps = {
     children: React.ReactElement;
@@ -19,6 +20,7 @@ function DefaultLayout(props: TProps) {
                 <Footer />
             </div>
             <ScrollTop />
+            <ChatBox />
         </div>
     );
 }
