@@ -3,6 +3,7 @@
     bottom: 30%;
     right: 16px;
     z-index: 999;
+    animation: fade 0.2s ease;
 }
 
 .container {
@@ -24,11 +25,13 @@
     right: -6px;
     width: 360px;
     height: calc(100vh - 70px);
-    background-color: orange;
+    background: rgba(186, 206, 163, 1);
+    background-image: url('../../../../assets/images/pattern.svg');
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
     display: flex;
     flex-direction: column;
+    z-index: 999;
 }
 
 .header-chat {
@@ -88,6 +91,7 @@
     display: flex;
     align-items: center;
     flex-direction: row-reverse;
+    margin-bottom: 6px;
 }
 
 .content-message-2 {
@@ -105,7 +109,7 @@
 .message {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .avatar-2,
@@ -135,6 +139,10 @@
     color: var(--primary-color);
 }
 
+.footer-chat {
+    background-color: inherit;
+}
+
 .footer-content {
     display: flex;
     align-items: center;
@@ -150,8 +158,9 @@
         border: none;
         outline: none;
         padding: 10px;
-        border-radius: 999px;
+        border-radius: 12px;
         width: 100%;
+        caret-color: rgb(116, 184, 40);
     }
 }
 
@@ -173,4 +182,13 @@
     margin: 0 12px;
     display: flex;
     cursor: pointer;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
