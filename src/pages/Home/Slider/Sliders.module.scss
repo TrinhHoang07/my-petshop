@@ -1,0 +1,51 @@
+.slider-img {
+    position: relative;
+    img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+}
+
+.info {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    margin-left: 16px;
+}
+.title {
+    font-size: 3.2rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1;
+}
+
+.heading {
+    font-size: 6.4rem;
+    margin-top: 24px;
+    line-height: 1;
+}
+
+.subheading {
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-top: 24px;
+}
+
+.wrap-description {
+    width: 100%;
+}
+
+.description {
+    width: 70%;
+    margin-top: 24px;
+    font-size: 1.8rem;
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+.btn {
+    margin-top: 24px;
+}

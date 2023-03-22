@@ -79,9 +79,6 @@
 .messages {
     flex: 1;
     padding: 8px 16px;
-    // display: flex;
-    // flex-direction: column;
-    // justify-content: flex-end;
     height: 390px;
     overflow: overlay;
     overflow-y: scroll;
@@ -131,7 +128,7 @@
     font-size: 1.4rem;
     height: auto;
     word-wrap: break-word;
-    word-break: break-all;
+    word-break: break-word;
     padding: 8px;
     background-color: #e4e6eb;
     border-radius: 16px;

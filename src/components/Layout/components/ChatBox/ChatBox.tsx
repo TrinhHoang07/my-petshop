@@ -18,61 +18,133 @@ type TMes = {
 
 function ChatBox() {
     const [open, setOpen] = useState<boolean>(false);
+    const init = useRef<boolean>(true);
     const [value, setValue] = useState<string>('');
     const [isSubmit, setIsSubmit] = useState<boolean>(false);
     const mesRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const prevMessage = useRef<string>();
     const [messages, setMessages] = useState<TMes[]>([
-        {
-            user: 'bot',
-            message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Hoàng Trịnh!',
-        },
-        {
-            user: 'bot',
-            message: 'Bạn đang cần giúp đỡ?',
-        },
-        {
-            user: 'user',
-            message: "Hello you! I'm Parent of Vader!",
-        },
-        {
-            user: 'bot',
-            message: 'Bạn là bố của tôi sao????? Địt con mẹ bạn luôn đấy!',
-        },
-        {
-            user: 'bot',
-            message: 'Đừng để tao phải nóng ok!',
-        },
-        {
-            user: 'user',
-            message: 'Bot deo gì mà láo vậy!',
-        },
-        {
-            user: 'bot',
-            message: 'Cút mẹ mày đi!',
-        },
-        {
-            user: 'user',
-            message: 'Mày biết bố mày là ai không?',
-        },
-        {
-            user: 'bot',
-            message: 'Tao biết, mày là cái thằng dẻ dách!',
-        },
-        {
-            user: 'user',
-            message: 'Cho bố mày cái địa chỉ.',
-        },
-        {
-            user: 'bot',
-            message: 'Đợi tao xỉa răng xong tao nói cho!',
-        },
+        // {
+        //     user: 'bot',
+        //     message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Hoàng Trịnh!',
+        // },
+        // {
+        //     user: 'bot',
+        //     message: 'Bạn đang cần giúp đỡ?',
+        // },
+        // {
+        //     user: 'user',
+        //     message: "Hello you! I'm Parent of Vader!",
+        // },
+        // {
+        //     user: 'bot',
+        //     message: 'Bạn là bố của tôi sao????? Địt con mẹ bạn luôn đấy!',
+        // },
+        // {
+        //     user: 'bot',
+        //     message: 'Đừng để tao phải nóng ok!',
+        // },
+        // {
+        //     user: 'user',
+        //     message: 'Bot deo gì mà láo vậy!',
+        // },
+        // {
+        //     user: 'bot',
+        //     message: 'Cút mẹ mày đi!',
+        // },
+        // {
+        //     user: 'user',
+        //     message: 'Mày biết bố mày là ai không?',
+        // },
+        // {
+        //     user: 'bot',
+        //     message: 'Tao biết, mày là cái thằng dẻ dách!',
+        // },
+        // {
+        //     user: 'user',
+        //     message: 'Cho bố mày cái địa chỉ.',
+        // },
+        // {
+        //     user: 'bot',
+        //     message: 'Đợi tao xỉa răng xong tao nói cho!',
+        // },
     ]);
 
     // scroll to message when user submitted
     useEffect(() => {
-        setMessages((prev) => [...prev, { user: 'bot', message: 'say hello!' }]);
+        console.log('calling', init.current);
+        init.current &&
+            setMessages((prev) => [
+                ...prev,
+                {
+                    user: 'bot',
+                    message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Hoàng Trịnh!',
+                },
+            ]);
+        if (prevMessage.current?.includes('hello')) {
+            setMessages((prev) => [...prev, { user: 'bot', message: 'Bạn cần tôi giúp đỡ gì không?' }]);
+        } else if (
+            [
+                'tôi cần giúp đỡ',
+                'có',
+                'giúp đỡ',
+                'cần',
+                'giúp',
+                'tôi cần',
+                'có điều',
+                'muốn hỏi',
+                'tôi có',
+                'bạn cho tôi',
+                'hỏi',
+                'cho tôi hỏi',
+            ].some((item) => prevMessage.current?.includes(item))
+        ) {
+            setMessages((prev) => [
+                ...prev,
+                { user: 'bot', message: 'Tôi luôn sẵn lòng giúp đỡ, bạn cần tôi giúp gì?' },
+            ]);
+        } else if (
+            [
+                'tôi muốn',
+                'mua',
+                'chó',
+                'mèo',
+                'thức ăn',
+                'tham khảo',
+                'giá',
+                'loại',
+                'bán',
+                'thế nào',
+                'cụ thể',
+                'giống này',
+                'shop',
+            ].some((item) => prevMessage.current?.includes(item))
+        ) {
+            setMessages((prev) => [
+                ...prev,
+                {
+                    user: 'bot',
+                    message: 'Bạn tham khảo giá như shop đã đăng nhé, đó là giá niêm yết rồi ý!',
+                },
+            ]);
+        } else if (prevMessage.current) {
+            setMessages((prev) => [
+                ...prev,
+                { user: 'bot', message: 'Chúng tôi sẽ phản hồi bạn trong thời gian ngắn nhất có thể!' },
+            ]);
+            setMessages((prev) => [
+                ...prev,
+                {
+                    user: 'bot',
+                    message: 'Đây là tin nhắn tự động của bot chat, được phát triển và thiết kế bởi Hoàng Trịnh!',
+                },
+            ]);
+        }
+
+        init.current = false;
+
         setTimeout(() => {
             scrollToBottom();
         }, 100);
@@ -89,12 +161,11 @@ function ChatBox() {
 
     const handleSubmit = () => {
         if (value.trim().length > 0) {
+            prevMessage.current = value;
             setMessages((prev) => [...prev, { user: 'user', message: value }]);
             setValue('');
             inputRef.current && inputRef.current.focus();
             setIsSubmit((prev) => !prev);
-            const messages = document.querySelectorAll('.getview');
-            console.log('messages', messages);
         }
     };
 
