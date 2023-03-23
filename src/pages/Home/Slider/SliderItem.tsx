@@ -1,7 +1,9 @@
 import classNames from 'classnames/bind';
-import { Button } from '../../../components/Button';
-import styles from './Sliders.module.scss';
+import { Link } from 'react-router-dom';
 
+import { Button } from '../../../components/Button';
+import routesConfig from '../../../config/routes';
+import styles from './Sliders.module.scss';
 const cx = classNames.bind(styles);
 
 type TProps = {
@@ -24,9 +26,9 @@ function SliderItem(props: TProps) {
                     <div className={cx('wrap-description')}>
                         <p className={cx('description')}>{props.description}</p>
                     </div>
-                    <div className={cx('btn')}>
+                    <Link to={routesConfig.shop} className={cx('btn')}>
                         <Button large={true}>SHOP NOW</Button>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </div>
