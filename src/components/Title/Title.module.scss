@@ -1,0 +1,24 @@
+.title-cpn {
+    text-align: center;
+}
+
+.heading {
+    font-size: 36px;
+    font-weight: 500;
+    -webkit-text-stroke: 1px #db2777;
+    color: #3c3451;
+    letter-spacing: 2px;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+
+    img {
+        width: 86px;
+        height: 86px;
+        object-fit: contain;
+        position: relative;
+        top: -12px;
+    }
+}

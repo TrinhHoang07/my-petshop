@@ -1,0 +1,33 @@
+.flash {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 42px 36px;
+    background-color: var(--flash-color);
+    margin-top: -6px;
+}
+
+.flash-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flash-icon {
+    font-size: 36px;
+    display: flex;
+    color: var(--white-color);
+    padding-right: 14px;
+}
+
+.title {
+    color: var(--white-color);
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.description {
+    font-size: 14px;
+    color: var(--white-color);
+    font-weight: 300;
+}

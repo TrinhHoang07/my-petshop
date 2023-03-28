@@ -34,9 +34,11 @@ function Sliders() {
                 pagination={{
                     clickable: true,
                 }}
+                speed={500}
                 autoplay={{
                     delay: 2500,
                     disableOnInteraction: false,
+                    waitForTransition: true,
                 }}
                 modules={[Autoplay, Pagination, EffectCreative]}
                 className="mySwiper"
