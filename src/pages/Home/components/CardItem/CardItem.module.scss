@@ -1,0 +1,49 @@
+.link-detail {
+    flex-basis: 25%;
+    padding: 0 8px;
+    margin-bottom: 16px;
+    text-decoration: none;
+}
+
+.wrap {
+    border-radius: 6px;
+    box-shadow: 0 0 2px #afaaaa;
+}
+
+.preview {
+    width: 100%;
+    border-radius: 6px;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        object-fit: cover;
+        border-radius: 6px;
+        transition: all 0.25s linear;
+        &:hover {
+            transform: scale(1.0999);
+        }
+    }
+}
+
+.info {
+    padding-top: 8px;
+    padding-bottom: 16px;
+    text-align: center;
+    .title {
+        font-size: 14px;
+        color: #888;
+    }
+
+    .name-dog {
+        font-weight: 500;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .price {
+        color: crimson;
+        font-weight: 400;
+        font-size: 14px;
+    }
+}
