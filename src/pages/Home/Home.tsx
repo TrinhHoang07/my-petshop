@@ -8,6 +8,7 @@ import cat1 from '../../assets/images/banner_cat_1.jpg';
 import cat2 from '../../assets/images/banner_cat_2.jpg';
 import { CatItem } from './CatItem';
 import { FoodItem } from './FoodItem';
+import { UseFul } from './UseFul';
 
 const cx = classNames.bind(styles);
 
@@ -32,6 +33,7 @@ function Home() {
                 </div>
             </div>
             <FoodItem />
+            <UseFul />
         </div>
     );
 }
