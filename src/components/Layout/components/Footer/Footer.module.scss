@@ -1,3 +1,24 @@
+$mobile-width: 739px;
+$tablet-width: 1023px;
+
+@mixin mobileAndTablet {
+    @media (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
 .bg-footer {
     height: 420px;
     width: 100%;
@@ -28,6 +49,10 @@
     text-transform: uppercase;
     color: var(--white-color);
     font-weight: 600;
+
+    @include tablet {
+        min-width: 160px;
+    }
 }
 
 .wrap-item,
@@ -61,6 +86,10 @@
 .wrapper-footer {
     text-align: center;
     padding: 0 125px;
+
+    @include mobileAndTablet {
+        padding: 0 8px;
+    }
 }
 
 .logo-footer {
@@ -77,6 +106,10 @@
     width: 500px;
     padding-top: 8px;
     margin: 0;
+
+    @include tablet {
+        width: unset;
+    }
 }
 
 .heading-feedback {
@@ -99,6 +132,10 @@
     border-radius: 4px;
     caret-color: #30b5b2;
     transition: border 0.2s, opacity 0.2s;
+
+    @include tablet {
+        width: 212px;
+    }
 
     &:focus {
         border: 1px solid #30b5b2;

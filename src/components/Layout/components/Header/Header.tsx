@@ -6,6 +6,8 @@ import Nav from './Nav';
 import routesConfig from '../../../../config/routes';
 import styles from './Header.module.scss';
 import classNames from 'classnames/bind';
+import { IoMenu } from 'react-icons/io5';
+import Menu from './Menu';
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +16,7 @@ function Header() {
 
     return (
         <div className={cx('header')}>
+            <Menu />
             <div className={cx('logo-header')}>
                 <Link className={cx('logo-to-home')} to={routesConfig.home}>
                     <img src={logo} alt="logo-shop" />
@@ -21,10 +24,10 @@ function Header() {
             </div>
             <Nav />
             <div className={cx('header-action')}>
-                <span className={cx('action-item')}>
+                <span className={cx('action-item', 'search-icon')}>
                     <BiSearch fontSize={'2.5rem'} />
                 </span>
-                <Link className={cx('action-item')} to={routesConfig.profile}>
+                <Link className={cx('action-item', 'user-icon')} to={routesConfig.profile}>
                     <FaUser fontSize={'2.5rem'} />
                 </Link>
                 <Link className={cx('action-item', 'categories')} to={routesConfig.categories}>

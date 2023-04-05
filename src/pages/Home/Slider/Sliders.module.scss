@@ -1,3 +1,24 @@
+$mobile-width: 739px;
+$tablet-width: 1023px;
+
+@mixin mobileAndTablet {
+    @media (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
 .slider-img {
     position: relative;
     img {
@@ -21,18 +42,30 @@
     font-weight: 600;
     margin: 0;
     line-height: 1;
+
+    @include tablet {
+        font-size: 2.4rem;
+    }
 }
 
 .heading {
     font-size: 6.4rem;
     margin-top: 24px;
     line-height: 1;
+
+    @include tablet {
+        font-size: 4.8rem;
+    }
 }
 
 .subheading {
     font-size: 1.8rem;
     font-weight: 400;
     margin-top: 24px;
+
+    @include tablet {
+        font-size: 1.5rem;
+    }
 }
 
 .wrap-description {
@@ -45,6 +78,10 @@
     font-size: 1.8rem;
     font-weight: 300;
     line-height: 1.5;
+
+    @include tablet {
+        font-size: 1.5rem;
+    }
 }
 
 .btn {

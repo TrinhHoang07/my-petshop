@@ -1,3 +1,24 @@
+$mobile-width: 739px;
+$tablet-width: 1023px;
+
+@mixin mobileAndTablet {
+    @media (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -11,6 +32,86 @@
     right: 0;
     background-color: #ffffff;
     z-index: 999;
+}
+
+.menu-header-tablet {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    z-index: 99999;
+    display: none;
+
+    @include mobileAndTablet {
+        display: block;
+        visibility: hidden;
+    }
+}
+
+.menu-wraper-tablet {
+    width: 260px;
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease-in-out;
+    transform: translateX(-260px);
+}
+
+.menu-search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+
+    .wraper-item-menu {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        border: 1px solid #d7d7d7;
+    }
+
+    input {
+        padding: 8px 0;
+        outline: none;
+        border: none;
+    }
+}
+
+.span-menu-icon {
+    display: flex;
+    cursor: pointer;
+}
+
+.social-icons-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 0;
+
+    span {
+        display: flex;
+        margin: 0 6px;
+        cursor: pointer;
+    }
+}
+
+.header-menu {
+    cursor: pointer;
+    padding: 8px;
+    display: none;
+
+    @include mobileAndTablet {
+        display: block;
+    }
+}
+
+.menu-header-icon {
+    display: flex;
 }
 
 .logo-header {
@@ -38,8 +139,13 @@
 .header-nav {
     text-align: center;
     flex: 1;
+
+    @include mobileAndTablet {
+        display: none;
+    }
 }
 
+.menu-link,
 .item-link {
     text-decoration: none;
     color: var(--primary-color);
@@ -52,6 +158,11 @@
     &:hover {
         background-color: #f0f2f5;
     }
+}
+
+.menu-link {
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid #d7d7d7;
 }
 
 .header-action {
@@ -85,6 +196,13 @@
                 border-radius: 999px;
                 font-size: 12px;
             }
+        }
+    }
+
+    @include tablet {
+        .action-item.user-icon,
+        .action-item.search-icon {
+            display: none;
         }
     }
 }
