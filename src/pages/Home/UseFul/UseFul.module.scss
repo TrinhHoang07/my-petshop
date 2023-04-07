@@ -1,3 +1,24 @@
+$mobile-width: 739px;
+$tablet-width: 1023px;
+
+@mixin mobileAndTablet {
+    @media (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
 .wrapper-useful {
     padding: 36px 24px;
     background-color: #f9f9f9;
@@ -16,6 +37,10 @@
     flex-basis: 33.3333333%;
     padding: 0 8px;
     cursor: pointer;
+
+    @include mobile {
+        flex-basis: 100%;
+    }
 }
 
 .avatar {
@@ -61,6 +86,15 @@
     font-weight: 400;
     color: #767676;
     padding: 12px 0;
+    text-align: justify;
+
+    @include mobileAndTablet {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        padding: 0;
+    }
 }
 
 .link-useful {
@@ -74,5 +108,26 @@
     text-align: center;
     a {
         text-decoration: none;
+    }
+
+    @include mobile {
+        button {
+            padding: 0 16px;
+            min-width: 60px;
+            height: 32px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 6px;
+        }
+        a {
+            padding: 0 16px;
+            min-width: 60px;
+            height: 32px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 6px;
+        }
     }
 }

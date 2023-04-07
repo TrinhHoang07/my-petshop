@@ -199,7 +199,7 @@ $tablet-width: 1023px;
         }
     }
 
-    @include tablet {
+    @include mobileAndTablet {
         .action-item.user-icon,
         .action-item.search-icon {
             display: none;

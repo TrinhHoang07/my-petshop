@@ -25,6 +25,10 @@ $tablet-width: 1023px;
     display: flex;
     position: relative;
 
+    @include mobile {
+        height: 810px;
+    }
+
     img {
         width: 100%;
         height: 100%;
@@ -41,6 +45,11 @@ $tablet-width: 1023px;
         display: flex;
         align-items: center;
         justify-content: center;
+
+        @include mobile {
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
 }
 
@@ -110,6 +119,10 @@ $tablet-width: 1023px;
     @include tablet {
         width: unset;
     }
+
+    @include mobile {
+        width: unset;
+    }
 }
 
 .heading-feedback {
@@ -135,6 +148,10 @@ $tablet-width: 1023px;
 
     @include tablet {
         width: 212px;
+    }
+
+    @include mobile {
+        width: 220px;
     }
 
     &:focus {

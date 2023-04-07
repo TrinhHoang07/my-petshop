@@ -6,7 +6,7 @@ import img_2 from '../../../assets/images/cat_item_2.jpg';
 import img_3 from '../../../assets/images/cat_item_3.jpg';
 import img_4 from '../../../assets/images/cat_item_4.jpg';
 import { Title } from '../../../components/Title';
-import { CardItem } from '../components/CardItem';
+import { CardItem } from '../../../components/Layout/components/CardItem';
 import { Button } from '../../../components/Button';
 
 const cx = classNames.bind(styles);
@@ -26,7 +26,7 @@ function CatItem() {
                 <CardItem title="MÈO CẢNH" name="Chó American Eskimo" src={img_4} price="14,000,000đ" />
             </div>
             <div className={cx('btn-more')}>
-                <Button medium={true}>XEM THÊM</Button>
+                <Button medium={'true'}>XEM THÊM</Button>
             </div>
         </div>
     );

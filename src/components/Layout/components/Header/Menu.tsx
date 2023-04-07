@@ -46,7 +46,7 @@ function Menu() {
                         </div>
                     </div>
                     {data.map((item: TData) => (
-                        <Link className={cx('menu-link')} to={item.path}>
+                        <Link key={item.id} className={cx('menu-link')} to={item.path}>
                             {item.name}
                         </Link>
                     ))}

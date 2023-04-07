@@ -23,7 +23,18 @@ function UseFul() {
             <Title logo={logo} title="THÔNG TIN HỮU ÍCH" />
             <div className={cx('useful-content')}>
                 <Swiper
-                    slidesPerView={3}
+                    slidesPerView={1}
+                    breakpoints={{
+                        739: {
+                            slidesPerView: 1,
+                        },
+                        740: {
+                            slidesPerView: 3,
+                        },
+                        1024: {
+                            slidesPerView: 3,
+                        },
+                    }}
                     spaceBetween={0}
                     autoplay={{
                         delay: 2500,
@@ -40,48 +51,48 @@ function UseFul() {
                         <UseFulItem
                             img={avatar}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem cum doloribus consequuntur"
+                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
                         />
                     </SwiperSlide>
                     <SwiperSlide>
                         <UseFulItem
                             img={avatar_2}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem cum doloribus consequuntur"
+                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
                         />
                     </SwiperSlide>
                     <SwiperSlide>
                         <UseFulItem
                             img={avatar_3}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem cum doloribus consequuntur"
+                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
                         />
                     </SwiperSlide>
                     <SwiperSlide>
                         <UseFulItem
                             img={avatar}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem cum doloribus consequuntur"
+                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
                         />
                     </SwiperSlide>
                     <SwiperSlide>
                         <UseFulItem
                             img={avatar_2}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem cum doloribus consequuntur"
+                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
                         />
                     </SwiperSlide>
                     <SwiperSlide>
                         <UseFulItem
                             img={avatar_3}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem cum doloribus consequuntur"
+                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
                         />
                     </SwiperSlide>
                 </Swiper>
             </div>
             <div className={cx('btn-more')}>
-                <Button medium={true}>XEM THÊM</Button>
+                <Button medium={'true'}>XEM THÊM</Button>
             </div>
         </div>
     );

@@ -9,9 +9,9 @@ type TProps = {
     href?: string;
     disabled?: boolean;
     to?: string;
-    medium?: boolean;
-    small?: boolean;
-    large?: boolean;
+    medium?: any;
+    small?: any;
+    large?: any;
     className?: string;
     primary?: boolean;
     onClick?: (event: MouseEvent) => void;
