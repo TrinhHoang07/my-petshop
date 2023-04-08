@@ -1,0 +1,39 @@
+.banner {
+    background-image: url('../../assets/images/contact.jpg');
+    background-position: 12% 6%;
+    height: 824px;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.contents {
+    position: absolute;
+    inset: 0;
+    padding: 36px 24px;
+    display: flex;
+    align-items: center;
+}
+
+.contact-info {
+    flex: 1;
+    background-color: rgb(231 164 98 / 74%);
+    padding: 48px 24px;
+}
+
+.description {
+    padding-bottom: 24px;
+}
+
+.description-p {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 400;
+    margin: 16px 0 24px 0;
+    line-height: 1.8;
+}
+
+.contact-form {
+    flex: 1;
+}

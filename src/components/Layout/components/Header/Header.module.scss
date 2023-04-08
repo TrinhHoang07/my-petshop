@@ -160,6 +160,11 @@ $tablet-width: 1023px;
     }
 }
 
+.item-link.active {
+    background-color: orange;
+    color: #fff;
+}
+
 .menu-link {
     border-top: 1px solid transparent;
     border-bottom: 1px solid #d7d7d7;

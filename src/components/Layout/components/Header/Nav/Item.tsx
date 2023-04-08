@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styles from '../Header.module.scss';
 import classNames from 'classnames/bind';
 
@@ -11,9 +11,9 @@ type ItemProps = {
 
 function Item(props: ItemProps) {
     return (
-        <Link className={cx('item-link')} to={props.to}>
+        <NavLink className={(nav) => cx('item-link', { active: nav.isActive })} to={props.to}>
             {props.name}
-        </Link>
+        </NavLink>
     );
 }
 
