@@ -119,7 +119,7 @@ function Contact() {
                                     type="text"
                                     {...register('phone', {
                                         required: true,
-                                        pattern: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
+                                        pattern: /^[\\+]?[(]?[0-9]{3}[)]?[-\s\\.]?[0-9]{3}[-\s\\.]?[0-9]{4,6}$/im,
                                     })}
                                     placeholder="Phone number..."
                                 />
@@ -135,7 +135,7 @@ function Contact() {
                                 {errors.description && <p className={cx('error-field')}>This field is required!</p>}
                             </div>
                             <div className={cx('form-submit')}>
-                                <button type="submit">SUBMIT</button>
+                                <button type="submit">GỬI</button>
                             </div>
                         </form>
                     </div>

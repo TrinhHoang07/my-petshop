@@ -6,7 +6,7 @@ import img_2 from '../../../assets/images/cat_item_2.jpg';
 import img_3 from '../../../assets/images/cat_item_3.jpg';
 import img_4 from '../../../assets/images/cat_item_4.jpg';
 import { Title } from '../../../components/Title';
-import { CardItem } from '../../../components/Layout/components/CardItem';
+import { CardItem } from '../../../components/CardItem';
 import { Button } from '../../../components/Button';
 
 const cx = classNames.bind(styles);

@@ -7,7 +7,7 @@ import img_2 from '../../../assets/images/food_item_2.jpg';
 import img_3 from '../../../assets/images/food_item_3.jpg';
 import img_4 from '../../../assets/images/food_item_4.jpg';
 import { Button } from '../../../components/Button';
-import { CardItem } from '../../../components/Layout/components/CardItem';
+import { CardItem } from '../../../components/CardItem';
 
 const cx = classNames.bind(styles);
 
