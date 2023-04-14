@@ -44,13 +44,13 @@ const publicRoutes: TRoutes[] = [
         id: 4,
         path: routesConfig.cat,
         component: Cat,
-        layout: LayoutSideBar,
+        layout: DefaultLayout,
     },
     {
         id: 5,
         path: routesConfig.dog,
         component: Dog,
-        layout: LayoutSideBar,
+        layout: DefaultLayout,
     },
     {
         id: 6,
@@ -62,7 +62,7 @@ const publicRoutes: TRoutes[] = [
         id: 7,
         path: routesConfig.food,
         component: Food,
-        layout: LayoutSideBar,
+        layout: DefaultLayout,
     },
     {
         id: 8,

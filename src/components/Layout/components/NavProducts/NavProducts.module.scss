@@ -1,0 +1,23 @@
+.nav-products {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 32px;
+}
+
+.heading-nav {
+    font-size: 18px;
+    font-weight: 600;
+
+    span {
+        color: #999;
+    }
+}
+
+.filter-title {
+    margin-right: 8px;
+}
+
+.drop-down-filter {
+    width: 220px;
+}

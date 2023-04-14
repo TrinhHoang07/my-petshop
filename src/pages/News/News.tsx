@@ -5,6 +5,8 @@ import logo_2 from '../../assets/images/new_2.jpg';
 import logo_3 from '../../assets/images/new_3.jpg';
 import logo_4 from '../../assets/images/new_4.jpg';
 import NewItem from './NewItem';
+import Search from './Search';
+import BarItem from './BarItem';
 
 const cx = classNames.bind(styles);
 
@@ -14,7 +16,10 @@ function News() {
             <h3 className={cx('heading')}>CATEGORY ARCHIVES: TIN TỨC</h3>
             <div className={cx('contents')}>
                 <div className={cx('wrapper')}>
-                    <div className={cx('bar')}>bar</div>
+                    <div className={cx('bar')}>
+                        <Search />
+                        <BarItem />
+                    </div>
                     <div className={cx('list-news')}>
                         <NewItem
                             logo={logo_1}
