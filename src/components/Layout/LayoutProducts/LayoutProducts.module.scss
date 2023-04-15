@@ -1,0 +1,18 @@
+.layout-products {
+    display: flex;
+}
+
+.wrapper {
+    margin: auto;
+    width: 1260px;
+    max-width: 1260px;
+}
+
+.contents {
+    display: flex;
+    padding: 16px 32px;
+}
+
+.main-products {
+    flex-basis: 75%;
+}

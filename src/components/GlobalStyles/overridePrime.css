@@ -5,3 +5,12 @@
 .p-dropdown-item {
     font-size: 15px;
 }
+
+.p-slider.p-slider-horizontal {
+    height: 6px;
+}
+
+.p-slider .p-slider-handle {
+    height: 1.45rem;
+    width: 1.45rem;
+}
