@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Description.module.scss';
 import { Title } from '../../components/Title';
@@ -12,6 +13,14 @@ import DescriptionItem from './DescriptionItem';
 const cx = classNames.bind(styles);
 
 function Description() {
+    useEffect(() => {
+        document.title = 'Giới thiệu | Petshop chất lượng số 1 Việt Nam!';
+        window.scrollTo({
+            behavior: 'smooth',
+            top: 0,
+        });
+    }, []);
+
     return (
         <div className={cx('description')}>
             <Title logo={logo} title="PETS SHOP" />

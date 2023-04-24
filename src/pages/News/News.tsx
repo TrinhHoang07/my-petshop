@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './News.module.scss';
 import logo_1 from '../../assets/images/new_1.png';
@@ -11,6 +12,14 @@ import BarItem from './BarItem';
 const cx = classNames.bind(styles);
 
 function News() {
+    useEffect(() => {
+        document.title = 'Tin tức | Petshop chất lượng số 1 Việt Nam!';
+        window.scrollTo({
+            behavior: 'smooth',
+            top: 0,
+        });
+    }, []);
+
     return (
         <div className={cx('news')}>
             <h3 className={cx('heading')}>CATEGORY ARCHIVES: TIN TỨC</h3>

@@ -13,8 +13,8 @@ function SuggestProducts(props: TProps) {
         <div className={cx('suggest-pro')}>
             <h6 className={cx('heading-menu')}>SẢN PHẨM</h6>
             <div className={cx('wrapper-suggest')}>
-                {props.data.map(() => (
-                    <>
+                {props.data.map((index) => (
+                    <div key={index}>
                         <div className={cx('suggest-item')}>
                             <div className={cx('preview-suggest')}>
                                 <img src={img} alt="preview product" />
@@ -25,7 +25,7 @@ function SuggestProducts(props: TProps) {
                             </div>
                         </div>
                         {/* <div className={cx('line-suggest')}></div> */}
-                    </>
+                    </div>
                 ))}
             </div>
         </div>

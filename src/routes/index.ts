@@ -38,7 +38,7 @@ const publicRoutes: TRoutes[] = [
         id: 3,
         path: routesConfig.accessories,
         component: Accessories,
-        layout: LayoutSideBar,
+        layout: DefaultLayout,
     },
     {
         id: 4,

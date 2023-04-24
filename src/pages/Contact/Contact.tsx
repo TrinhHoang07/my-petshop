@@ -29,6 +29,14 @@ function Contact() {
     };
 
     useEffect(() => {
+        document.title = 'Liên hệ | Petshop chất lượng số 1 Việt Nam!';
+        window.scrollTo({
+            behavior: 'smooth',
+            top: 0,
+        });
+    }, []);
+
+    useEffect(() => {
         if (errors.name?.ref) {
             nameRef.current = errors.name.ref;
             handleErrorInput(errors.name.ref);

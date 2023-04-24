@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import { Flash } from './Flash';
 import styles from './Home.module.scss';
@@ -13,6 +14,14 @@ import { UseFul } from './UseFul';
 const cx = classNames.bind(styles);
 
 function Home() {
+    useEffect(() => {
+        document.title = 'Trang chủ | Petshop chất lượng số 1 Việt Nam!';
+        window.scrollTo({
+            behavior: 'smooth',
+            top: 0,
+        });
+    }, []);
+
     return (
         <div className={cx('home')}>
             <div className={cx('sliders')}>
