@@ -1,6 +1,8 @@
 import classNames from 'classnames/bind';
 import styles from './NavProducts.module.scss';
-import { Dropdown } from 'primereact/dropdown';
+import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
+import { useRecoilState } from 'recoil';
+import { filterItem } from '../../../../store';
 
 const cx = classNames.bind(styles);
 
@@ -9,8 +11,14 @@ type TProps = {
     subTitle?: string;
 };
 
+type Select = {
+    name: string;
+};
+
 function NavProducts(props: TProps) {
-    const cities = [
+    const [selected, setSelected] = useRecoilState(filterItem);
+
+    const cities: Select[] = [
         { name: 'Phổ biến' },
         { name: 'Điểm đánh giá' },
         { name: 'Mới về' },
@@ -26,6 +34,8 @@ function NavProducts(props: TProps) {
             <div className={cx('filters')}>
                 <span className={cx('filter-title')}>Sắp xếp: </span>
                 <Dropdown
+                    onChange={(e: DropdownChangeEvent) => setSelected(e.value)}
+                    value={selected}
                     className={cx('drop-down-filter')}
                     placeholder="Mặc định"
                     options={cities}

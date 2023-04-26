@@ -11,6 +11,7 @@ const routesConfig = {
     profile: '/profile',
     search: '/search',
     shop: '/shop',
+    detail: '/product/detail/:id',
 };
 
 export default routesConfig;

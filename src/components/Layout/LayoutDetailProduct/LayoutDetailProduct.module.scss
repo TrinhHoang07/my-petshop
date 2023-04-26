@@ -1,0 +1,16 @@
+.contents {
+    display: flex;
+    width: 1260px;
+    max-width: 1260px;
+    margin: auto;
+}
+
+.nav-bar {
+    flex-basis: 25%;
+    padding-right: 16px;
+    margin-bottom: 32px;
+}
+
+.detail {
+    flex-basis: 75%;
+}

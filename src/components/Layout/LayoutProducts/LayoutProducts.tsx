@@ -7,7 +7,6 @@ const cx = classNames.bind(styles);
 type TProps = {
     children: React.ReactNode;
     value: [number, number];
-    onChange: Function;
     dataProducts: any[];
     title: string;
 };
@@ -18,7 +17,7 @@ function LayoutProducts(props: TProps) {
             <div className={cx('wrapper')}>
                 <NavProducts title={props.title} />
                 <div className={cx('contents')}>
-                    <BarProducts value={props.value} onChange={props.onChange} dataProducts={props.dataProducts} />
+                    <BarProducts value={props.value} dataProducts={props.dataProducts} />
                     <div className={cx('main-products')}>{props.children}</div>
                 </div>
             </div>

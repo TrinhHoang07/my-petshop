@@ -12,6 +12,7 @@ import { Home } from '../pages/Home';
 import { News } from '../pages/News';
 import { Profile } from '../pages/Profile';
 import { Search } from '../pages/Search';
+import { Detail } from '../pages/Detail';
 import { Shop } from '../pages/Shop';
 
 type TRoutes = {
@@ -81,6 +82,12 @@ const publicRoutes: TRoutes[] = [
         path: routesConfig.search,
         component: Search,
         layout: LayoutSideBar,
+    },
+    {
+        id: 11,
+        path: routesConfig.detail,
+        component: Detail,
+        layout: DefaultLayout,
     },
 ];
 

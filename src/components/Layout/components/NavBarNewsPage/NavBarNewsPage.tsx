@@ -1,10 +1,11 @@
-import classNames from 'classnames/bind';
-import styles from './News.module.scss';
-import image from '../../assets/images/meoww.jpg';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames/bind';
+import styles from './NavBarNewsPage.module.scss';
+import image from '../../../../assets/images/meoww.jpg';
+
 const cx = classNames.bind(styles);
 
-function BarItem() {
+function NavBarNewsPage() {
     return (
         <div className={cx('bar-content')}>
             <h2 className={cx('bar-heading')}>BÀI VIẾT MỚI</h2>
@@ -67,4 +68,4 @@ function BarItem() {
     );
 }
 
-export default BarItem;
+export default NavBarNewsPage;

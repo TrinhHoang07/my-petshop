@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import styles from './BarProducts.module.scss';
+import styles from './SuggestProducts.module.scss';
 import img from '../../../../assets/images/meoww.jpg';
 
 const cx = classNames.bind(styles);

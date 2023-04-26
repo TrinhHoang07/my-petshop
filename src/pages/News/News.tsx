@@ -7,7 +7,7 @@ import logo_3 from '../../assets/images/new_3.jpg';
 import logo_4 from '../../assets/images/new_4.jpg';
 import NewItem from './NewItem';
 import Search from './Search';
-import BarItem from './BarItem';
+import { NavBarNewsPage } from '../../components/Layout/components/NavBarNewsPage';
 
 const cx = classNames.bind(styles);
 
@@ -26,8 +26,8 @@ function News() {
             <div className={cx('contents')}>
                 <div className={cx('wrapper')}>
                     <div className={cx('bar')}>
+                        <NavBarNewsPage />
                         <Search />
-                        <BarItem />
                     </div>
                     <div className={cx('list-news')}>
                         <NewItem
