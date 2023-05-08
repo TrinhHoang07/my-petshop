@@ -1,24 +1,63 @@
+$mobile-width: 739px;
+$tablet-width: 1023px;
+
+@mixin mobileAndTablet {
+    @media (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
 .contents {
     display: flex;
     width: 1260px;
     max-width: 1260px;
     margin: auto;
+
+    @include mobileAndTablet {
+        width: unset;
+    }
 }
 
 .nav-bar {
     flex-basis: 25%;
+    flex-shrink: 0;
     padding-right: 16px;
     margin-bottom: 32px;
+
+    @include mobileAndTablet {
+        display: none;
+    }
 }
 
 .detail {
     flex-basis: 75%;
     padding-top: 32px;
+    overflow: hidden;
+
+    @include mobileAndTablet {
+        flex-basis: 100%;
+    }
 }
 
 .detail-wrapper {
     display: flex;
     width: 100%;
+
+    @include mobileAndTablet {
+        flex-direction: column;
+    }
 }
 
 .slider {
@@ -71,9 +110,12 @@
         .p_1 {
             padding: 8px;
             cursor: pointer;
+            user-select: none;
         }
         .p_2 {
-            padding: 8px 16px;
+            width: 40px;
+            padding: 8px 0;
+            text-align: center;
             border-left: 1px solid #d7d7d7;
             border-right: 1px solid #d7d7d7;
         }
@@ -175,4 +217,13 @@
     color: #fff;
     margin-top: 16px;
     font-weight: bold;
+}
+
+.heading-menu-similar {
+    margin-top: 24px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    padding-bottom: 8px;
+    display: inline-block;
+    border-bottom: 2px solid #d7d7d7;
 }

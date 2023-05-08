@@ -1,7 +1,14 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { privateRoutes, publicRoutes } from './routes';
+import AOS from 'aos';
 
 function App() {
+    AOS.init({
+        offset: 100,
+        throttleDelay: 120,
+        duration: 800,
+    });
+
     return (
         <BrowserRouter>
             <Routes>

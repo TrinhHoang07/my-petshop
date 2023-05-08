@@ -16,6 +16,7 @@ function CardItem(props: TProps) {
     return (
         <Link className={cx('link-detail')} to={'/'}>
             <div className={cx('detail-dog')}>
+                {/* <div data-aos="zoom-in-left"> */}
                 <div className={cx('wrap')}>
                     <div className={cx('preview')}>
                         <img src={props.src} alt="preview dog" />
@@ -26,6 +27,7 @@ function CardItem(props: TProps) {
                         <p className={cx('price')}>{props.price}</p>
                     </div>
                 </div>
+                {/* </div> */}
             </div>
         </Link>
     );

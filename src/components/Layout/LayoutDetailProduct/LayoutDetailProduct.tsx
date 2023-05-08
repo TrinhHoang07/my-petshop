@@ -8,6 +8,8 @@ import { Galleria } from 'primereact/galleria';
 import img_1 from '../../../assets/images/cat_item_1.jpg';
 import img_2 from '../../../assets/images/cat_item_2.jpg';
 import img_3 from '../../../assets/images/cat_item_3.jpg';
+import { useState } from 'react';
+import { Similar } from '../components/Similar';
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +18,8 @@ type TProps = {
 };
 
 function LayoutDetailProduct(props: TProps) {
+    const [quantity, setQuantity] = useState<number>(1);
+
     const data = [
         {
             id: 1,
@@ -38,7 +42,7 @@ function LayoutDetailProduct(props: TProps) {
     ];
 
     const itemTemplate = (item: any) => {
-        return <img src={item.url} alt={item.alt} style={{ width: '100%' }} />;
+        return item && <img src={item.url} alt={item.alt} style={{ width: '100%' }} />;
     };
 
     const thumbnailTemplate = (item: any) => {
@@ -54,11 +58,12 @@ function LayoutDetailProduct(props: TProps) {
                 </div>
                 <div className={cx('detail')}>
                     <div className={cx('detail-wrapper')}>
-                        {/* Galleria Prime React */}
                         <div className={cx('slider')}>
                             <Galleria
                                 value={data}
                                 item={itemTemplate}
+                                draggable={false}
+                                showThumbnailNavigators={false}
                                 thumbnail={thumbnailTemplate}
                                 style={{ width: '100%' }}
                             />
@@ -82,9 +87,30 @@ function LayoutDetailProduct(props: TProps) {
                             </div>
                             <div className={cx('info-actions')}>
                                 <div className={cx('count')}>
-                                    <p className={cx('p_1')}>-</p>
-                                    <p className={cx('p_2')}>1</p>
-                                    <p className={cx('p_3')}>+</p>
+                                    <p
+                                        onClick={() => {
+                                            setQuantity((prev) => {
+                                                const quantity = prev - 1;
+                                                if (quantity <= 0) {
+                                                    return 1;
+                                                } else {
+                                                    return quantity;
+                                                }
+                                            });
+                                        }}
+                                        className={cx('p_1')}
+                                    >
+                                        -
+                                    </p>
+                                    <p className={cx('p_2')}>{quantity}</p>
+                                    <p
+                                        onClick={() => {
+                                            setQuantity((prev) => prev + 1);
+                                        }}
+                                        className={cx('p_3')}
+                                    >
+                                        +
+                                    </p>
                                 </div>
                                 <div className={cx('add-to-cart')}>
                                     <button>THÊM VÀO GIỎ</button>
@@ -95,7 +121,6 @@ function LayoutDetailProduct(props: TProps) {
                         </div>
                     </div>
                     <div className={cx('spacer-w')} />
-                    {/* TabView Prime React*/}
                     <div className={cx('tab-view')}>
                         <TabView>
                             <TabPanel header="MÔ TẢ">
@@ -197,7 +222,10 @@ function LayoutDetailProduct(props: TProps) {
                             </TabPanel>
                         </TabView>
                     </div>
-                    <div>similar</div>
+                    <div style={{ padding: '0 16px' }}>
+                        <h6 className={cx('heading-menu-similar')}>SẢN PHẨM TƯƠNG TỰ</h6>
+                        <Similar />
+                    </div>
                 </div>
             </div>
         </div>

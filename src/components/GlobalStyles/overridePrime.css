@@ -19,7 +19,7 @@
     font-size: 1.5rem;
 }
 
-.p-galleria-thumbnail-items[pr_id_2] .p-galleria-thumbnail-item {
+.p-galleria-thumbnail-item {
     flex: unset !important;
     padding: 0 8px;
 }

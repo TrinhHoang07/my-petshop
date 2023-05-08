@@ -10,6 +10,7 @@
         "@types/node": "^16.18.16",
         "@types/react": "^18.0.28",
         "@types/react-dom": "^18.0.11",
+        "aos": "^2.3.4",
         "classnames": "^2.3.2",
         "normalize.css": "^8.0.1",
         "primeicons": "^6.0.1",
@@ -25,6 +26,7 @@
         "web-vitals": "^2.1.4"
     },
     "devDependencies": {
+        "@types/aos": "^3.0.4",
         "customize-cra": "^1.0.0",
         "react-app-rewired": "^2.2.1",
         "react-icons": "^4.8.0",
