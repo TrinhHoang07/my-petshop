@@ -6,7 +6,7 @@ import img_2 from '../../../assets/images/cat_item_2.jpg';
 import img_3 from '../../../assets/images/cat_item_3.jpg';
 import img_4 from '../../../assets/images/cat_item_4.jpg';
 import { Title } from '../../../components/Title';
-import { CardItem } from '../../../components/CardItem';
+import { CardItemZoomInLeft } from '../../../components/CardItemZoomInLeft';
 import { Button } from '../../../components/Button';
 
 const cx = classNames.bind(styles);
@@ -16,14 +16,14 @@ function CatItem() {
         <div className={cx('wraper-catitem')}>
             <Title logo={logo} title="Mèo Cảnh" />
             <div className={cx('list-cards')}>
-                <CardItem title="MÈO CẢNH" name="Mèo Anh Lông Dài" src={img_1} price="14,000,000đ" />
-                <CardItem title="MÈO CẢNH" name="Chó American Eskimo" src={img_2} price="14,000,000đ" />
-                <CardItem title="MÈO CẢNH" name="Mèo Anh Lông Ngắn" src={img_3} price="14,000,000đ" />
-                <CardItem title="MÈO CẢNH" name="Chó American Eskimo" src={img_4} price="14,000,000đ" />
-                <CardItem title="MÈO CẢNH" name="Chó American Eskimo" src={img_1} price="14,000,000đ" />
-                <CardItem title="MÈO CẢNH" name="Chó American Eskimo" src={img_2} price="14,000,000đ" />
-                <CardItem title="MÈO CẢNH" name="Chó American Eskimo" src={img_3} price="14,000,000đ" />
-                <CardItem title="MÈO CẢNH" name="Chó American Eskimo" src={img_4} price="14,000,000đ" />
+                <CardItemZoomInLeft title="MÈO CẢNH" name="Mèo Anh Lông Dài" src={img_1} price="14,000,000đ" />
+                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_2} price="14,000,000đ" />
+                <CardItemZoomInLeft title="MÈO CẢNH" name="Mèo Anh Lông Ngắn" src={img_3} price="14,000,000đ" />
+                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_4} price="14,000,000đ" />
+                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_1} price="14,000,000đ" />
+                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_2} price="14,000,000đ" />
+                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_3} price="14,000,000đ" />
+                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_4} price="14,000,000đ" />
             </div>
             <div className={cx('btn-more')}>
                 <Button medium={'true'}>XEM THÊM</Button>

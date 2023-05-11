@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import styles from './CardItem.module.scss';
+import styles from './CardItemZoomIn.module.scss';
 import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
@@ -12,11 +12,11 @@ type TProps = {
     flash?: string;
 };
 
-function CardItem(props: TProps) {
+function CardItemZoomIn(props: TProps) {
     return (
         <Link className={cx('link-detail')} to={'/'}>
             <div className={cx('detail-dog')}>
-                <div data-aos="fade-left">
+                <div data-aos="zoom-in">
                     <div className={cx('wrap')}>
                         <div className={cx('preview')}>
                             <img src={props.src} alt="preview dog" />
@@ -33,4 +33,4 @@ function CardItem(props: TProps) {
     );
 }
 
-export default CardItem;
+export default CardItemZoomIn;

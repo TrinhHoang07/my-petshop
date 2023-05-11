@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Food.module.scss';
 import { LayoutProducts } from '../../components/Layout/LayoutProducts';
-import { CardItem } from '../../components/CardItem';
+import { CardItemFlip } from '../../components/CardItemFlip';
 import img from '../../assets/images/food_item_1.jpg';
 import { useSetRecoilState } from 'recoil';
 import { filterItem } from '../../store';
@@ -29,22 +29,22 @@ function Food() {
             <LayoutProducts title="ĐỒ ĂN" value={value} dataProducts={[1, 2, 3, 4, 5]}>
                 <>
                     <div className={cx('food-item')}>
-                        <CardItem name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
+                        <CardItemFlip name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
                     </div>
                     <div className={cx('food-item')}>
-                        <CardItem name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
+                        <CardItemFlip name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
                     </div>
                     <div className={cx('food-item')}>
-                        <CardItem name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
+                        <CardItemFlip name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
                     </div>
                     <div className={cx('food-item')}>
-                        <CardItem name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
+                        <CardItemFlip name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
                     </div>
                     <div className={cx('food-item')}>
-                        <CardItem name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
+                        <CardItemFlip name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
                     </div>
                     <div className={cx('food-item')}>
-                        <CardItem name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
+                        <CardItemFlip name="Bánh thưởng hình bóng AFP Krazy" price="80000đ" title="ĐỒ ĂN" src={img} />
                     </div>
                 </>
             </LayoutProducts>
