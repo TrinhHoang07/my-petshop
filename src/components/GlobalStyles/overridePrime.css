@@ -31,3 +31,24 @@
 .p-rating .p-rating-item .p-rating-icon {
     font-size: 1.6rem;
 }
+
+.p-paginator-icon.pi.pi-angle-right,
+.p-paginator-icon.pi.pi-angle-left,
+.p-paginator-icon.pi.pi-angle-double-right,
+.p-paginator-icon.pi.pi-angle-double-left {
+    font-size: 18px;
+}
+
+.p-paginator-next.p-paginator-element.p-link,
+.p-paginator-prev.p-paginator-element.p-link,
+.p-paginator-last.p-paginator-element.p-link,
+.p-paginator-first.p-paginator-element.p-link {
+    width: 48px;
+    height: 48px;
+}
+
+.p-paginator-page.p-paginator-element.p-link {
+    width: 48px;
+    height: 48px;
+    font-size: 16px;
+}

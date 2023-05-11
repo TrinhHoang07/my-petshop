@@ -30,6 +30,8 @@ $tablet-width: 1023px;
     }
 }
 
+// navbar
+
 .nav-bar {
     flex-basis: 25%;
     flex-shrink: 0;
@@ -40,6 +42,8 @@ $tablet-width: 1023px;
         display: none;
     }
 }
+
+// detail
 
 .detail {
     flex-basis: 75%;
@@ -159,6 +163,8 @@ $tablet-width: 1023px;
     background-color: #d7d7d7;
     margin: 16px;
 }
+
+// tabview
 
 .tab-view {
     padding: 0 16px;

@@ -9,13 +9,14 @@ type TProps = {
     value: [number, number];
     dataProducts: any[];
     title: string;
+    subTitle?: string;
 };
 
 function LayoutProducts(props: TProps) {
     return (
         <div className={cx('layout-products')}>
             <div className={cx('wrapper')}>
-                <NavProducts title={props.title} />
+                <NavProducts subTitle={props.subTitle} title={props.title} />
                 <div className={cx('contents')}>
                     <BarProducts value={props.value} dataProducts={props.dataProducts} />
                     <div className={cx('main-products')}>{props.children}</div>

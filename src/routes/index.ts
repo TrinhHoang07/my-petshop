@@ -1,5 +1,4 @@
 import { DefaultLayout } from '../components/Layout/DefaultLayout';
-import { LayoutSideBar } from '../components/Layout/LayoutSideBar';
 import routesConfig from '../config/routes';
 import { Accessories } from '../pages/Accessories';
 import { Cat } from '../pages/Cat';
@@ -75,13 +74,13 @@ const publicRoutes: TRoutes[] = [
         id: 9,
         path: routesConfig.shop,
         component: Shop,
-        layout: LayoutSideBar,
+        layout: DefaultLayout,
     },
     {
         id: 10,
         path: routesConfig.search,
         component: Search,
-        layout: LayoutSideBar,
+        layout: DefaultLayout,
     },
     {
         id: 11,
