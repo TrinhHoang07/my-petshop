@@ -4,13 +4,16 @@ import { RecoilRoot } from 'recoil';
 import App from './App';
 import { GlobalStyles } from './components/GlobalStyles';
 import reportWebVitals from './reportWebVitals';
+import { AosContext } from './components/AosContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
     <React.StrictMode>
         <GlobalStyles>
             <RecoilRoot>
-                <App />
+                <AosContext>
+                    <App />
+                </AosContext>
             </RecoilRoot>
         </GlobalStyles>
     </React.StrictMode>,
