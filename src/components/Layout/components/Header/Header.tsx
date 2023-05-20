@@ -14,6 +14,18 @@ const cx = classNames.bind(styles);
 function Header() {
     const count = 5;
 
+    const handleOpenSearch = () => {
+        const mask: HTMLElement | null = document.getElementById('mask');
+        const search: HTMLElement | null = document.getElementById('search-wrap');
+
+        if (mask) {
+            mask.style.visibility = 'visible';
+        }
+        if (search) {
+            search.style.transform = 'translateX(0)';
+        }
+    };
+
     return (
         <div className={cx('header')}>
             <Menu />
@@ -25,7 +37,7 @@ function Header() {
             </div>
             <Nav />
             <div className={cx('header-action')}>
-                <span className={cx('action-item', 'search-icon')}>
+                <span onClick={handleOpenSearch} className={cx('action-item', 'search-icon')}>
                     <BiSearch fontSize={'2.5rem'} />
                 </span>
                 <Link className={cx('action-item', 'user-icon')} to={routesConfig.profile}>

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { RxCaretUp } from 'react-icons/rx';
-import useWindowPosition from '../../../../hooks';
+import { useWindowPosition } from '../../../../hooks';
 
 function ScrollTop() {
     const ref = useRef<HTMLDivElement>(null);
