@@ -13,6 +13,8 @@ import { Profile } from '../pages/Profile';
 import { Search } from '../pages/Search';
 import { Detail } from '../pages/Detail';
 import { Shop } from '../pages/Shop';
+import { NotFound } from '../pages/NotFound';
+import { FlagmentLayout } from '../components/Layout/FlagmentLayout';
 
 type TRoutes = {
     id: number;
@@ -87,6 +89,12 @@ const publicRoutes: TRoutes[] = [
         path: routesConfig.detail,
         component: Detail,
         layout: DefaultLayout,
+    },
+    {
+        id: 12,
+        path: routesConfig.notFound,
+        component: NotFound,
+        layout: FlagmentLayout,
     },
 ];
 

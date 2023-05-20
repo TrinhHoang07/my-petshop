@@ -11,7 +11,6 @@ function AosContext(props: TProps) {
     useEffect(() => {
         init &&
             AOS.init({
-                offset: 150,
                 throttleDelay: 120,
                 duration: 800,
             });

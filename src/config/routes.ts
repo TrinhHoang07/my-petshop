@@ -12,6 +12,7 @@ const routesConfig = {
     search: '/search',
     shop: '/shop',
     detail: '/product/detail/:id',
+    notFound: '*',
 };
 
 export default routesConfig;

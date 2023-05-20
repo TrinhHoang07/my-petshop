@@ -6,8 +6,8 @@ import Nav from './Nav';
 import routesConfig from '../../../../config/routes';
 import styles from './Header.module.scss';
 import classNames from 'classnames/bind';
-import { IoMenu } from 'react-icons/io5';
 import Menu from './Menu';
+import { Search } from '../Search';
 
 const cx = classNames.bind(styles);
 
@@ -17,6 +17,7 @@ function Header() {
     return (
         <div className={cx('header')}>
             <Menu />
+            <Search />
             <div className={cx('logo-header')}>
                 <Link className={cx('logo-to-home')} to={routesConfig.home}>
                     <img src={logo} alt="logo-shop" />
