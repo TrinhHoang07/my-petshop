@@ -10,6 +10,8 @@ const routesConfig = {
     news: '/news',
     profile: '/profile',
     search: '/search',
+    login: '/login',
+    register: '/register',
     shop: '/shop',
     detail: '/product/detail/:id',
     notFound: '*',

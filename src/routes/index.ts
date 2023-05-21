@@ -15,6 +15,8 @@ import { Detail } from '../pages/Detail';
 import { Shop } from '../pages/Shop';
 import { NotFound } from '../pages/NotFound';
 import { FlagmentLayout } from '../components/Layout/FlagmentLayout';
+import { Login } from '../pages/Login';
+import { Register } from '../pages/Register';
 
 type TRoutes = {
     id: number;
@@ -110,6 +112,18 @@ const privateRoutes = [
         path: routesConfig.categories,
         component: Categories,
         layout: DefaultLayout,
+    },
+    {
+        id: 3,
+        path: routesConfig.login,
+        component: Login,
+        layout: FlagmentLayout,
+    },
+    {
+        id: 3,
+        path: routesConfig.register,
+        component: Register,
+        layout: FlagmentLayout,
     },
 ];
 

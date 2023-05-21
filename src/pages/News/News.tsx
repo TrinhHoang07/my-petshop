@@ -26,8 +26,8 @@ function News() {
             <div className={cx('contents')}>
                 <div className={cx('wrapper')}>
                     <div className={cx('bar')}>
-                        <NavBarNewsPage />
                         <Search />
+                        <NavBarNewsPage />
                     </div>
                     <div className={cx('list-news')}>
                         <NewItem

@@ -74,7 +74,6 @@ function ChatBox() {
 
     // scroll to message when user submitted
     useEffect(() => {
-        console.log('calling', init.current);
         init.current &&
             setMessages((prev) => [
                 ...prev,
