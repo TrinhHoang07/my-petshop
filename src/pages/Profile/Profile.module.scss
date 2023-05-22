@@ -1,0 +1,19 @@
+.profile {
+    text-align: center;
+    padding: 32px 0;
+
+    h1 {
+        padding: 24px 0;
+    }
+
+    button {
+        padding: 12px 24px;
+        background-color: lightslategray;
+        color: #fff;
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+}

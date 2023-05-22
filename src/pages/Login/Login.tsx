@@ -2,9 +2,10 @@ import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import logo from '../../assets/images/logo-petshop.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import routesConfig from '../../config/routes';
 import { useEffect, useRef } from 'react';
+import { useSessionContext } from '../../context/SessionContext';
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +17,8 @@ type TForm = {
 function Login() {
     const nameRef = useRef<any>();
     const passwordRef = useRef<any>();
+    const navigate = useNavigate();
+    const [, setStateContext] = useSessionContext();
 
     const {
         register,
@@ -23,7 +26,22 @@ function Login() {
         formState: { errors },
     } = useForm<TForm>();
 
-    const onSubmit: SubmitHandler<TForm> = (data: TForm) => console.log(data);
+    const onSubmit: SubmitHandler<TForm> = (data: TForm) => {
+        const dataUser = {
+            name: data.name,
+            password: data.password,
+        };
+        localStorage.setItem('user', JSON.stringify(dataUser));
+        setStateContext({
+            isAuth: true,
+            user: {
+                name: data.name,
+                token: data.password,
+            },
+        });
+
+        navigate(routesConfig.home);
+    };
 
     const handleErrorInput = (ele: HTMLInputElement) => {
         ele.style.border = '1px solid red';

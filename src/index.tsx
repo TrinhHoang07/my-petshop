@@ -5,15 +5,18 @@ import App from './App';
 import { GlobalStyles } from './components/GlobalStyles';
 import reportWebVitals from './reportWebVitals';
 import { AosContext } from './components/AosContext';
+import SessionContextProvider from './context/SessionContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
     <React.StrictMode>
         <GlobalStyles>
             <RecoilRoot>
-                <AosContext>
-                    <App />
-                </AosContext>
+                <SessionContextProvider>
+                    <AosContext>
+                        <App />
+                    </AosContext>
+                </SessionContextProvider>
             </RecoilRoot>
         </GlobalStyles>
     </React.StrictMode>,
