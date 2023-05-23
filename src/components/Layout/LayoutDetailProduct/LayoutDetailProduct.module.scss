@@ -203,6 +203,7 @@ $tablet-width: 1023px;
     padding-top: 12px;
 
     label {
+        margin-bottom: 4px;
         font-size: 1.5rem;
     }
 
@@ -219,10 +220,14 @@ $tablet-width: 1023px;
     padding: 10px 16px;
     cursor: pointer;
     border-radius: 4px;
-    background-color: mediumturquoise;
+    background-color: dodgerblue;
     color: #fff;
     margin-top: 16px;
     font-weight: bold;
+
+    &:hover {
+        opacity: 0.8;
+    }
 }
 
 .heading-menu-similar {

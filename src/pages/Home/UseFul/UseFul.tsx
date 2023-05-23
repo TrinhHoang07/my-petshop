@@ -14,6 +14,7 @@ import { Button } from '../../../components/Button';
 import avatar from '../../../assets/images/useful_1.jpg';
 import avatar_2 from '../../../assets/images/useful_2.jpg';
 import avatar_3 from '../../../assets/images/useful_3.jpg';
+import routesConfig from '../../../config/routes';
 
 const cx = classNames.bind(styles);
 
@@ -92,7 +93,9 @@ function UseFul() {
                 </Swiper>
             </div>
             <div className={cx('btn-more')}>
-                <Button medium={'true'}>XEM THÊM</Button>
+                <Button to={routesConfig.news} medium={'true'}>
+                    XEM THÊM
+                </Button>
             </div>
         </div>
     );

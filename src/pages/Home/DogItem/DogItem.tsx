@@ -8,6 +8,7 @@ import img_3 from '../../../assets/images/dog_item_3.jpg';
 import img_4 from '../../../assets/images/dog_item_4.jpg';
 import { Button } from '../../../components/Button';
 import { CardItem } from '../../../components/CardItem';
+import routesConfig from '../../../config/routes';
 
 const cx = classNames.bind(styles);
 
@@ -16,17 +17,67 @@ function DogItem() {
         <div className={cx('wraper-dogitem')}>
             <Title logo={logo} title="Chó Cảnh" />
             <div className={cx('list-cards')}>
-                <CardItem title="CHÓ CẢNH" name="Chó American Eskimo" src={img_1} price="14,000,000đ" />
-                <CardItem title="CHÓ CẢNH" name="Chó American Eskimo" src={img_2} price="14,000,000đ" />
-                <CardItem title="CHÓ CẢNH" name="Chó American Eskimo" src={img_3} price="14,000,000đ" />
-                <CardItem title="CHÓ CẢNH" name="Chó American Eskimo" src={img_4} price="14,000,000đ" />
-                <CardItem title="CHÓ CẢNH" name="Chó American Eskimo" src={img_1} price="14,000,000đ" />
-                <CardItem title="CHÓ CẢNH" name="Chó American Eskimo" src={img_2} price="14,000,000đ" />
-                <CardItem title="CHÓ CẢNH" name="Chó American Eskimo" src={img_3} price="14,000,000đ" />
-                <CardItem title="CHÓ CẢNH" name="Chó American Eskimo" src={img_4} price="14,000,000đ" />
+                <CardItem
+                    to={'product/dog/1'}
+                    title="CHÓ CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_1}
+                    price="14,000,000đ"
+                />
+                <CardItem
+                    to={'product/dog/2'}
+                    title="CHÓ CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_2}
+                    price="14,000,000đ"
+                />
+                <CardItem
+                    to={'product/dog/3'}
+                    title="CHÓ CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_3}
+                    price="14,000,000đ"
+                />
+                <CardItem
+                    to={'product/dog/4'}
+                    title="CHÓ CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_4}
+                    price="14,000,000đ"
+                />
+                <CardItem
+                    to={'product/dog/5'}
+                    title="CHÓ CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_1}
+                    price="14,000,000đ"
+                />
+                <CardItem
+                    to={'product/dog/6'}
+                    title="CHÓ CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_2}
+                    price="14,000,000đ"
+                />
+                <CardItem
+                    to={'product/dog/7'}
+                    title="CHÓ CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_3}
+                    price="14,000,000đ"
+                />
+                <CardItem
+                    to={'product/dog/8'}
+                    title="CHÓ CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_4}
+                    price="14,000,000đ"
+                />
             </div>
             <div className={cx('btn-more')}>
-                <Button medium={'true'}>XEM THÊM</Button>
+                <Button to={routesConfig.dog} medium={'true'}>
+                    XEM THÊM
+                </Button>
             </div>
         </div>
     );

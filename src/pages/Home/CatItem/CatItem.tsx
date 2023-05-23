@@ -8,6 +8,7 @@ import img_4 from '../../../assets/images/cat_item_4.jpg';
 import { Title } from '../../../components/Title';
 import { CardItemZoomInLeft } from '../../../components/CardItemZoomInLeft';
 import { Button } from '../../../components/Button';
+import routesConfig from '../../../config/routes';
 
 const cx = classNames.bind(styles);
 
@@ -16,17 +17,67 @@ function CatItem() {
         <div className={cx('wraper-catitem')}>
             <Title logo={logo} title="Mèo Cảnh" />
             <div className={cx('list-cards')}>
-                <CardItemZoomInLeft title="MÈO CẢNH" name="Mèo Anh Lông Dài" src={img_1} price="14,000,000đ" />
-                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_2} price="14,000,000đ" />
-                <CardItemZoomInLeft title="MÈO CẢNH" name="Mèo Anh Lông Ngắn" src={img_3} price="14,000,000đ" />
-                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_4} price="14,000,000đ" />
-                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_1} price="14,000,000đ" />
-                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_2} price="14,000,000đ" />
-                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_3} price="14,000,000đ" />
-                <CardItemZoomInLeft title="MÈO CẢNH" name="Chó American Eskimo" src={img_4} price="14,000,000đ" />
+                <CardItemZoomInLeft
+                    to={'product/cat/1'}
+                    title="MÈO CẢNH"
+                    name="Mèo Anh Lông Dài"
+                    src={img_1}
+                    price="14,000,000đ"
+                />
+                <CardItemZoomInLeft
+                    to={'product/cat/2'}
+                    title="MÈO CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_2}
+                    price="14,000,000đ"
+                />
+                <CardItemZoomInLeft
+                    to={'product/cat/3'}
+                    title="MÈO CẢNH"
+                    name="Mèo Anh Lông Ngắn"
+                    src={img_3}
+                    price="14,000,000đ"
+                />
+                <CardItemZoomInLeft
+                    to={'product/cat/4'}
+                    title="MÈO CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_4}
+                    price="14,000,000đ"
+                />
+                <CardItemZoomInLeft
+                    to={'product/cat/5'}
+                    title="MÈO CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_1}
+                    price="14,000,000đ"
+                />
+                <CardItemZoomInLeft
+                    to={'product/cat/6'}
+                    title="MÈO CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_2}
+                    price="14,000,000đ"
+                />
+                <CardItemZoomInLeft
+                    to={'product/cat/7'}
+                    title="MÈO CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_3}
+                    price="14,000,000đ"
+                />
+                <CardItemZoomInLeft
+                    to={'product/cat/8'}
+                    title="MÈO CẢNH"
+                    name="Chó American Eskimo"
+                    src={img_4}
+                    price="14,000,000đ"
+                />
             </div>
             <div className={cx('btn-more')}>
-                <Button medium={'true'}>XEM THÊM</Button>
+                <Button to={routesConfig.cat} medium={'true'}>
+                    XEM THÊM
+                </Button>
             </div>
         </div>
     );

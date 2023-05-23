@@ -17,6 +17,7 @@ import { NotFound } from '../pages/NotFound';
 import { FlagmentLayout } from '../components/Layout/FlagmentLayout';
 import { Login } from '../pages/Login';
 import { Register } from '../pages/Register';
+import { LayoutDetailNew } from '../components/Layout/LayoutDetailNew';
 
 type TRoutes = {
     id: number;
@@ -82,21 +83,22 @@ const publicRoutes: TRoutes[] = [
     },
     {
         id: 10,
-        path: routesConfig.search,
-        component: Search,
-        layout: DefaultLayout,
-    },
-    {
-        id: 11,
         path: routesConfig.detail,
         component: Detail,
         layout: DefaultLayout,
     },
     {
-        id: 12,
+        id: 11,
         path: routesConfig.notFound,
         component: NotFound,
         layout: FlagmentLayout,
+    },
+    // test
+    {
+        id: 12,
+        path: 'test/detail-new',
+        component: LayoutDetailNew,
+        layout: DefaultLayout,
     },
 ];
 

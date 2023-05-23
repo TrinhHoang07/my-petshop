@@ -5,6 +5,7 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
 type TProps = {
+    to?: string;
     src: any;
     title: string;
     name: string;
@@ -14,7 +15,7 @@ type TProps = {
 
 function CardItemFlip(props: TProps) {
     return (
-        <Link className={cx('link-detail')} to={'/'}>
+        <Link className={cx('link-detail')} to={props.to ?? '/'}>
             <div className={cx('detail-dog')}>
                 <div data-aos="flip-right">
                     <div className={cx('wrap')}>

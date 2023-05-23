@@ -8,7 +8,7 @@ import { Galleria } from 'primereact/galleria';
 import img_1 from '../../../assets/images/cat_item_1.jpg';
 import img_2 from '../../../assets/images/cat_item_2.jpg';
 import img_3 from '../../../assets/images/cat_item_3.jpg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Similar } from '../components/Similar';
 
 const cx = classNames.bind(styles);
@@ -40,6 +40,14 @@ function LayoutDetailProduct(props: TProps) {
             alt: 'description',
         },
     ];
+
+    useEffect(() => {
+        document.title = 'Trang chủ | Petshop chất lượng số 1 Việt Nam!';
+        window.scrollTo({
+            behavior: 'smooth',
+            top: 0,
+        });
+    }, []);
 
     const itemTemplate = (item: any) => {
         return item && <img src={item.url} alt={item.alt} style={{ width: '100%' }} />;
