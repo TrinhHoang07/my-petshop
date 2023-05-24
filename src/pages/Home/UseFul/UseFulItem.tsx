@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 type TProps = {
+    to?: string;
     img: any;
     heading: string;
     description: string;
@@ -11,7 +12,7 @@ type TProps = {
 
 function UseFulItem(props: TProps) {
     return (
-        <div className={cx('wrapper-useful-item')}>
+        <Link to={props.to ?? '/'} className={cx('wrapper-useful-item')}>
             <div className={cx('avatar')}>
                 <img src={props.img} alt="preview avatar" />
             </div>
@@ -22,7 +23,7 @@ function UseFulItem(props: TProps) {
                     XEM THÊM
                 </Link>
             </div>
-        </div>
+        </Link>
     );
 }
 

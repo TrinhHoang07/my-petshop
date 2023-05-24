@@ -8,6 +8,7 @@ import styles from './Header.module.scss';
 import classNames from 'classnames/bind';
 import Menu from './Menu';
 import { Search } from '../Search';
+import { Carts } from './Carts';
 
 const cx = classNames.bind(styles);
 
@@ -23,6 +24,20 @@ function Header() {
         }
         if (search) {
             search.style.transform = 'translateX(0)';
+        }
+    };
+
+    const handleOpenCarts = () => {
+        const cart: HTMLElement | null = document.getElementById('carts-list-small');
+        if (cart) {
+            cart.style.transform = 'scale(1)';
+        }
+    };
+
+    const handleCloseCarts = () => {
+        const cart: HTMLElement | null = document.getElementById('carts-list-small');
+        if (cart) {
+            cart.style.transform = 'scale(0)';
         }
     };
 
@@ -43,14 +58,17 @@ function Header() {
                 <Link className={cx('action-item', 'user-icon')} to={routesConfig.profile}>
                     <FaUser fontSize={'2.5rem'} />
                 </Link>
-                <Link className={cx('action-item', 'categories')} to={routesConfig.categories}>
-                    <FaShoppingCart fontSize={'2.5rem'} />
-                    {count > 0 && (
-                        <div className={cx('count-item')}>
-                            <span>{count >= 100 ? '99+' : count}</span>
-                        </div>
-                    )}
-                </Link>
+                <div onMouseEnter={handleOpenCarts} onMouseLeave={handleCloseCarts} className={cx('wrapper-cart')}>
+                    <Link className={cx('action-item', 'categories')} to={routesConfig.categories}>
+                        <FaShoppingCart fontSize={'2.5rem'} />
+                        {count > 0 && (
+                            <div className={cx('count-item')}>
+                                <span>{count >= 100 ? '99+' : count}</span>
+                            </div>
+                        )}
+                    </Link>
+                    <Carts />
+                </div>
             </div>
         </div>
     );

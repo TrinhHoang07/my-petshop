@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import logo from '../../assets/images/logo-petshop.jpg';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import routesConfig from '../../config/routes';
 import { useEffect, useRef } from 'react';
 import { useSessionContext } from '../../context/SessionContext';
@@ -14,10 +14,15 @@ type TForm = {
     password: string;
 };
 
+type TStateRedirect = {
+    redirect: string;
+};
+
 function Login() {
     const nameRef = useRef<any>();
     const passwordRef = useRef<any>();
     const navigate = useNavigate();
+    const { state }: { state: TStateRedirect } = useLocation();
     const [, setStateContext] = useSessionContext();
 
     const {
@@ -40,7 +45,11 @@ function Login() {
             },
         });
 
-        navigate(routesConfig.home);
+        if (state) {
+            navigate(state.redirect);
+        } else {
+            navigate(routesConfig.home);
+        }
     };
 
     const handleErrorInput = (ele: HTMLInputElement) => {

@@ -10,7 +10,6 @@ import { Food } from '../pages/Food';
 import { Home } from '../pages/Home';
 import { News } from '../pages/News';
 import { Profile } from '../pages/Profile';
-import { Search } from '../pages/Search';
 import { Detail } from '../pages/Detail';
 import { Shop } from '../pages/Shop';
 import { NotFound } from '../pages/NotFound';
@@ -96,7 +95,7 @@ const publicRoutes: TRoutes[] = [
     // test
     {
         id: 12,
-        path: 'test/detail-new',
+        path: routesConfig.newsDetail,
         component: LayoutDetailNew,
         layout: DefaultLayout,
     },

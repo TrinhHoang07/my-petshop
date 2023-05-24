@@ -21,7 +21,11 @@ function Categories() {
 
     useLayoutEffect(() => {
         if (!values.isAuth) {
-            navigate(routesConfig.login);
+            navigate(routesConfig.login, {
+                state: {
+                    redirect: `${routesConfig.categories}`,
+                },
+            });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

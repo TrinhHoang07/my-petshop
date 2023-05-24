@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './LayoutDetailNew.module.scss';
 import img from '../../../assets/images/banner_detail_new.jpg';
@@ -9,6 +10,14 @@ import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function LayoutDetailNew() {
+    useEffect(() => {
+        document.title = 'Trang chủ | Petshop chất lượng số 1 Việt Nam!';
+        window.scrollTo({
+            behavior: 'smooth',
+            top: 0,
+        });
+    }, []);
+
     return (
         <div className={cx('layout-detail-new')}>
             <div

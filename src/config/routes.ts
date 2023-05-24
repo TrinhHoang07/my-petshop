@@ -13,6 +13,7 @@ const routesConfig = {
     register: '/register',
     shop: '/shop',
     detail: '/product/:name/:id',
+    newsDetail: 'news/detail/:id',
     notFound: '*',
 };
 
