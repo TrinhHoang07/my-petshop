@@ -66,41 +66,43 @@ function Categories() {
                                     <div className={cx('preview-product')}>
                                         <img src={pro} alt="preview product" />
                                     </div>
-                                    <p className={cx('name-item-cart')}>
-                                        Name products Name products Name products Name products
-                                    </p>
+                                    <div className={cx('wrapper-info')}>
+                                        <p className={cx('name-item-cart')}>
+                                            Name products Name products Name products Name products
+                                        </p>
+                                        <p className={cx('color-product')}>Màu sắc: Trắng tuyết</p>
+                                        <p className={cx('item-price')}>₫1.995.000</p>
+                                        <div className={cx('count-item')}>
+                                            <p
+                                                onClick={() => {
+                                                    setQuantity((prev) => {
+                                                        const quantity = prev - 1;
+                                                        if (quantity <= 0) {
+                                                            return 1;
+                                                        } else {
+                                                            return quantity;
+                                                        }
+                                                    });
+                                                }}
+                                                className={cx('p_1')}
+                                            >
+                                                -
+                                            </p>
+                                            <p className={cx('p_2')}>{quantity}</p>
+                                            <p
+                                                onClick={() => {
+                                                    setQuantity((prev) => prev + 1);
+                                                }}
+                                                className={cx('p_3')}
+                                            >
+                                                +
+                                            </p>
+                                        </div>
+                                        <p className={cx('last-price')}>₫1.995.000</p>
+                                        <p className={cx('remove-item')}>Xóa</p>
+                                    </div>
                                 </div>
                             </div>
-                            <p className={cx('color-product')}>Màu sắc: Trắng tuyết</p>
-                            <p className={cx('item-price')}>₫1.995.000</p>
-                            <div className={cx('count-item')}>
-                                <p
-                                    onClick={() => {
-                                        setQuantity((prev) => {
-                                            const quantity = prev - 1;
-                                            if (quantity <= 0) {
-                                                return 1;
-                                            } else {
-                                                return quantity;
-                                            }
-                                        });
-                                    }}
-                                    className={cx('p_1')}
-                                >
-                                    -
-                                </p>
-                                <p className={cx('p_2')}>{quantity}</p>
-                                <p
-                                    onClick={() => {
-                                        setQuantity((prev) => prev + 1);
-                                    }}
-                                    className={cx('p_3')}
-                                >
-                                    +
-                                </p>
-                            </div>
-                            <p className={cx('last-price')}>₫1.995.000</p>
-                            <p className={cx('remove-item')}>Xóa</p>
                         </div>
                     ))}
                 </div>
@@ -125,7 +127,7 @@ function Categories() {
                         </div>
                         <div className={cx('buy-all')}>
                             <p className={cx('total-buy')}>
-                                Tổng thanh toán (5 sản phẩm): <span>₫0</span>
+                                Tổng thanh toán <span className={cx('total-count')}>(5 sản phẩm)</span>: <span>₫0</span>
                             </p>
                             <button className={cx('btn-buy')}>Mua Hàng</button>
                         </div>

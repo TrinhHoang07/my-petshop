@@ -50,7 +50,7 @@ function UseFul() {
                 >
                     <SwiperSlide>
                         <UseFulItem
-                            to="news/detail/1"
+                            path="news/detail/1"
                             img={avatar}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
                             description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
@@ -58,7 +58,7 @@ function UseFul() {
                     </SwiperSlide>
                     <SwiperSlide>
                         <UseFulItem
-                            to="news/detail/2"
+                            path="news/detail/2"
                             img={avatar_2}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
                             description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
@@ -66,7 +66,7 @@ function UseFul() {
                     </SwiperSlide>
                     <SwiperSlide>
                         <UseFulItem
-                            to="news/detail/3"
+                            path="news/detail/3"
                             img={avatar_3}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
                             description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
@@ -74,7 +74,7 @@ function UseFul() {
                     </SwiperSlide>
                     <SwiperSlide>
                         <UseFulItem
-                            to="news/detail/1"
+                            path="news/detail/1"
                             img={avatar}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
                             description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
@@ -82,7 +82,7 @@ function UseFul() {
                     </SwiperSlide>
                     <SwiperSlide>
                         <UseFulItem
-                            to="news/detail/2"
+                            path="news/detail/2"
                             img={avatar_2}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
                             description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
@@ -90,7 +90,7 @@ function UseFul() {
                     </SwiperSlide>
                     <SwiperSlide>
                         <UseFulItem
-                            to="news/detail/3"
+                            path="news/detail/3"
                             img={avatar_3}
                             heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
                             description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
