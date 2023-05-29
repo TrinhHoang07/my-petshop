@@ -191,7 +191,7 @@ $tablet-width: 1023px;
 }
 
 .name-item-cart {
-    width: 220px;
+    width: 250px;
     text-align: left;
     font-size: 1.4rem;
     display: -webkit-box;
@@ -208,6 +208,8 @@ $tablet-width: 1023px;
 
 .color-product {
     font-size: 1.4rem;
+    min-width: 250px;
+    text-align: left;
 
     @include mobile {
         font-size: 1.2rem;
@@ -218,6 +220,8 @@ $tablet-width: 1023px;
 .last-price,
 .item-price {
     font-size: 1.4rem;
+    min-width: 150px;
+    text-align: left;
 
     @include mobile {
         font-size: 1.2rem;
@@ -226,6 +230,7 @@ $tablet-width: 1023px;
 }
 
 .last-price {
+    margin-left: 32px;
     @include mobile {
         display: none;
     }
@@ -236,6 +241,7 @@ $tablet-width: 1023px;
     align-items: center;
     border: 1px solid #d7d7d7;
     font-size: 1.4rem;
+    text-align: left;
 
     @include mobile {
         font-size: 1.2rem;

@@ -2,19 +2,70 @@ import classNames from 'classnames/bind';
 import styles from './Categories.module.scss';
 import { useSessionContext } from '../../context/SessionContext';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import routesConfig from '../../config/routes';
-// import img from '../../assets/images/logo-petshop.jpg';
 import user from '../../assets/images/meoww.jpg';
 import pro from '../../assets/images/cat_item_3.jpg';
+import { confirmDialog } from 'primereact/confirmdialog';
 import { MdOutlineDiscount } from 'react-icons/md';
+import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 
 const cx = classNames.bind(styles);
 
+const fakeData = [
+    {
+        id: 1,
+        name: 'Meow Meow Cuteeeeeeee',
+        color: 'White snow',
+        price: 3000000,
+        lastPrice: 3000000,
+        quantity: 1,
+        checked: false,
+    },
+    {
+        id: 2,
+        name: 'Dog Dog Cuteeeeeeee',
+        color: 'Black',
+        price: 10007770,
+        lastPrice: 10007770,
+        quantity: 1,
+        checked: false,
+    },
+    {
+        id: 3,
+        name: 'Thuc an cho Meow Meow',
+        color: 'White snow',
+        price: 1090000,
+        lastPrice: 1090000,
+        quantity: 1,
+        checked: false,
+    },
+    {
+        id: 4,
+        name: 'Meo anh long dai cute',
+        color: 'Gold',
+        price: 1900000,
+        lastPrice: 1900000,
+        quantity: 1,
+        checked: false,
+    },
+    {
+        id: 5,
+        name: 'Cho ba tu',
+        color: 'Grey',
+        price: 1500000,
+        lastPrice: 1500000,
+        quantity: 1,
+        checked: false,
+    },
+];
+
 function Categories() {
     const [values] = useSessionContext();
-    const [quantity, setQuantity] = useState<number>(1);
+    const [data, setData] = useState<any[]>(fakeData);
+    const [checkAll, setCheckAll] = useState<boolean>(false);
     const navigate = useNavigate();
+    const toast = useConfirmToast();
 
     useEffect(() => {
         document.title = 'Trang chủ | Petshop chất lượng số 1 Việt Nam!';
@@ -36,14 +87,122 @@ function Categories() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [values]);
 
+    const totalMoney = useMemo(() => {
+        const dataChecked: any[] = data.filter((item) => item.checked === true);
+
+        console.log('call', dataChecked);
+
+        if (dataChecked.length > 0) {
+            const result = dataChecked.reduce((result, cur) => result + cur.lastPrice, 0);
+            console.log(result);
+
+            return {
+                price: result,
+                length: dataChecked.length,
+            };
+        }
+    }, [data]);
+
+    const confirmOne = (value: any) => {
+        confirmDialog({
+            message: 'Bạn có chắc chắn muốn xóa không?',
+            header: 'Xóa sản phẩm',
+            acceptLabel: 'Đồng ý',
+            rejectLabel: 'Hủy bỏ',
+            icon: 'pi pi-exclamation-triangle',
+            accept() {
+                toast.current?.show({
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: 'Đã xóa thành công sản phẩm',
+                    life: 3000,
+                });
+                setData((prev) => prev.filter((item) => item.id !== value.id));
+            },
+        });
+    };
+
+    const confirmAll = () => {
+        confirmDialog({
+            message: 'Bạn có chắc chắn muốn xóa tất cả sản phẩm không?',
+            header: 'Xóa sản phẩm',
+            acceptLabel: 'Đồng ý',
+            rejectLabel: 'Hủy bỏ',
+            icon: 'pi pi-exclamation-triangle',
+            accept() {
+                if (checkAll) {
+                    setData([]);
+                    toast.current?.show({
+                        severity: 'success',
+                        summary: 'Thành công',
+                        detail: 'Đã xóa thành công',
+                        life: 3000,
+                    });
+                } else {
+                    toast.current?.show({
+                        severity: 'error',
+                        summary: 'Thất bại',
+                        detail: 'Vui lòng chọn sản phẩm cần xóa!',
+                        life: 3000,
+                    });
+                }
+            },
+        });
+    };
+
+    const handleIncrementQuantity = (value: any) => {
+        const index = data.findIndex((item) => item.id === value.id);
+
+        const dataChanged = [...data];
+        dataChanged[index] = {
+            ...data[index],
+            quantity: ++data[index].quantity,
+            lastPrice: data[index].quantity * data[index].price,
+        };
+
+        setData(dataChanged);
+    };
+
+    const handleDownQuantity = (value: any) => {
+        const index = data.findIndex((item) => item.id === value.id);
+
+        const dataChanged = [...data];
+        dataChanged[index] = {
+            ...dataChanged[index],
+            quantity: --data[index].quantity <= 1 ? 1 : data[index].quantity,
+            lastPrice: data[index].quantity <= 1 ? data[index].price : data[index].quantity * data[index].price,
+        };
+
+        setData(dataChanged);
+    };
+
+    const handleChecked = (value: any) => {
+        const index = data.findIndex((item) => item.id === value.id);
+
+        const dataChanged = [...data];
+        dataChanged[index] = {
+            ...dataChanged[index],
+            checked: !data[index].checked,
+        };
+
+        setData(dataChanged);
+    };
+
+    const handeSelectAll = () => {
+        setCheckAll((prev) => !prev);
+        const dataChecked = data.map((item) => ({
+            ...item,
+            checked: !checkAll ? true : false,
+        }));
+
+        setData(dataChecked);
+    };
+
     return (
         <div className={cx('categories')}>
             <div className={cx('header')}>
                 <div className={cx('info')}>
                     <div className={cx('logo')}>
-                        {/* <div className={cx('avatar')}>
-                            <img src={img} alt="logo" />
-                        </div> */}
                         <h3 className={cx('name-petshop')}>Petshop</h3>
                     </div>
                     <div className={cx('line')}></div>
@@ -58,48 +217,37 @@ function Categories() {
             </div>
             <div className={cx('carts-list')}>
                 <div className={cx('wrapper-carts')}>
-                    {[1, 2, 3, 4, 5].map((item) => (
-                        <div key={item} className={cx('cart-item')}>
+                    {data.map((item) => (
+                        <div key={item.id} className={cx('cart-item')}>
                             <div className={cx('input-product-wrap')}>
-                                <input type="checkbox" name="check-cart" />
+                                <input
+                                    checked={item.checked}
+                                    onChange={() => handleChecked(item)}
+                                    type="checkbox"
+                                    name="check-cart"
+                                />
                                 <div className={cx('info-item')}>
                                     <div className={cx('preview-product')}>
                                         <img src={pro} alt="preview product" />
                                     </div>
                                     <div className={cx('wrapper-info')}>
-                                        <p className={cx('name-item-cart')}>
-                                            Name products Name products Name products Name products
-                                        </p>
-                                        <p className={cx('color-product')}>Màu sắc: Trắng tuyết</p>
-                                        <p className={cx('item-price')}>₫1.995.000</p>
+                                        <p className={cx('name-item-cart')}>{item.name}</p>
+                                        <p className={cx('color-product')}>Màu sắc: {item.color}</p>
+                                        <p className={cx('item-price')}>{item.price}</p>
                                         <div className={cx('count-item')}>
-                                            <p
-                                                onClick={() => {
-                                                    setQuantity((prev) => {
-                                                        const quantity = prev - 1;
-                                                        if (quantity <= 0) {
-                                                            return 1;
-                                                        } else {
-                                                            return quantity;
-                                                        }
-                                                    });
-                                                }}
-                                                className={cx('p_1')}
-                                            >
+                                            <p onClick={() => handleDownQuantity(item)} className={cx('p_1')}>
                                                 -
                                             </p>
-                                            <p className={cx('p_2')}>{quantity}</p>
-                                            <p
-                                                onClick={() => {
-                                                    setQuantity((prev) => prev + 1);
-                                                }}
-                                                className={cx('p_3')}
-                                            >
+                                            <p className={cx('p_2')}>{item.quantity}</p>
+                                            <p onClick={() => handleIncrementQuantity(item)} className={cx('p_3')}>
                                                 +
                                             </p>
                                         </div>
-                                        <p className={cx('last-price')}>₫1.995.000</p>
-                                        <p className={cx('remove-item')}>Xóa</p>
+
+                                        <p className={cx('last-price')}>{item.lastPrice}</p>
+                                        <p onClick={() => confirmOne(item)} className={cx('remove-item')}>
+                                            Xóa
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -120,14 +268,26 @@ function Categories() {
                     <div className={cx('actions-footer')}>
                         <div className={cx('all-remove')}>
                             <div className={cx('select-all')}>
-                                <input type="checkbox" name="remove-all" id="all-del" />
-                                <label htmlFor="all-del">Chọn Tất Cả (5)</label>
+                                <input
+                                    onChange={handeSelectAll}
+                                    checked={checkAll}
+                                    type="checkbox"
+                                    name="remove-all"
+                                    id="all-del"
+                                />
+                                <label htmlFor="all-del">Chọn Tất Cả ({data.length})</label>
                             </div>
-                            <p className={cx('deleted-all')}>Xóa</p>
+                            <p onClick={confirmAll} className={cx('deleted-all')}>
+                                Xóa
+                            </p>
                         </div>
                         <div className={cx('buy-all')}>
                             <p className={cx('total-buy')}>
-                                Tổng thanh toán <span className={cx('total-count')}>(5 sản phẩm)</span>: <span>₫0</span>
+                                Tổng thanh toán{' '}
+                                {totalMoney?.length && (
+                                    <span className={cx('total-count')}>({totalMoney?.length} sản phẩm)</span>
+                                )}
+                                <span>₫{totalMoney?.price ?? 0}</span>
                             </p>
                             <button className={cx('btn-buy')}>Mua Hàng</button>
                         </div>
