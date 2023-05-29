@@ -6,6 +6,7 @@ import { GlobalStyles } from './components/GlobalStyles';
 import reportWebVitals from './reportWebVitals';
 import { AosContext } from './components/AosContext';
 import SessionContextProvider from './context/SessionContext';
+import ConfirmAndToastContext from './context/ConfirmAndToastContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -13,9 +14,11 @@ root.render(
         <GlobalStyles>
             <RecoilRoot>
                 <SessionContextProvider>
-                    <AosContext>
-                        <App />
-                    </AosContext>
+                    <ConfirmAndToastContext>
+                        <AosContext>
+                            <App />
+                        </AosContext>
+                    </ConfirmAndToastContext>
                 </SessionContextProvider>
             </RecoilRoot>
         </GlobalStyles>
