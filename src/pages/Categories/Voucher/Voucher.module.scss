@@ -1,0 +1,136 @@
+.mask {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    visibility: hidden;
+    z-index: 99999;
+}
+
+.contents {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background-color: #fff;
+    padding: 16px 24px;
+    transform: translate(-50%, -50%) scale(0);
+    transition: all ease-in-out 0.25s;
+    transform-origin: center center;
+    z-index: 999999;
+    border-radius: 4px;
+}
+
+.header {
+    h3 {
+        font-size: 1.5rem;
+        font-weight: 500;
+        text-align: left;
+        padding-bottom: 8px;
+    }
+}
+
+.search-vouchers {
+    display: flex;
+    align-items: center;
+    padding-bottom: 16px;
+
+    span {
+        font-size: 1.2rem;
+        margin-right: 8px;
+    }
+
+    input {
+        width: 250px;
+        border: 1px solid #d7d7d7;
+        border-radius: 6px;
+        outline: none;
+        padding: 8px 8px 8px 14px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 1.4rem;
+        background-color: orange;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        margin-left: 8px;
+    }
+}
+
+.vouchers {
+    padding: 16px 0;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.wraper-info,
+.voucher-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.voucher-item {
+    padding: 8px 16px 8px 8px;
+    transition: all linear 0.2s;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f0eded;
+    }
+}
+
+.preview_img {
+    width: 100px;
+    height: 86px;
+    background-color: aqua;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+}
+
+.info-voucher {
+    font-size: 1.2rem;
+    text-align: left;
+    padding-left: 12px;
+    .danger {
+        color: red;
+        display: inline-block;
+        padding: 2px;
+        border: 1px solid red;
+        margin: 4px 0;
+    }
+
+    .deadline {
+        font-size: 1rem;
+    }
+}
+
+.footer {
+    text-align: right;
+    padding-top: 16px;
+
+    button {
+        padding: 8px 16px;
+        color: #000;
+        font-size: 1.4rem;
+        border: 1px solid #333;
+        border-radius: 4px;
+
+        + button {
+            margin: 0 4px;
+        }
+    }
+
+    .primary {
+        background-color: orange;
+        color: #fff;
+        border: 1px solid transparent;
+        min-width: 64px;
+    }
+}

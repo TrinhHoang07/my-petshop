@@ -9,6 +9,7 @@ import pro from '../../assets/images/cat_item_3.jpg';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { MdOutlineDiscount } from 'react-icons/md';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
+import { Voucher } from './Voucher';
 
 const cx = classNames.bind(styles);
 
@@ -198,8 +199,21 @@ function Categories() {
         setData(dataChecked);
     };
 
+    const handleOpenVoucher = () => {
+        const mask: HTMLElement | null = document.getElementById('mask');
+        const voucher: HTMLElement | null = document.getElementById('voucher');
+
+        if (mask) {
+            mask.style.visibility = 'visible';
+        }
+        if (voucher) {
+            voucher.style.transform = 'translate(-50%, -50%) scale(1)';
+        }
+    };
+
     return (
         <div className={cx('categories')}>
+            <Voucher />
             <div className={cx('header')}>
                 <div className={cx('info')}>
                     <div className={cx('logo')}>
@@ -262,7 +276,9 @@ function Categories() {
                                 <MdOutlineDiscount size={'2rem'} />
                                 <span>Petshop Voucher</span>
                             </div>
-                            <p className={cx('add-voucher')}>Chọn Hoặc Nhập Mã</p>
+                            <p onClick={handleOpenVoucher} className={cx('add-voucher')}>
+                                Chọn Hoặc Nhập Mã
+                            </p>
                         </div>
                     </div>
                     <div className={cx('actions-footer')}>
