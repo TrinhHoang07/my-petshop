@@ -4,6 +4,7 @@ import { useSessionContext } from '../../context/SessionContext';
 import { useEffect, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import routesConfig from '../../config/routes';
+import { LayoutProfile } from '../../components/Layout/LayoutProfile';
 
 const cx = classNames.bind(styles);
 
@@ -28,21 +29,23 @@ function Profile() {
     }, [values]);
 
     return (
-        <div className={cx('profile')}>
-            <h1>Xin chào {values.user?.name}</h1>
-            <button
-                onClick={() => {
-                    setValues({
-                        isAuth: false,
-                        user: {},
-                    });
-                    localStorage.setItem('user', '');
-                    navigate(routesConfig.home);
-                }}
-            >
-                Log out
-            </button>
-        </div>
+        <LayoutProfile>
+            <div className={cx('profile')}>
+                <h1>Xin chào {values.user?.name}</h1>
+                <button
+                    onClick={() => {
+                        setValues({
+                            isAuth: false,
+                            user: {},
+                        });
+                        localStorage.setItem('user', '');
+                        navigate(routesConfig.home);
+                    }}
+                >
+                    Log out
+                </button>
+            </div>
+        </LayoutProfile>
     );
 }
 
