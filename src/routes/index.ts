@@ -17,6 +17,12 @@ import { FlagmentLayout } from '../components/Layout/FlagmentLayout';
 import { Login } from '../pages/Login';
 import { Register } from '../pages/Register';
 import { LayoutDetailNew } from '../components/Layout/LayoutDetailNew';
+import { ProfileBanks } from '../pages/ProfileBanks';
+import { ProfileAddress } from '../pages/ProfileAddress';
+import { ProfileChangePassword } from '../pages/ProfileChangePassword';
+import { ProfileBuys } from '../pages/ProfileBuys';
+import { ProfileNoti } from '../pages/ProfileNoti';
+import { ProfileVouchers } from '../pages/ProfileVouchers';
 
 type TRoutes = {
     id: number;
@@ -121,10 +127,46 @@ const privateRoutes = [
         layout: FlagmentLayout,
     },
     {
-        id: 3,
+        id: 4,
         path: routesConfig.register,
         component: Register,
         layout: FlagmentLayout,
+    },
+    {
+        id: 5,
+        path: routesConfig.profile_bank,
+        component: ProfileBanks,
+        layout: DefaultLayout,
+    },
+    {
+        id: 6,
+        path: routesConfig.profile_address,
+        component: ProfileAddress,
+        layout: DefaultLayout,
+    },
+    {
+        id: 7,
+        path: routesConfig.profile_change_password,
+        component: ProfileChangePassword,
+        layout: DefaultLayout,
+    },
+    {
+        id: 8,
+        path: routesConfig.profile_buy,
+        component: ProfileBuys,
+        layout: DefaultLayout,
+    },
+    {
+        id: 9,
+        path: routesConfig.profile_noti,
+        component: ProfileNoti,
+        layout: DefaultLayout,
+    },
+    {
+        id: 10,
+        path: routesConfig.profile_voucher,
+        component: ProfileVouchers,
+        layout: DefaultLayout,
     },
 ];
 

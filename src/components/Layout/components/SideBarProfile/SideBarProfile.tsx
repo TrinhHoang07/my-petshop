@@ -1,11 +1,12 @@
 import classNames from 'classnames/bind';
 import styles from './SideBarProfile.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { AiOutlineEdit, AiOutlineUser } from 'react-icons/ai';
 import { CiViewList } from 'react-icons/ci';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import img from '../../../../assets/images/meoww.jpg';
 import { MdOutlineDiscount } from 'react-icons/md';
+import routesConfig from '../../../../config/routes';
 
 const cx = classNames.bind(styles);
 
@@ -18,7 +19,7 @@ function SideBarProfile() {
                 </div>
                 <div className={cx('info-user')}>
                     <h3 className={cx('user-name')}>Name user</h3>
-                    <Link to={''}>
+                    <Link to={routesConfig.profile}>
                         <AiOutlineEdit />
                         <span>Sửa hồ sơ</span>
                     </Link>
@@ -26,36 +27,57 @@ function SideBarProfile() {
             </div>
             <div className={cx('options')}>
                 <div className={cx('private-info')}>
-                    <Link to={''} className={cx('title-info-private')}>
+                    <Link to={routesConfig.profile} className={cx('title-info-private')}>
                         <AiOutlineUser size={'2rem'} style={{ color: '#3067be' }} />
                         <span>Tài khoản của tôi</span>
                     </Link>
-                    <Link className={cx('child-not-icon')} to={''}>
+                    <NavLink
+                        className={(nav) => cx('child-not-icon', { active: nav.isActive })}
+                        to={routesConfig.profile}
+                    >
                         Hồ Sơ
-                    </Link>
-                    <Link className={cx('child-not-icon')} to={''}>
+                    </NavLink>
+                    <NavLink
+                        className={(nav) => cx('child-not-icon', { active: nav.isActive })}
+                        to={routesConfig.profile_bank}
+                    >
                         Ngân Hàng
-                    </Link>
-                    <Link className={cx('child-not-icon')} to={''}>
+                    </NavLink>
+                    <NavLink
+                        className={(nav) => cx('child-not-icon', { active: nav.isActive })}
+                        to={routesConfig.profile_address}
+                    >
                         Địa Chỉ
-                    </Link>
-                    <Link className={cx('child-not-icon')} to={''}>
+                    </NavLink>
+                    <NavLink
+                        className={(nav) => cx('child-not-icon', { active: nav.isActive })}
+                        to={routesConfig.profile_change_password}
+                    >
                         Đổi Mật Khẩu
-                    </Link>
+                    </NavLink>
                 </div>
                 <div className={cx('more-actions')}>
-                    <Link to={''} className={cx('title-info-private')}>
+                    <NavLink
+                        to={routesConfig.profile_buy}
+                        className={(nav) => cx('title-info-private', { active: nav.isActive })}
+                    >
                         <CiViewList size={'2rem'} style={{ color: '#3067be' }} />
                         <span>Đơn Mua</span>
-                    </Link>
-                    <Link to={''} className={cx('title-info-private')}>
+                    </NavLink>
+                    <NavLink
+                        to={routesConfig.profile_noti}
+                        className={(nav) => cx('title-info-private', { active: nav.isActive })}
+                    >
                         <IoMdNotificationsOutline style={{ color: '#f46b4e' }} size={'2rem'} />
                         <span>Thông Báo</span>
-                    </Link>
-                    <Link to={''} className={cx('title-info-private')}>
+                    </NavLink>
+                    <NavLink
+                        to={routesConfig.profile_voucher}
+                        className={(nav) => cx('title-info-private', { active: nav.isActive })}
+                    >
                         <MdOutlineDiscount size={'2rem'} style={{ color: 'orange' }} />
                         <span>Petshop Vouchers</span>
-                    </Link>
+                    </NavLink>
                 </div>
             </div>
         </div>
