@@ -31,11 +31,10 @@ $tablet-width: 1023px;
 }
 
 // navbar
-
 .nav-bar {
     flex-basis: 25%;
     flex-shrink: 0;
-    padding-right: 16px;
+    padding-left: 8px;
     margin-bottom: 32px;
 
     @include mobileAndTablet {

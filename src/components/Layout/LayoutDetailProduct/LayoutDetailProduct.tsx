@@ -154,6 +154,20 @@ function LayoutDetailProduct(props: TProps) {
                                     lại thích nằm lười. Với đặc điểm này khiến chúng trở nên dễ nuôi hơn, không cần
                                     thường xuyên cho đi dạo.
                                 </p>
+                                <p className={cx('description-tab-view')}>
+                                    Mèo Anh Lông Dài có tính tình khá hiền lành, ôn hòa. Chúng khá hiếu động và thích
+                                    đùa giỡn, nhất là khi chúng còn nhỏ. Tuy nhiên, vì lông dài và dày nên việc chăm sóc
+                                    và chải chuốt yêu cầu nhiều hơn so với Mèo Anh Lông Ngắn. Tuy nhiên, khi lớn chúng
+                                    lại thích nằm lười. Với đặc điểm này khiến chúng trở nên dễ nuôi hơn, không cần
+                                    thường xuyên cho đi dạo.
+                                </p>
+                                <p className={cx('description-tab-view')}>
+                                    Mèo Anh Lông Dài có tính tình khá hiền lành, ôn hòa. Chúng khá hiếu động và thích
+                                    đùa giỡn, nhất là khi chúng còn nhỏ. Tuy nhiên, vì lông dài và dày nên việc chăm sóc
+                                    và chải chuốt yêu cầu nhiều hơn so với Mèo Anh Lông Ngắn. Tuy nhiên, khi lớn chúng
+                                    lại thích nằm lười. Với đặc điểm này khiến chúng trở nên dễ nuôi hơn, không cần
+                                    thường xuyên cho đi dạo.
+                                </p>
                             </TabPanel>
                             <TabPanel header="ĐÁNH GIÁ">
                                 <div className={cx('header-rate')}>
