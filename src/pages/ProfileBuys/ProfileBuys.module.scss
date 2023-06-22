@@ -1,0 +1,33 @@
+.profile-buys {
+    width: 100%;
+    padding: 16px 48px;
+}
+
+.buys-search {
+    span {
+        display: flex;
+        align-items: center;
+        border: 1px solid #d7d7d7;
+        border-radius: 4px;
+
+        .icon-search {
+            display: inline-block;
+            width: 36px;
+            text-align: center;
+            color: #d7d7d7;
+            transition: all ease 0.3s;
+        }
+
+        input {
+            width: 100%;
+            border: none;
+            padding: 12px 14px 12px 0;
+            outline: none;
+            font-size: 1.4rem;
+        }
+    }
+
+    &:focus-within .icon-search {
+        color: #333;
+    }
+}
