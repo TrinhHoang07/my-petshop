@@ -81,7 +81,7 @@ function FormAdBank(props: _T_Props) {
                 <h3 className={cx('heading-form-add')}>Thêm số điện thoại</h3>
 
                 <div className={cx('detail-card')}>
-                    <form onSubmit={handleSubmit(onSubmit)} className={cx('form')}>
+                    <form onSubmit={handleSubmit(onSubmit)} className={cx('form-container')}>
                         <div className={cx('form-wrapper')}>
                             <div className={cx('form-item')}>
                                 <label htmlFor="phoneNumber">Số điện thoại: </label>

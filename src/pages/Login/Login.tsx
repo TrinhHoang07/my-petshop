@@ -99,7 +99,7 @@ function Login() {
                     <p>Hãy nhập thông tin tài khoản và mật khẩu của bạn</p>
                 </div>
                 <div className={cx('login-form')}>
-                    <form onSubmit={handleSubmit(onSubmit)} className={cx('form')}>
+                    <form onSubmit={handleSubmit(onSubmit)} className={cx('form-container')}>
                         <div className={cx('form-item')}>
                             <label htmlFor="name">Tài khoản: </label>
                             <input

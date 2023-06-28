@@ -96,7 +96,7 @@ function Contact() {
                         <Title logo={logo} title="" />
                     </div>
                     <div className={cx('contact-form')}>
-                        <form onSubmit={handleSubmit(onSubmit)} className={cx('form')}>
+                        <form onSubmit={handleSubmit(onSubmit)} className={cx('form-container')}>
                             <div className={cx('form-item')}>
                                 <label htmlFor="name">Họ Và Tên: </label>
                                 <input

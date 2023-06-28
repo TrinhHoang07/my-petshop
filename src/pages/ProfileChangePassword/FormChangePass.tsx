@@ -71,7 +71,7 @@ function FormChangePass() {
 
     return (
         <div className={cx('form-container')}>
-            <form onSubmit={handleSubmit(onSubmit)} className={cx('form')}>
+            <form onSubmit={handleSubmit(onSubmit)} className={cx('form-container')}>
                 <div className={cx('form-wrapper')}>
                     <div className={cx('form-item')}>
                         <label htmlFor="prevPass">Nhập mật khẩu cũ: </label>

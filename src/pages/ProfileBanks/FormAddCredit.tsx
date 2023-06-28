@@ -137,7 +137,7 @@ function FormAdCredit(props: _T_Props) {
                     </div>
                 </div>
                 <div className={cx('detail-card')}>
-                    <form onSubmit={handleSubmit(onSubmit)} className={cx('form')}>
+                    <form onSubmit={handleSubmit(onSubmit)} className={cx('form-container')}>
                         <div className={cx('form-wrapper')}>
                             <div className={cx('form-item')}>
                                 <label htmlFor="cardNumber">Số thẻ: </label>

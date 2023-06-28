@@ -93,7 +93,7 @@ function Register() {
                     <p>Vui lòng nhập đầy đủ thông tin của bạn</p>
                 </div>
                 <div className={cx('login-form')}>
-                    <form onSubmit={handleSubmit(onSubmit)} className={cx('form')}>
+                    <form onSubmit={handleSubmit(onSubmit)} className={cx('form-container')}>
                         <div className={cx('form-item')}>
                             <label htmlFor="name">Tài khoản: </label>
                             <input
