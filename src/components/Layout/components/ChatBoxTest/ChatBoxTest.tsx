@@ -1,4 +1,4 @@
-import styles from './ChatBox.module.scss';
+import styles from './ChatBoxTest.module.scss';
 import classNames from 'classnames/bind';
 import { BiMinus, BiHappy } from 'react-icons/bi';
 import { IoSend } from 'react-icons/io5';
@@ -37,7 +37,7 @@ function ChatBox() {
                 console.log('id connected: ', socketRef.current?.id);
 
                 socketRef.current?.on(`${socketRef.current?.id}`, (data: any) => {
-                    console.log('tin nhan cua user gui cho admin', data);
+                    console.log('tin nhan cua admin gui cho user: ', data);
                 });
             });
 
@@ -192,7 +192,7 @@ function ChatBox() {
     };
 
     const handleSubmit = () => {
-        socketRef.current?.emit('messageToAdmin', {
+        socketRef.current?.emit('messageToUser', {
             id: socketRef.current?.id,
             name: value,
             age: 20,
