@@ -9,17 +9,40 @@ import logo from '../../../../assets/images/logo-petshop.jpg';
 import cat from '../../../../assets/images/meoww.jpg';
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { TypingAdmin } from '../TypingAdmin';
 
 const cx = classNames.bind(styles);
 
 type TMes = {
-    user: string;
+    role: string;
     message: string;
+    id?: string;
+    name: string;
 };
 
 function ChatBox() {
     // test chats
     const socketRef = useRef<Socket>();
+
+    // //////////////////////////////////////////////////////////////////
+    const [open, setOpen] = useState<boolean>(false);
+    const [visible, setVisible] = useState<boolean>(false);
+    const [value, setValue] = useState<string>('');
+    const mesRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [messages, setMessages] = useState<TMes[]>([
+        {
+            role: 'admin',
+            name: 'Van Hoang',
+            message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Hoàng Trịnh!',
+        },
+    ]);
+
+    // scroll to message when user submitted
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, open]);
 
     useEffect(() => {
         const socket = io('http://localhost:3008', {
@@ -27,18 +50,56 @@ function ChatBox() {
         });
 
         socketRef.current = socket;
+
+        return () => {
+            socketRef.current?.disconnect();
+        };
     }, []);
 
     useEffect(() => {
         if (socketRef.current) {
-            console.log('call');
-
             socketRef.current.on('connect', () => {
-                console.log('id connected: ', socketRef.current?.id);
+                console.log('id connected USER: ', socketRef.current?.id);
 
-                socketRef.current?.on(`${socketRef.current?.id}`, (data: any) => {
-                    console.log('tin nhan cua user gui cho admin', data);
+                socketRef.current?.once(`init_user_${socketRef.current.id}`, (data) => {
+                    setMessages((prev) => [
+                        ...prev,
+                        {
+                            message:
+                                'Chúng tôi sẽ trả lời bạn sớm nhất có thể. Nếu chờ lâu bạn hãy liên hệ: 0396254427! Xin cảm ơn.',
+                            name: 'Van Hoang',
+                            role: 'admin',
+                        },
+                    ]);
                 });
+
+                if (socketRef.current?.id) {
+                    socketRef.current?.on(`${socketRef.current?.id}`, (data) => {
+                        setMessages((prev) => [
+                            ...prev,
+                            {
+                                message: data.message,
+                                name: data.name,
+                                role: data.role,
+                                id: data.id,
+                            },
+                        ]);
+                    });
+
+                    socketRef.current.on(`typing_admin_${socketRef.current.id}`, (data) => {
+                        if (data.isType === socketRef.current?.id) {
+                            setVisible(true);
+                        } else {
+                            setVisible(false);
+                        }
+                    });
+
+                    socketRef.current.on(`clear_typing_admin_${socketRef.current.id}`, (data) => {
+                        if (data.isType === socketRef.current?.id) {
+                            setVisible(false);
+                        }
+                    });
+                }
             });
 
             socketRef.current.on('disconnect', () => {
@@ -49,162 +110,34 @@ function ChatBox() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [socketRef.current]);
 
-    // //////////////////////////////////////////////////////////////////
-    const [open, setOpen] = useState<boolean>(false);
-    const init = useRef<boolean>(true);
-    const [value, setValue] = useState<string>('');
-    const [isSubmit, setIsSubmit] = useState<boolean>(false);
-    const mesRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-    const prevMessage = useRef<string>();
-    const [messages, setMessages] = useState<TMes[]>([
-        // {
-        //     user: 'bot',
-        //     message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Hoàng Trịnh!',
-        // },
-        // {
-        //     user: 'bot',
-        //     message: 'Bạn đang cần giúp đỡ?',
-        // },
-        // {
-        //     user: 'user',
-        //     message: "Hello you! I'm Parent of Vader!",
-        // },
-        // {
-        //     user: 'bot',
-        //     message: 'Bạn là bố của tôi sao????? Địt con mẹ bạn luôn đấy!',
-        // },
-        // {
-        //     user: 'bot',
-        //     message: 'Đừng để tao phải nóng ok!',
-        // },
-        // {
-        //     user: 'user',
-        //     message: 'Bot deo gì mà láo vậy!',
-        // },
-        // {
-        //     user: 'bot',
-        //     message: 'Cút mẹ mày đi!',
-        // },
-        // {
-        //     user: 'user',
-        //     message: 'Mày biết bố mày là ai không?',
-        // },
-        // {
-        //     user: 'bot',
-        //     message: 'Tao biết, mày là cái thằng dẻ dách!',
-        // },
-        // {
-        //     user: 'user',
-        //     message: 'Cho bố mày cái địa chỉ.',
-        // },
-        // {
-        //     user: 'bot',
-        //     message: 'Đợi tao xỉa răng xong tao nói cho!',
-        // },
-    ]);
-
-    // scroll to message when user submitted
     useEffect(() => {
-        init.current &&
-            setMessages((prev) => [
-                ...prev,
-                {
-                    user: 'bot',
-                    message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Hoàng Trịnh!',
-                },
-            ]);
-        if (prevMessage.current?.includes('hello')) {
-            setMessages((prev) => [...prev, { user: 'bot', message: 'Bạn cần tôi giúp đỡ gì không?' }]);
-        } else if (
-            [
-                'tôi cần giúp đỡ',
-                'có',
-                'giúp đỡ',
-                'cần',
-                'giúp',
-                'tôi cần',
-                'có điều',
-                'muốn hỏi',
-                'tôi có',
-                'bạn cho tôi',
-                'hỏi',
-                'cho tôi hỏi',
-            ].some((item) => prevMessage.current?.includes(item))
-        ) {
-            setMessages((prev) => [
-                ...prev,
-                { user: 'bot', message: 'Tôi luôn sẵn lòng giúp đỡ, bạn cần tôi giúp gì?' },
-            ]);
-        } else if (
-            [
-                'tôi muốn',
-                'mua',
-                'chó',
-                'mèo',
-                'thức ăn',
-                'tham khảo',
-                'giá',
-                'loại',
-                'bán',
-                'thế nào',
-                'cụ thể',
-                'giống này',
-                'shop',
-            ].some((item) => prevMessage.current?.includes(item))
-        ) {
-            setMessages((prev) => [
-                ...prev,
-                {
-                    user: 'bot',
-                    message: 'Bạn tham khảo giá như shop đã đăng nhé, đó là giá niêm yết rồi ý!',
-                },
-            ]);
-        } else if (prevMessage.current) {
-            setMessages((prev) => [
-                ...prev,
-                { user: 'bot', message: 'Chúng tôi sẽ phản hồi bạn trong thời gian ngắn nhất có thể!' },
-            ]);
-            setMessages((prev) => [
-                ...prev,
-                {
-                    user: 'bot',
-                    message: 'Đây là tin nhắn tự động của bot chat, được phát triển và thiết kế bởi Hoàng Trịnh!',
-                },
-            ]);
+        if (socketRef.current?.id) {
+            if (value.trim().length > 0) {
+                socketRef.current?.emit('typing_user', socketRef.current?.id);
+            } else {
+                socketRef.current?.emit('clear_typing_user', socketRef.current?.id);
+            }
         }
-
-        init.current = false;
-
-        setTimeout(() => {
-            scrollToBottom();
-        }, 100);
-    }, [isSubmit]);
-
-    // scroll to message latest
-    useEffect(() => {
-        scrollToBottom();
-    }, [open]);
+    }, [value]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     const handleSubmit = () => {
-        socketRef.current?.emit('messageToAdmin', {
-            id: socketRef.current?.id,
-            name: value,
-            age: 20,
-            address: 'Ha Noi',
-        });
-
         if (value.trim().length > 0) {
-            prevMessage.current = value;
-            setMessages((prev) => [...prev, { user: 'user', message: value }]);
+            socketRef.current?.emit('messageToAdmin', {
+                id: socketRef.current?.id,
+                name: 'Thuy cute',
+                role: 'user',
+                message: value,
+            });
+            setMessages((prev) => [
+                ...prev,
+                { message: value, role: 'user', name: 'Thuy cute', id: socketRef.current?.id },
+            ]);
             setValue('');
             inputRef.current && inputRef.current.focus();
-            setIsSubmit((prev) => !prev);
         }
     };
 
@@ -240,7 +173,7 @@ function ChatBox() {
                     </div>
                     <div ref={mesRef} className={cx('messages')}>
                         {messages.map((message, index) => {
-                            if (message.user === 'bot') {
+                            if (message.role === 'admin') {
                                 return (
                                     <div key={index} className={cx('message', 'getview')}>
                                         <div className={cx('avatar')}>
@@ -263,6 +196,7 @@ function ChatBox() {
                         <div ref={messagesEndRef} />
                     </div>
                     <div className={cx('footer-chat')}>
+                        {visible && <TypingAdmin />}
                         <div className={cx('footer-content')}>
                             <div className={cx('input-footer')}>
                                 <span className={cx('icons')}>
