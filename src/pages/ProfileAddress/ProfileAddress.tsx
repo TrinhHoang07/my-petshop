@@ -2,7 +2,7 @@ import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ProfileAddress.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
-import { IoAdd } from 'react-icons/io5';
+import { IoAdd, IoArrowBack } from 'react-icons/io5';
 import { AddressIcon } from '../../assets/svg';
 import FormAddAddress from './FormAddAddress';
 
@@ -17,7 +17,12 @@ function ProfileAddress() {
                 <div className={cx('my-address')}>
                     <FormAddAddress visible={isVisible} setIsVisible={setIsVisible} />
                     <div className={cx('header')}>
-                        <p className={cx('heading')}>Địa Chỉ Của Tôi</p>
+                        <p className={cx('heading')}>
+                            <span className={cx('back-btn-profile')}>
+                                <IoArrowBack />
+                            </span>
+                            <span>Địa Chỉ Của Tôi</span>
+                        </p>
                         <p onClick={() => setIsVisible(true)} className={cx('btn-credit')}>
                             <IoAdd />
                             Thêm Địa Chỉ Mới

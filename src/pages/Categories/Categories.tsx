@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './Categories.module.scss';
 import { useSessionContext } from '../../context/SessionContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import routesConfig from '../../config/routes';
 import user from '../../assets/images/meoww.jpg';
@@ -222,12 +222,20 @@ function Categories() {
                     <div className={cx('line')}></div>
                     <p className={cx('cart-name')}>Giỏ hàng</p>
                 </div>
-                <div className={cx('user')}>
-                    <div className={cx('preview')}>
-                        <img src={user} alt="user" />
+                <Link
+                    style={{
+                        textDecoration: 'none',
+                        color: '#333',
+                    }}
+                    to={routesConfig.profile}
+                >
+                    <div className={cx('user')}>
+                        <div className={cx('preview')}>
+                            <img src={user} alt="user" />
+                        </div>
+                        <h3 className={cx('user-name')}>hoangtrinh</h3>
                     </div>
-                    <h3 className={cx('user-name')}>hoangtrinh</h3>
-                </div>
+                </Link>
             </div>
             <div className={cx('carts-list')}>
                 <div className={cx('wrapper-carts')}>

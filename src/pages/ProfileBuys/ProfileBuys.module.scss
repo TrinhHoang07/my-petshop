@@ -1,6 +1,35 @@
+$mobile-width: 739px;
+$tablet-width: 1023px;
+
+@mixin mobileAndTablet {
+    @media (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
 .profile-buys {
     width: 100%;
     padding: 16px 48px;
+
+    .back-btn-profile {
+        display: none;
+
+        @include mobile {
+            display: flex;
+        }
+    }
 }
 
 .buys-search {

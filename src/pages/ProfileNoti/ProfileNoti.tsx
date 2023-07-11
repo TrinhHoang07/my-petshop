@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './ProfileNoti.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
 import NotiItem from './NotiItem';
+import { IoArrowBack } from 'react-icons/io5';
 
 const cx = classNames.bind(styles);
 
@@ -14,7 +15,12 @@ function ProfileNoti() {
             <div className={cx('profile-noti')}>
                 <div className={cx('my-noti')}>
                     <div className={cx('header')}>
-                        <p className={cx('heading')}>Thông Báo Của Bạn</p>
+                        <p className={cx('heading')}>
+                            <span className={cx('back-btn-profile')}>
+                                <IoArrowBack />
+                            </span>
+                            <span>Thông Báo Của Bạn</span>
+                        </p>
                     </div>
                     <div className={cx('contents')}>
                         <div className={cx('options')}>

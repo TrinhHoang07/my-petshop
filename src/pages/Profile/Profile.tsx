@@ -7,6 +7,7 @@ import routesConfig from '../../config/routes';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
 import { Dropdown } from 'primereact/dropdown';
 import img from '../../assets/images/meoww.jpg';
+import { IoArrowBack } from 'react-icons/io5';
 
 const cx = classNames.bind(styles);
 
@@ -117,7 +118,14 @@ function Profile() {
         <LayoutProfile>
             <div className={cx('profile')}>
                 <div className={cx('header')}>
-                    <h3 className={cx('title')}>Hồ Sơ Của Tôi</h3>
+                    <h3 className={cx('title')}>
+                        <div className={cx('profile-into-back')}>
+                            <span className={cx('back-btn-profile')}>
+                                <IoArrowBack />
+                            </span>
+                            <span>Hồ Sơ Của Tôi</span>
+                        </div>
+                    </h3>
                     <p className={cx('sub-title')}>Quản lý thông tin hồ sơ để bảo mật tài khoản của bạn</p>
                 </div>
                 <div className={cx('contents')}>

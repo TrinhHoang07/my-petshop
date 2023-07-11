@@ -1,3 +1,24 @@
+$mobile-width: 739px;
+$tablet-width: 1023px;
+
+@mixin mobileAndTablet {
+    @media (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
 .profile-voucher {
     width: 100%;
     padding: 16px 48px;
@@ -12,6 +33,20 @@
 
         .heading {
             font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+
+            .back-btn-profile {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 16px;
+                display: none;
+
+                @include mobile {
+                    display: flex;
+                }
+            }
         }
     }
 
@@ -23,12 +58,20 @@
             background-color: #f2f3f5;
             justify-content: center;
 
+            @include mobile {
+                flex-direction: column;
+            }
+
             .input-wrapper {
                 display: flex;
                 align-items: center;
                 border: 1px solid #d7d7d7;
                 margin: 0 6px 0 12px;
                 background-color: #fff;
+
+                @include mobile {
+                    margin: 12px 0;
+                }
             }
 
             span {

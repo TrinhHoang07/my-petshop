@@ -5,6 +5,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { useRef, useState, useEffect, useMemo } from 'react';
 import { Socket, io } from 'socket.io-client';
 import { ChatBoxTest } from '../../components/Layout/components/ChatBoxTest';
+import { IoArrowBack } from 'react-icons/io5';
 
 const cx = classNames.bind(styles);
 type TMes = {
@@ -71,7 +72,12 @@ function ProfileVouchers() {
             <div className={cx('profile-voucher')}>
                 <div className={cx('all-vouchers')}>
                     <div className={cx('header')}>
-                        <p className={cx('heading')}>Kho Vouchers</p>
+                        <p className={cx('heading')}>
+                            <span className={cx('back-btn-profile')}>
+                                <IoArrowBack />
+                            </span>
+                            <span>Kho Vouchers</span>
+                        </p>
                     </div>
                     <div className={cx('contents')}>
                         <div className={cx('searching')}>

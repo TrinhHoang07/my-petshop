@@ -2,7 +2,7 @@ import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ProfileBanks.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
-import { IoAdd } from 'react-icons/io5';
+import { IoAdd, IoArrowBack } from 'react-icons/io5';
 import FormAdCredit from './FormAddCredit';
 import FormAdBank from './FormAddBank';
 
@@ -19,7 +19,12 @@ function ProfileBanks() {
                     <FormAdCredit visible={isVisibleCredit} setIsVisible={setIsVisibleCredit} />
                     <FormAdBank visible={isVisibleBank} setIsVisible={setIsVisibleBank} />
                     <div className={cx('header')}>
-                        <p className={cx('heading')}>Thẻ Tín Dụng/Ghi Nợ</p>
+                        <p className={cx('heading')}>
+                            <span className={cx('back-btn-profile')}>
+                                <IoArrowBack />
+                            </span>
+                            <span>Thẻ Tín Dụng/Ghi Nợ</span>
+                        </p>
                         <p onClick={() => setIsVisibleCredit(true)} className={cx('btn-credit')}>
                             <IoAdd />
                             Thêm Thẻ Mới
