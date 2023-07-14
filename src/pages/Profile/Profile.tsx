@@ -7,13 +7,16 @@ import routesConfig from '../../config/routes';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
 import { Dropdown } from 'primereact/dropdown';
 import img from '../../assets/images/meoww.jpg';
-import { IoArrowBack } from 'react-icons/io5';
+import { HiMenu } from 'react-icons/hi';
+import { useSetRecoilState } from 'recoil';
+import { isMenuMobile } from '../../store';
 
 const cx = classNames.bind(styles);
 
 function Profile() {
     const [values] = useSessionContext();
     const navigate = useNavigate();
+    const setState = useSetRecoilState(isMenuMobile);
 
     const days = [
         { day: 1 },
@@ -120,8 +123,14 @@ function Profile() {
                 <div className={cx('header')}>
                     <h3 className={cx('title')}>
                         <div className={cx('profile-into-back')}>
-                            <span className={cx('back-btn-profile')}>
-                                <IoArrowBack />
+                            <span
+                                onClick={() => {
+                                    console.log(111);
+                                    setState(true);
+                                }}
+                                className={cx('back-btn-profile')}
+                            >
+                                <HiMenu />
                             </span>
                             <span>Hồ Sơ Của Tôi</span>
                         </div>

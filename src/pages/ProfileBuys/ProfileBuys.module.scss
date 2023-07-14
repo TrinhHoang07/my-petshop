@@ -24,6 +24,7 @@ $tablet-width: 1023px;
     padding: 16px 48px;
 
     .back-btn-profile {
+        cursor: pointer;
         display: none;
 
         @include mobile {

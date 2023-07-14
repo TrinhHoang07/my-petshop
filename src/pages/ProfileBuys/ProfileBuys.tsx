@@ -3,17 +3,21 @@ import styles from './ProfileBuys.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { IoArrowBack } from 'react-icons/io5';
+import { HiMenu } from 'react-icons/hi';
+import { useSetRecoilState } from 'recoil';
+import { isMenuMobile } from '../../store';
 
 const cx = classNames.bind(styles);
 
 function ProfileBuys() {
+    const setState = useSetRecoilState(isMenuMobile);
+
     return (
         <LayoutProfile>
             <div className={cx('profile-buys')}>
                 <div>
-                    <span className={cx('back-btn-profile')}>
-                        <IoArrowBack />
+                    <span onClick={() => setState(true)} className={cx('back-btn-profile')}>
+                        <HiMenu />
                     </span>
                 </div>
                 <TabView>

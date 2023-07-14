@@ -43,6 +43,7 @@ $tablet-width: 1023px;
                 align-items: center;
                 justify-content: center;
                 margin-right: 16px;
+                cursor: pointer;
                 display: none;
 
                 @include mobile {

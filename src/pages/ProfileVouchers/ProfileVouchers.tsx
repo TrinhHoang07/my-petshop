@@ -5,7 +5,9 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { useRef, useState, useEffect, useMemo } from 'react';
 import { Socket, io } from 'socket.io-client';
 import { ChatBoxTest } from '../../components/Layout/components/ChatBoxTest';
-import { IoArrowBack } from 'react-icons/io5';
+import { HiMenu } from 'react-icons/hi';
+import { useSetRecoilState } from 'recoil';
+import { isMenuMobile } from '../../store';
 
 const cx = classNames.bind(styles);
 type TMes = {
@@ -66,6 +68,7 @@ function ProfileVouchers() {
 
     //
     const [searchText, setSearchText] = useState<string>('');
+    const setState = useSetRecoilState(isMenuMobile);
 
     return (
         <LayoutProfile>
@@ -73,8 +76,8 @@ function ProfileVouchers() {
                 <div className={cx('all-vouchers')}>
                     <div className={cx('header')}>
                         <p className={cx('heading')}>
-                            <span className={cx('back-btn-profile')}>
-                                <IoArrowBack />
+                            <span onClick={() => setState(true)} className={cx('back-btn-profile')}>
+                                <HiMenu />
                             </span>
                             <span>Kho Vouchers</span>
                         </p>

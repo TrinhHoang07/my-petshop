@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './LayoutProfile.module.scss';
 import { useEffect } from 'react';
 import { SideBarProfile } from '../components/SideBarProfile';
+import { MenuPhoneProfile } from '../components/MenuPhoneProfile';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +21,7 @@ function LayoutProfile(props: TProps) {
 
     return (
         <div className={cx('layout-detail-product')}>
+            <MenuPhoneProfile />
             <div className={cx('contents')}>
                 <div className={cx('nav-bar')}>
                     <SideBarProfile />

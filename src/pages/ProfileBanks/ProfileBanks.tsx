@@ -2,15 +2,19 @@ import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ProfileBanks.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
-import { IoAdd, IoArrowBack } from 'react-icons/io5';
+import { IoAdd } from 'react-icons/io5';
 import FormAdCredit from './FormAddCredit';
 import FormAdBank from './FormAddBank';
+import { HiMenu } from 'react-icons/hi';
+import { useSetRecoilState } from 'recoil';
+import { isMenuMobile } from '../../store';
 
 const cx = classNames.bind(styles);
 
 function ProfileBanks() {
     const [isVisibleCredit, setIsVisibleCredit] = useState(false);
     const [isVisibleBank, setIsVisibleBank] = useState(false);
+    const setState = useSetRecoilState(isMenuMobile);
 
     return (
         <LayoutProfile>
@@ -20,8 +24,8 @@ function ProfileBanks() {
                     <FormAdBank visible={isVisibleBank} setIsVisible={setIsVisibleBank} />
                     <div className={cx('header')}>
                         <p className={cx('heading')}>
-                            <span className={cx('back-btn-profile')}>
-                                <IoArrowBack />
+                            <span onClick={() => setState(true)} className={cx('back-btn-profile')}>
+                                <HiMenu />
                             </span>
                             <span>Thẻ Tín Dụng/Ghi Nợ</span>
                         </p>

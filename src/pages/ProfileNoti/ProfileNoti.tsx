@@ -3,12 +3,15 @@ import classNames from 'classnames/bind';
 import styles from './ProfileNoti.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
 import NotiItem from './NotiItem';
-import { IoArrowBack } from 'react-icons/io5';
+import { HiMenu } from 'react-icons/hi';
+import { useSetRecoilState } from 'recoil';
+import { isMenuMobile } from '../../store';
 
 const cx = classNames.bind(styles);
 
 function ProfileNoti() {
     const [active, setActive] = useState(1);
+    const setState = useSetRecoilState(isMenuMobile);
 
     return (
         <LayoutProfile>
@@ -16,8 +19,8 @@ function ProfileNoti() {
                 <div className={cx('my-noti')}>
                     <div className={cx('header')}>
                         <p className={cx('heading')}>
-                            <span className={cx('back-btn-profile')}>
-                                <IoArrowBack />
+                            <span onClick={() => setState(true)} className={cx('back-btn-profile')}>
+                                <HiMenu />
                             </span>
                             <span>Thông Báo Của Bạn</span>
                         </p>
