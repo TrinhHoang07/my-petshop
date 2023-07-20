@@ -4,7 +4,6 @@ import styles from './Description.module.scss';
 import { Title } from '../../components/Title';
 import logo from '../../assets/images/sleigh-bell.svg';
 import image from '../../assets/images/description_page.jpg';
-
 import dogImage from '../../assets/images/dog_home_logo.png';
 import catImage from '../../assets/images/cat_home_logo.png';
 import foodImage from '../../assets/images/food_home_logo.png';

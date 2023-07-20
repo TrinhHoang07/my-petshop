@@ -4,23 +4,41 @@ import img from '../../../assets/images/freeship.png';
 
 const cx = classNames.bind(styles);
 
-function Voucher() {
-    const handleCloseVoucher = () => {
-        const mask: HTMLElement | null = document.getElementById('mask');
-        const voucher: HTMLElement | null = document.getElementById('voucher');
+type T_Props = {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+};
 
-        if (mask) {
-            mask.style.visibility = 'hidden';
-        }
-        if (voucher) {
-            voucher.style.transform = 'translate(-50%, -50%) scale(0)';
-        }
+function Voucher(props: T_Props) {
+    const handleCloseVoucher = () => {
+        props.setOpen(false);
+        // const mask: HTMLElement | null = document.getElementById('mask');
+        // const voucher: HTMLElement | null = document.getElementById('voucher');
+
+        // if (mask) {
+        //     mask.style.visibility = 'hidden';
+        // }
+        // if (voucher) {
+        //     voucher.style.transform = 'translate(-50%, -50%) scale(0)';
+        // }
     };
 
     return (
         <div className={cx('voucher')}>
-            <div id="mask" className={cx('mask')}></div>
-            <div id="voucher" className={cx('contents')}>
+            <div
+                style={{
+                    visibility: props.open ? 'visible' : 'hidden',
+                }}
+                id="mask"
+                className={cx('mask')}
+            ></div>
+            <div
+                style={{
+                    transform: props.open ? 'translate(-50%, -50%) scale(1)' : 'translate(-50%, -50%) scale(0)',
+                }}
+                id="voucher"
+                className={cx('contents')}
+            >
                 <div className={cx('header')}>
                     <h3>Petshop Vouchers</h3>
                     <div className={cx('search-vouchers')}>

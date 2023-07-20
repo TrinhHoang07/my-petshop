@@ -11,7 +11,6 @@ const cx = classNames.bind(styles);
 
 function Food() {
     const [value, setValue] = useState<[number, number]>([0, 100]);
-
     const setFilterItem = useSetRecoilState(filterItem);
 
     useEffect(() => {

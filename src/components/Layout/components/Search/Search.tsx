@@ -8,7 +8,12 @@ import { useDebounce } from '../../../../hooks';
 
 const cx = classNames.bind(styles);
 
-function Search() {
+type T_Props = {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+};
+
+function Search(props: T_Props) {
     const [inputValue, setInputValue] = useState<string>('');
     const [fakeData, setFakeData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -35,21 +40,35 @@ function Search() {
     }, [debounced]);
 
     const handleCloseSearch = () => {
-        const mask: HTMLElement | null = document.getElementById('mask');
-        const search: HTMLElement | null = document.getElementById('search-wrap');
+        props.setOpen(false);
+        // const mask: HTMLElement | null = document.getElementById('mask');
+        // const search: HTMLElement | null = document.getElementById('search-wrap');
 
-        if (mask) {
-            mask.style.visibility = 'hidden';
-        }
-        if (search) {
-            search.style.transform = 'translateX(450px)';
-        }
+        // if (mask) {
+        //     mask.style.visibility = 'hidden';
+        // }
+        // if (search) {
+        //     search.style.transform = 'translateX(450px)';
+        // }
     };
 
     return (
         <>
-            <div id="mask" onClick={handleCloseSearch} className={cx('search')}></div>
-            <div id="search-wrap" className={cx('wrapper')}>
+            <div
+                style={{
+                    visibility: props.open ? 'visible' : 'hidden',
+                }}
+                id="mask"
+                onClick={handleCloseSearch}
+                className={cx('search')}
+            ></div>
+            <div
+                style={{
+                    transform: props.open ? 'translateX(0)' : 'translateX(450px)',
+                }}
+                id="search-wrap"
+                className={cx('wrapper')}
+            >
                 <div className={cx('contents')}>
                     <h4 className={cx('heading')}>Tìm kiếm trong Shop</h4>
                     <div className={cx('input-search')}>

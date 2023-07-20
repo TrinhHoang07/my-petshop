@@ -9,22 +9,26 @@ import classNames from 'classnames/bind';
 import Menu from './Menu';
 import { Search } from '../Search';
 import { Carts } from './Carts';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Header() {
+    const [openSearch, setOpenSearch] = useState<boolean>(false);
     const count = 5;
 
     const handleOpenSearch = () => {
-        const mask: HTMLElement | null = document.getElementById('mask');
-        const search: HTMLElement | null = document.getElementById('search-wrap');
+        setOpenSearch(true);
 
-        if (mask) {
-            mask.style.visibility = 'visible';
-        }
-        if (search) {
-            search.style.transform = 'translateX(0)';
-        }
+        // const mask: HTMLElement | null = document.getElementById('mask');
+        // const search: HTMLElement | null = document.getElementById('search-wrap');
+
+        // if (mask) {
+        //     mask.style.visibility = 'visible';
+        // }
+        // if (search) {
+        //     search.style.transform = 'translateX(0)';
+        // }
     };
 
     const handleOpenCarts = () => {
@@ -44,7 +48,7 @@ function Header() {
     return (
         <div className={cx('header')}>
             <Menu />
-            <Search />
+            <Search open={openSearch} setOpen={setOpenSearch} />
             <div className={cx('logo-header')}>
                 <Link className={cx('logo-to-home')} to={routesConfig.home}>
                     <img src={logo} alt="logo-shop" />

@@ -64,6 +64,7 @@ const fakeData = [
 function Categories() {
     const [values] = useSessionContext();
     const [data, setData] = useState<any[]>(fakeData);
+    const [openVoucher, setOpenVoucher] = useState<boolean>(false);
     const [checkAll, setCheckAll] = useState<boolean>(false);
     const navigate = useNavigate();
     const toast = useConfirmToast();
@@ -200,20 +201,22 @@ function Categories() {
     };
 
     const handleOpenVoucher = () => {
-        const mask: HTMLElement | null = document.getElementById('mask');
-        const voucher: HTMLElement | null = document.getElementById('voucher');
+        setOpenVoucher(true);
 
-        if (mask) {
-            mask.style.visibility = 'visible';
-        }
-        if (voucher) {
-            voucher.style.transform = 'translate(-50%, -50%) scale(1)';
-        }
+        // const mask: HTMLElement | null = document.getElementById('mask');
+        // const voucher: HTMLElement | null = document.getElementById('voucher');
+
+        // if (mask) {
+        //     mask.style.visibility = 'visible';
+        // }
+        // if (voucher) {
+        //     voucher.style.transform = 'translate(-50%, -50%) scale(1)';
+        // }
     };
 
     return (
         <div className={cx('categories')}>
-            <Voucher />
+            <Voucher open={openVoucher} setOpen={setOpenVoucher} />
             <div className={cx('header')}>
                 <div className={cx('info')}>
                     <div className={cx('logo')}>
