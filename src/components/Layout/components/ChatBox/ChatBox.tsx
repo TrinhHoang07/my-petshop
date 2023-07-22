@@ -2,12 +2,11 @@ import styles from './ChatBox.module.scss';
 import classNames from 'classnames/bind';
 import { BiMinus, BiHappy } from 'react-icons/bi';
 import { IoSend } from 'react-icons/io5';
-import { BsFillImageFill } from 'react-icons/bs';
-
+import { BsFillImageFill, BsDot } from 'react-icons/bs';
 import chatbox from '../../../../assets/images/chat-box.png';
 import logo from '../../../../assets/images/logo-petshop.jpg';
 import cat from '../../../../assets/images/meoww.jpg';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { TypingAdmin } from '../TypingAdmin';
 
@@ -38,6 +37,10 @@ function ChatBox() {
             message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Hoàng Trịnh!',
         },
     ]);
+
+    const lastMessage = useMemo(() => {
+        return messages[messages.length - 1];
+    }, [messages]);
 
     // scroll to message when user submitted
     useEffect(() => {
@@ -157,6 +160,29 @@ function ChatBox() {
                 className={cx('container')}
             >
                 <img src={chatbox} alt="chat box" />
+
+                {lastMessage.role === 'admin' && (
+                    <div className={cx('notification-count')}>
+                        <span>1</span>
+                    </div>
+                )}
+
+                <div className={cx('preview-chat-box')}>
+                    <div className={cx('container-preview')}>
+                        <div className={cx('triangle-sharp')}></div>
+                        <h3> Admin - Hoàng</h3>
+                        {lastMessage.role === 'user' ? (
+                            <p>Bạn: {lastMessage.message}</p>
+                        ) : (
+                            <div className={cx('wrapper-message-preview')}>
+                                <span>
+                                    <BsDot color="dodgerblue" size={'2.8rem'} style={{ margin: 0, padding: 0 }} />
+                                </span>
+                                <p>{lastMessage.message}</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
             {open && (
                 <div className={cx('content')}>
