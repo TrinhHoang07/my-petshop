@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import styles from './CardItemFlip.module.scss';
 import classNames from 'classnames/bind';
+import { formatMoney } from '../../Helper';
 
 const cx = classNames.bind(styles);
 
@@ -25,7 +26,7 @@ function CardItemFlip(props: TProps) {
                         <div className={cx('info')}>
                             <p className={cx('title')}>{props.title}</p>
                             <h3 className={cx('name-dog')}>{props.name}</h3>
-                            <p className={cx('price')}>{props.price}</p>
+                            <p className={cx('price')}>{formatMoney(props.price)}đ</p>
                         </div>
                     </div>
                 </div>
