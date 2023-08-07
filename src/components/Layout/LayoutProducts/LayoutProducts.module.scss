@@ -41,9 +41,8 @@ $tablet-width: 1023px;
 .main-products {
     flex-basis: 75%;
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    margin: auto;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 24px 0;
 
     @include mobileAndTablet {
