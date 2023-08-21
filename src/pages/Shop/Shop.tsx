@@ -4,13 +4,10 @@ import { LayoutProducts } from '../../components/Layout/LayoutProducts';
 import { useSetRecoilState } from 'recoil';
 import { filterItem } from '../../store';
 import { useEffect, useState } from 'react';
-import { CardItem } from '../../components/CardItem';
-import img from '../../assets/images/cat_item_2.jpg';
-import img_d from '../../assets/images/dog_item_2.jpg';
-import img_f from '../../assets/images/food_item_2.jpg';
 import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
 import { CardItemFlip } from '../../components/CardItemFlip';
-import { CardItemZoomInLeft } from '../../components/CardItemZoomInLeft';
+import { getNameFromType, getValueFilterInArray } from '../../Helper';
+import { Loading } from '../../components/Loading';
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +15,10 @@ function Shop() {
     const [value, setValue] = useState<[number, number]>([0, 100]);
     const [subTitle, setSubTitle] = useState<string>('');
     const setFilterItem = useSetRecoilState(filterItem);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    // update typescript later
+    const [data, setData] = useState<any>([]);
 
     // fake page
     const [first, setFirst] = useState<number>(1);
@@ -27,6 +28,25 @@ function Shop() {
         setPageNumber(event.page + 1);
         setFirst(event.first);
     };
+
+    useEffect(() => {
+        // get filter money item
+        data.length > 0 && setValue(getValueFilterInArray(data));
+    }, [data]);
+
+    useEffect(() => {
+        setIsLoading(true);
+
+        fetch('http://localhost:3009/products/all')
+            .then((res) => res.json())
+            .then((data) => {
+                if (data && data.length > 0) {
+                    setData(data);
+                    setIsLoading(false);
+                }
+            })
+            .catch((err) => console.error(err));
+    }, []);
 
     useEffect(() => {
         if (pageNumber > 1) {
@@ -48,47 +68,31 @@ function Shop() {
     }, []);
 
     return (
-        <LayoutProducts subTitle={subTitle} title="CỬA HÀNG" value={value} dataProducts={[1, 2, 3, 4, 5]}>
+        <LayoutProducts subTitle={subTitle} title="CỬA HÀNG" value={value}>
             <>
                 <div className={cx('my-shop')}>
-                    {pageNumber === 1 &&
-                        Array(9)
-                            .fill(9)
-                            .map((item, index) => (
-                                <div key={index} className={cx('shop-item')}>
-                                    <CardItem name="Chó Alaska" price="11000000đ" title="CHÓ CẢNH" src={img_d} />
-                                </div>
-                            ))}
-                    {pageNumber === 2 &&
-                        Array(9)
-                            .fill(9)
-                            .map((item, index) => (
-                                <div key={index} className={cx('shop-item')}>
-                                    <CardItemZoomInLeft
-                                        name="Mèo Anh Lông Dài"
-                                        price="8000000đ"
-                                        title="MÈO CẢNH"
-                                        src={img}
-                                    />
-                                </div>
-                            ))}
-                    {pageNumber === 3 &&
-                        Array(9)
-                            .fill(9)
-                            .map((item, index) => (
-                                <div key={index} className={cx('shop-item')}>
-                                    <CardItemFlip
-                                        name="Bánh thưởng hình bóng AFP Krazy"
-                                        price="80000đ"
-                                        title="ĐỒ ĂN"
-                                        src={img_f}
-                                    />
-                                </div>
-                            ))}
+                    {!isLoading ? (
+                        data.length > 0 &&
+                        data
+                            .slice((pageNumber - 1) * 8, pageNumber * 8)
+                            .map((item: any) => (
+                                <CardItemFlip
+                                    key={item.id}
+                                    name={item.name}
+                                    price={item.price}
+                                    title={getNameFromType(item.type)}
+                                    src={item.preview_url}
+                                />
+                            ))
+                    ) : (
+                        <Loading />
+                    )}
                 </div>
-                <div style={{ width: '100%' }}>
-                    <Paginator first={first} rows={10} totalRecords={30} onPageChange={onPageChange} />
-                </div>
+                {!isLoading && (
+                    <div style={{ width: '100%' }}>
+                        <Paginator first={first} rows={10} totalRecords={30} onPageChange={onPageChange} />
+                    </div>
+                )}
             </>
         </LayoutProducts>
     );

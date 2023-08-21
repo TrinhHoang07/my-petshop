@@ -4,6 +4,7 @@ import styles from './BarProducts.module.scss';
 import { Slider } from 'primereact/slider';
 import { useRecoilState } from 'recoil';
 import { filterItemByPrice } from '../../../../store';
+import { formatMoney } from '../../../../Helper';
 
 const cx = classNames.bind(styles);
 
@@ -18,7 +19,7 @@ function Filter(props: TProps) {
         setValue(props.value);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [props.value]);
 
     const handleChange = (value: [number, number]) => {
         setValue(value);
@@ -37,7 +38,7 @@ function Filter(props: TProps) {
                 <div className={cx('info-filter')}>
                     <button>Lọc</button>
                     <p>
-                        Giá: {value[0]}đ - {value[1]}đ
+                        Giá: {formatMoney(value[0])}đ - {formatMoney(value[1])}đ
                     </p>
                 </div>
             </div>

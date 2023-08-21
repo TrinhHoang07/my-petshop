@@ -1,16 +1,11 @@
 import classNames from 'classnames/bind';
 import styles from './SuggestProducts.module.scss';
-import img from '../../../../assets/images/meoww.jpg';
 import { useEffect, useState } from 'react';
 import { formatMoney } from '../../../../Helper';
 
 const cx = classNames.bind(styles);
 
-type TProps = {
-    data: any[];
-};
-
-function SuggestProducts(props: TProps) {
+function SuggestProducts() {
     const [data, setData] = useState<any>([]);
 
     useEffect(() => {
@@ -33,7 +28,7 @@ function SuggestProducts(props: TProps) {
                         <div key={item.id}>
                             <div className={cx('suggest-item')}>
                                 <div className={cx('preview-suggest')}>
-                                    <img src={img} alt="preview product" />
+                                    <img src={item.preview_url} alt="preview product" />
                                 </div>
                                 <div className={cx('suggest-info')}>
                                     <h6 className={cx('heading-suggest')}>{item.name}</h6>

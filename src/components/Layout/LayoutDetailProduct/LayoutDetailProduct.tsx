@@ -61,7 +61,7 @@ function LayoutDetailProduct(props: TProps) {
         <div className={cx('layout-detail-product')}>
             <div className={cx('contents')}>
                 <div className={cx('nav-bar')}>
-                    <SuggestProducts data={[1, 2, 3, 4, 5]} />
+                    <SuggestProducts />
                     <NavBarNewsPage />
                 </div>
                 <div className={cx('detail')}>

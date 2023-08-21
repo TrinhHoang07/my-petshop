@@ -24,7 +24,7 @@ $tablet-width: 1023px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    margin: auto;
+    // margin: auto;
     padding: 24px 0;
 
     @include mobileAndTablet {

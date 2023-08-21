@@ -8,7 +8,6 @@ const cx = classNames.bind(styles);
 
 type TProps = {
     value: [number, number];
-    dataProducts: any[];
 };
 
 function BarProducts(props: TProps) {
@@ -16,7 +15,7 @@ function BarProducts(props: TProps) {
         <div className={cx('bar-products')}>
             <Categories />
             <Filter value={props.value} />
-            <SuggestProducts data={props.dataProducts} />
+            <SuggestProducts />
         </div>
     );
 }

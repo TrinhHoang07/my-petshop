@@ -7,6 +7,7 @@ import { useSetRecoilState } from 'recoil';
 import { filterItem } from '../../store';
 import useDataInHome, { _T_DataItemHome } from '../../hooks/useDataInHome';
 import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
+import { getValueFilterInArray } from '../../Helper';
 
 const cx = classNames.bind(styles);
 
@@ -28,6 +29,10 @@ function Dog() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        data.length > 0 && setValue(getValueFilterInArray(data));
+    }, [data]);
+
     const onPageChange = (page: PaginatorPageChangeEvent) => {
         setFisrt(page.first);
         setCurrentPage(++page.page);
@@ -37,7 +42,7 @@ function Dog() {
 
     return (
         <div>
-            <LayoutProducts title="CHÓ CẢNH" value={value} dataProducts={[1, 2, 3, 4, 5]}>
+            <LayoutProducts title="CHÓ CẢNH" value={value}>
                 <>
                     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                         {data.slice((currentPage - 1) * 6, currentPage * 6).map((item: _T_DataItemHome) => (
