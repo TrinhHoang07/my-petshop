@@ -2,9 +2,10 @@ import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './BarProducts.module.scss';
 import { Slider } from 'primereact/slider';
-import { useRecoilState } from 'recoil';
-import { filterItemByPrice } from '../../../../store';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { filterItemByPrice, isFilter } from '../../../../store';
 import { formatMoney } from '../../../../Helper';
+import { useDebouneClick } from '../../../../hooks/useDebounceClick';
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +15,7 @@ type TProps = {
 
 function Filter(props: TProps) {
     const [value, setValue] = useRecoilState<[number, number]>(filterItemByPrice);
+    const setIsFilter = useSetRecoilState(isFilter);
 
     useEffect(() => {
         setValue(props.value);
@@ -24,6 +26,11 @@ function Filter(props: TProps) {
     const handleChange = (value: [number, number]) => {
         setValue(value);
     };
+
+    const handleSubmitFilter = useDebouneClick(() => {
+        setIsFilter((prev) => !prev);
+    }, 450);
+
     return (
         <div className={cx('filter')}>
             <h6 className={cx('heading-menu')}>LỌC THEO GIÁ</h6>
@@ -36,7 +43,7 @@ function Filter(props: TProps) {
                     onChange={(e) => handleChange(e.value as [number, number])}
                 />
                 <div className={cx('info-filter')}>
-                    <button>Lọc</button>
+                    <button onClick={handleSubmitFilter}>Lọc</button>
                     <p>
                         Giá: {formatMoney(value[0])}đ - {formatMoney(value[1])}đ
                     </p>

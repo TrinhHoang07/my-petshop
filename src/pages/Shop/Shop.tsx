@@ -1,24 +1,28 @@
 import classNames from 'classnames/bind';
 import styles from './Shop.module.scss';
 import { LayoutProducts } from '../../components/Layout/LayoutProducts';
-import { useSetRecoilState } from 'recoil';
-import { filterItem } from '../../store';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { filterItem, filterItemByPrice, isFilter } from '../../store';
 import { useEffect, useState } from 'react';
 import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
 import { CardItemFlip } from '../../components/CardItemFlip';
 import { getNameFromType, getValueFilterInArray } from '../../Helper';
 import { Loading } from '../../components/Loading';
+import { T_Products } from '../../models';
 
 const cx = classNames.bind(styles);
 
 function Shop() {
     const [value, setValue] = useState<[number, number]>([0, 100]);
+    const [dataRender, setDataRender] = useState<T_Products[]>([]);
     const [subTitle, setSubTitle] = useState<string>('');
     const setFilterItem = useSetRecoilState(filterItem);
+    const valuess = useRecoilValue(filterItemByPrice);
+    const isSubmitFilter = useRecoilValue(isFilter);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     // update typescript later
-    const [data, setData] = useState<any>([]);
+    const [data, setData] = useState<T_Products[]>([]);
 
     // fake page
     const [first, setFirst] = useState<number>(1);
@@ -30,8 +34,16 @@ function Shop() {
     };
 
     useEffect(() => {
-        // get filter money item
-        data.length > 0 && setValue(getValueFilterInArray(data));
+        setDataRender(data.filter((item: T_Products) => item.price >= valuess[0] && item.price <= valuess[1]));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isSubmitFilter]);
+
+    useEffect(() => {
+        if (data.length > 0) {
+            setDataRender(data);
+            setValue(getValueFilterInArray(data));
+        }
     }, [data]);
 
     useEffect(() => {
@@ -72,8 +84,8 @@ function Shop() {
             <>
                 <div className={cx('my-shop')}>
                     {!isLoading ? (
-                        data.length > 0 &&
-                        data
+                        dataRender.length > 0 &&
+                        dataRender
                             .slice((pageNumber - 1) * 8, pageNumber * 8)
                             .map((item: any) => (
                                 <CardItemFlip
@@ -90,7 +102,12 @@ function Shop() {
                 </div>
                 {!isLoading && (
                     <div style={{ width: '100%' }}>
-                        <Paginator first={first} rows={10} totalRecords={30} onPageChange={onPageChange} />
+                        <Paginator
+                            first={first}
+                            rows={10}
+                            totalRecords={dataRender.length}
+                            onPageChange={onPageChange}
+                        />
                     </div>
                 )}
             </>

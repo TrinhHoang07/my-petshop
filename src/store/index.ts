@@ -10,6 +10,11 @@ export const filterItemByPrice = atom<[number, number]>({
     default: [0, 100],
 });
 
+export const isFilter = atom<boolean>({
+    key: 'isFilter',
+    default: false,
+});
+
 export const isMenuMobile = atom<boolean>({
     key: 'isMenuMobile',
     default: false,

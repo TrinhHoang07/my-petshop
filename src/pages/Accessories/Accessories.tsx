@@ -3,11 +3,12 @@ import classNames from 'classnames/bind';
 import styles from './Accessories.module.scss';
 import { LayoutProducts } from '../../components/Layout/LayoutProducts';
 import { CardItemZoomIn } from '../../components/CardItemZoomIn';
-import { useSetRecoilState } from 'recoil';
-import { filterItem } from '../../store';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { filterItem, filterItemByPrice, isFilter } from '../../store';
 import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
 import useDataInHome, { _T_DataItemHome } from '../../hooks/useDataInHome';
 import { getValueFilterInArray } from '../../Helper';
+import { Loading } from '../../components/Loading';
 
 const cx = classNames.bind(styles);
 
@@ -15,8 +16,12 @@ function Accessories() {
     const [value, setValue] = useState<[number, number]>([0, 100]);
     const setFilterItem = useSetRecoilState(filterItem);
     const [first, setFisrt] = useState<number>(1);
+    const valuess = useRecoilValue(filterItemByPrice);
+    const isSubmitFilter = useRecoilValue(isFilter);
+    const [dataRender, setDataRender] = useState<_T_DataItemHome[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const data = useDataInHome('http://localhost:3009/products/products/home?type=accessory');
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const data: _T_DataItemHome[] = useDataInHome('http://localhost:3009/products/products/home?type=accessory');
 
     useEffect(() => {
         document.title = 'Phụ kiện | Petshop chất lượng số 1 Việt Nam!';
@@ -30,7 +35,17 @@ function Accessories() {
     }, []);
 
     useEffect(() => {
-        data.length > 0 && setValue(getValueFilterInArray(data));
+        setDataRender(data.filter((item: _T_DataItemHome) => item.price >= valuess[0] && item.price <= valuess[1]));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isSubmitFilter]);
+
+    useEffect(() => {
+        if (data.length > 0) {
+            setValue(getValueFilterInArray(data));
+            setDataRender(data);
+            setIsLoading(false);
+        }
     }, [data]);
 
     const onPageChange = (page: PaginatorPageChangeEvent) => {
@@ -43,21 +58,32 @@ function Accessories() {
             <LayoutProducts title="PHỤ KIỆN" value={value}>
                 <>
                     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                        {data.slice((currentPage - 1) * 6, currentPage * 6).map((item: _T_DataItemHome) => (
-                            <div key={item.id} className={cx('accessories-item')}>
-                                <CardItemZoomIn
-                                    name={item.name}
-                                    price={`${item.price.toString()}đ`}
-                                    title="PHỤ KIỆN"
-                                    src={item.previewUrl}
-                                />
-                            </div>
-                        ))}
+                        {!isLoading ? (
+                            dataRender.slice((currentPage - 1) * 6, currentPage * 6).map((item: _T_DataItemHome) => (
+                                <div key={item.id} className={cx('accessories-item')}>
+                                    <CardItemZoomIn
+                                        name={item.name}
+                                        price={`${item.price.toString()}đ`}
+                                        title="PHỤ KIỆN"
+                                        src={item.previewUrl}
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <Loading />
+                        )}
                     </div>
 
-                    <div className={cx('paginator-accessory')}>
-                        <Paginator first={first} rows={6} totalRecords={8} onPageChange={onPageChange} />
-                    </div>
+                    {!isLoading && (
+                        <div className={cx('paginator-accessory')}>
+                            <Paginator
+                                first={first}
+                                rows={6}
+                                totalRecords={dataRender.length}
+                                onPageChange={onPageChange}
+                            />
+                        </div>
+                    )}
                 </>
             </LayoutProducts>
         </div>
