@@ -8,6 +8,7 @@ const routesConfig = {
     contact: '/contact',
     food: '/food',
     news: '/news',
+    search: '/search',
     profile: '/profile/account',
     profile_bank: '/profile/banks',
     profile_address: '/profile/address',

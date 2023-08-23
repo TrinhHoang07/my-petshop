@@ -170,7 +170,7 @@ function ChatBox(props: _T_Props) {
                                     onKeyUp={handleEnter}
                                     ref={inputRef}
                                     value={value}
-                                    onChange={(e) => setValue(e.target.value)}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
                                     type="text"
                                     placeholder="Aa..."
                                 />

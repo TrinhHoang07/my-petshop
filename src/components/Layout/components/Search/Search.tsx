@@ -6,6 +6,7 @@ import { AiOutlineLoading } from 'react-icons/ai';
 import img from '../../../../assets/images/cat_item_1.jpg';
 import { useDebounce } from '../../../../hooks';
 import { formatMoney } from '../../../../Helper';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +21,7 @@ function Search(props: T_Props) {
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('Không có tìm kiếm gần đây');
     const debounced = useDebounce(inputValue, 750);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (debounced.trim().length > 0) {
@@ -42,15 +44,19 @@ function Search(props: T_Props) {
 
     const handleCloseSearch = () => {
         props.setOpen(false);
-        // const mask: HTMLElement | null = document.getElementById('mask');
-        // const search: HTMLElement | null = document.getElementById('search-wrap');
+    };
 
-        // if (mask) {
-        //     mask.style.visibility = 'hidden';
-        // }
-        // if (search) {
-        //     search.style.transform = 'translateX(450px)';
-        // }
+    const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            console.log('searching...', inputValue);
+            navigate('/search', {
+                state: {
+                    q: inputValue,
+                },
+            });
+
+            props.setOpen(false);
+        }
     };
 
     return (
@@ -75,9 +81,10 @@ function Search(props: T_Props) {
                     <div className={cx('input-search')}>
                         <input
                             value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
                             type="text"
                             placeholder="Nhập để tìm kiếm..."
+                            onKeyDown={handleSearch}
                         />
                         <span>
                             {inputValue?.trim().length > 0 && !loading && (

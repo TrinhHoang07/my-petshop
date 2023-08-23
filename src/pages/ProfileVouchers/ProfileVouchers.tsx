@@ -88,7 +88,7 @@ function ProfileVouchers() {
                             <div className={cx('input-wrapper')}>
                                 <input
                                     value={searchText}
-                                    onChange={(e) => setSearchText(e.target.value)}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchText(e.target.value)}
                                     type="text"
                                     placeholder="Nhập mã voucher tại đây"
                                 />

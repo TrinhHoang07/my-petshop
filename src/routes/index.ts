@@ -23,6 +23,7 @@ import { ProfileChangePassword } from '../pages/ProfileChangePassword';
 import { ProfileBuys } from '../pages/ProfileBuys';
 import { ProfileNoti } from '../pages/ProfileNoti';
 import { ProfileVouchers } from '../pages/ProfileVouchers';
+import { Search } from '../pages/Search';
 
 type TRoutes = {
     id: number;
@@ -103,6 +104,12 @@ const publicRoutes: TRoutes[] = [
         id: 12,
         path: routesConfig.newsDetail,
         component: LayoutDetailNew,
+        layout: DefaultLayout,
+    },
+    {
+        id: 13,
+        path: routesConfig.search,
+        component: Search,
         layout: DefaultLayout,
     },
 ];
