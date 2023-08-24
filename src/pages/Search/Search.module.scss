@@ -80,6 +80,7 @@ $tablet-width: 1023px;
                     box-shadow: 0 1px 4px #d7d7d7;
                     left: 0;
                     right: 0;
+                    z-index: 9;
 
                     h6 {
                         padding: 12px 8px 8px 8px;
@@ -88,6 +89,9 @@ $tablet-width: 1023px;
                     }
 
                     .result-search-preview {
+                        max-height: 250px;
+                        overflow-y: auto;
+
                         p {
                             font-size: 1.4rem;
                             padding: 8px;
@@ -99,6 +103,10 @@ $tablet-width: 1023px;
                         }
                     }
                 }
+            }
+
+            .loading-input {
+                animation: loading linear 0.5s infinite;
             }
         }
 
@@ -117,10 +125,20 @@ $tablet-width: 1023px;
             .containers {
                 display: flex;
                 align-items: center;
-                div {
-                    flex-basis: 25%;
-                }
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                margin: auto;
+                padding-top: 24px;
             }
         }
+    }
+}
+
+@keyframes loading {
+    from {
+        transform: rotate(0);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }
