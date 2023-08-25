@@ -68,7 +68,7 @@ function Search() {
                             data.map((item: any) => (
                                 <CardItemFlip
                                     key={item.id}
-                                    to={`product/cat/${item.id}`}
+                                    to={`/product/cat/${item.id}`}
                                     title="MÈO CẢNH"
                                     name={item.name}
                                     src={item.preview_url}

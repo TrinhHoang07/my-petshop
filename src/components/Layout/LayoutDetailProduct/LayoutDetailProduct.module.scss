@@ -165,6 +165,18 @@ $tablet-width: 1023px;
 
 // tabview
 
+.wrapper-tab-sub-description {
+    p,
+    div,
+    strong,
+    ul,
+    li,
+    ol {
+        font-size: 1.6rem;
+        margin-bottom: 16px;
+    }
+}
+
 .tab-view {
     padding: 0 16px;
 }
