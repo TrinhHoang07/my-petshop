@@ -9,6 +9,7 @@ type TUser = {
     email?: string;
     phone?: string;
     token?: string;
+    id: number;
 };
 
 type TState = {
@@ -27,21 +28,21 @@ function SessionContextProvider(props: TProps) {
     const [stateContext, setStateContext] = useState<TState>(initState);
     const values: [TState, typeof setStateContext] = [stateContext, setStateContext];
 
-    useEffect(() => {
-        const user: any = localStorage.getItem('user');
-        if (user) {
-            const data = JSON.parse(user);
-            if (data) {
-                initState.isAuth = true;
-                initState.user = {
-                    name: data.name,
-                    email: data.email,
-                    phone: data.phone,
-                    token: data.token,
-                };
-            }
-        }
-    }, []);
+    // useEffect(() => {
+    //     const user: any = localStorage.getItem('user');
+    //     if (user) {
+    //         const data = JSON.parse(user);
+    //         if (data) {
+    //             initState.isAuth = true;
+    //             initState.user = {
+    //                 name: data.name,
+    //                 email: data.email,
+    //                 phone: data.phone,
+    //                 token: data.token,
+    //             };
+    //         }
+    //     }
+    // }, []);
 
     return <ContextSession.Provider value={values}>{props.children}</ContextSession.Provider>;
 }

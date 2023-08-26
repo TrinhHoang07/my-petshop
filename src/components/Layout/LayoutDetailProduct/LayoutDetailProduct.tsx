@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react';
 import { Similar } from '../components/Similar';
 import { formatMoney, getNameFromType } from '../../../Helper';
 import { Loading } from '../../Loading';
+import { useSessionContext } from '../../../context/SessionContext';
+import { useConfirmToast } from '../../../context/ConfirmAndToastContext';
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +20,8 @@ type TProps = {
 
 function LayoutDetailProduct(props: TProps) {
     const [quantity, setQuantity] = useState<number>(1);
+    const [infoUser] = useSessionContext();
+    const toast = useConfirmToast();
 
     const data = [
         {
@@ -47,6 +51,42 @@ function LayoutDetailProduct(props: TProps) {
             top: 0,
         });
     }, []);
+
+    const handleAddToCart = () => {
+        fetch('http://localhost:3009/carts/add-to-cart', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + infoUser.user?.token,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                product_id: props.data.id,
+                customer_id: infoUser.user?.id,
+                quantity: quantity,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log('data: ', data);
+
+                if (data.message === 'success') {
+                    toast.current?.show({
+                        severity: 'success',
+                        summary: 'Thành công',
+                        detail: 'Thêm thành công',
+                        life: 1500,
+                    });
+                } else {
+                    toast.current?.show({
+                        severity: 'error',
+                        summary: 'Có lỗi',
+                        detail: 'Sản phẩm này đã tồn tại trong giỏ hàng!',
+                        life: 1500,
+                    });
+                }
+            })
+            .catch((err) => console.error(err));
+    };
 
     const itemTemplate = (item: any) => {
         return item && <img src={item.url} alt={item.alt} style={{ width: '100%' }} />;
@@ -116,7 +156,7 @@ function LayoutDetailProduct(props: TProps) {
                                         </p>
                                     </div>
                                     <div className={cx('add-to-cart')}>
-                                        <button>THÊM VÀO GIỎ</button>
+                                        <button onClick={handleAddToCart}>THÊM VÀO GIỎ</button>
                                     </div>
                                 </div>
                                 <div className={cx('line-hint')}></div>

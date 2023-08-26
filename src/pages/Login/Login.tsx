@@ -36,20 +36,48 @@ function Login() {
             name: data.name,
             password: data.password,
         };
-        localStorage.setItem('user', JSON.stringify(dataUser));
-        setStateContext({
-            isAuth: true,
-            user: {
-                name: data.name,
-                token: data.password,
-            },
-        });
 
-        if (state) {
-            navigate(state.redirect);
-        } else {
-            navigate(routesConfig.home);
-        }
+        fetch('http://localhost:3009/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                username: dataUser.name,
+                password: dataUser.password,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.message === 'success') {
+                    setStateContext({
+                        isAuth: true,
+                        user: {
+                            id: data.data.id,
+                            name: data.data.name,
+                            email: data.data.email,
+                            phone: data.data.phone_number,
+                            token: data.data.access_token,
+                        },
+                    });
+
+                    if (state) {
+                        navigate(state.redirect);
+                    } else {
+                        navigate(routesConfig.home);
+                    }
+                }
+            })
+            .catch((err) => console.error(err));
+
+        // localStorage.setItem('user', JSON.stringify(dataUser));
+        // setStateContext({
+        //     isAuth: true,
+        //     user: {
+        //         name: data.name,
+        //         token: data.password,
+        //     },
+        // });
     };
 
     const handleErrorInput = (ele: HTMLInputElement) => {
