@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { privateRoutes, publicRoutes } from './routes';
+import { PrivateRoute } from './components/PrivateRoute';
 
 function App() {
     return (
@@ -31,9 +32,14 @@ function App() {
                             key={route.id}
                             path={route.path}
                             element={
-                                <Layout>
-                                    <Page />
-                                </Layout>
+                                <PrivateRoute
+                                    redirect={route.path}
+                                    component={() => (
+                                        <Layout>
+                                            <Page />
+                                        </Layout>
+                                    )}
+                                />
                             }
                         />
                     );

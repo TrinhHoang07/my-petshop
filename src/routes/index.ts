@@ -99,6 +99,7 @@ const publicRoutes: TRoutes[] = [
         component: NotFound,
         layout: FlagmentLayout,
     },
+
     // test
     {
         id: 12,
@@ -111,6 +112,18 @@ const publicRoutes: TRoutes[] = [
         path: routesConfig.search,
         component: Search,
         layout: DefaultLayout,
+    },
+    {
+        id: 14,
+        path: routesConfig.login,
+        component: Login,
+        layout: FlagmentLayout,
+    },
+    {
+        id: 15,
+        path: routesConfig.register,
+        component: Register,
+        layout: FlagmentLayout,
     },
 ];
 
@@ -126,18 +139,6 @@ const privateRoutes = [
         path: routesConfig.categories,
         component: Categories,
         layout: DefaultLayout,
-    },
-    {
-        id: 3,
-        path: routesConfig.login,
-        component: Login,
-        layout: FlagmentLayout,
-    },
-    {
-        id: 4,
-        path: routesConfig.register,
-        component: Register,
-        layout: FlagmentLayout,
     },
     {
         id: 5,

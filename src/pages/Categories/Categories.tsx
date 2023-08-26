@@ -1,8 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './Categories.module.scss';
-import { useSessionContext } from '../../context/SessionContext';
-import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
 import routesConfig from '../../config/routes';
 import user from '../../assets/images/meoww.jpg';
 import pro from '../../assets/images/cat_item_3.jpg';
@@ -10,6 +9,7 @@ import { confirmDialog } from 'primereact/confirmdialog';
 import { MdOutlineDiscount } from 'react-icons/md';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { Voucher } from './Voucher';
+import { useSessionContext } from '../../context/SessionContext';
 
 const cx = classNames.bind(styles);
 
@@ -62,12 +62,11 @@ const fakeData = [
 ];
 
 function Categories() {
-    const [values] = useSessionContext();
     const [data, setData] = useState<any[]>(fakeData);
     const [openVoucher, setOpenVoucher] = useState<boolean>(false);
     const [checkAll, setCheckAll] = useState<boolean>(false);
-    const navigate = useNavigate();
     const toast = useConfirmToast();
+    const [values] = useSessionContext();
 
     useEffect(() => {
         document.title = 'Trang chủ | Petshop chất lượng số 1 Việt Nam!';
@@ -77,17 +76,25 @@ function Categories() {
         });
     }, []);
 
-    useLayoutEffect(() => {
-        if (!values.isAuth) {
-            navigate(routesConfig.login, {
-                state: {
-                    redirect: `${routesConfig.categories}`,
-                },
-            });
-        }
+    useEffect(() => {
+        // fetch API
+
+        fetch(`http://localhost:3009/carts/cart-by-customer/${values.user?.id}`, {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + values.user?.token,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.message === 'success') {
+                    console.log(data);
+                }
+            })
+            .catch((err) => console.error(err));
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [values]);
+    }, []);
 
     const totalMoney = useMemo(() => {
         const dataChecked: any[] = data.filter((item) => item.checked === true);
@@ -202,16 +209,6 @@ function Categories() {
 
     const handleOpenVoucher = () => {
         setOpenVoucher(true);
-
-        // const mask: HTMLElement | null = document.getElementById('mask');
-        // const voucher: HTMLElement | null = document.getElementById('voucher');
-
-        // if (mask) {
-        //     mask.style.visibility = 'visible';
-        // }
-        // if (voucher) {
-        //     voucher.style.transform = 'translate(-50%, -50%) scale(1)';
-        // }
     };
 
     return (

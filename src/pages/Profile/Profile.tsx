@@ -1,9 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './Profile.module.scss';
-import { useSessionContext } from '../../context/SessionContext';
-import { useEffect, useLayoutEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import routesConfig from '../../config/routes';
+import { useEffect } from 'react';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
 import { Dropdown } from 'primereact/dropdown';
 import img from '../../assets/images/meoww.jpg';
@@ -14,8 +11,6 @@ import { isMenuMobile } from '../../store';
 const cx = classNames.bind(styles);
 
 function Profile() {
-    const [values] = useSessionContext();
-    const navigate = useNavigate();
     const setState = useSetRecoilState(isMenuMobile);
 
     const days = [
@@ -108,14 +103,6 @@ function Profile() {
             top: 0,
         });
     }, []);
-
-    useLayoutEffect(() => {
-        if (!values.isAuth) {
-            navigate(routesConfig.login);
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [values]);
 
     return (
         <LayoutProfile>
