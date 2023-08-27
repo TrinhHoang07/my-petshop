@@ -6,6 +6,7 @@ import { BiSearch } from 'react-icons/bi';
 import { useDebounce } from '../../hooks';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { CardItemFlip } from '../../components/CardItemFlip';
+import { T_Product, T_Search } from '../../models';
 
 const cx = classNames.bind(styles);
 
@@ -18,7 +19,7 @@ function Search() {
     const [searchText, setSearchText] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('Không có tìm kiếm gần đây');
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<T_Product[]>([]);
     const debounced = useDebounce(searchText, 750);
 
     useEffect(() => {
@@ -26,7 +27,7 @@ function Search() {
             setLoading(true);
             fetch(`http://localhost:3009/products/search?search=${debounced}`)
                 .then((res) => res.json())
-                .then((data) => {
+                .then((data: T_Search) => {
                     setLoading(false);
 
                     if (data.data.length > 0) {
@@ -65,7 +66,7 @@ function Search() {
                     {data.length > 0 && <h2>Kết quả tìm kiếm</h2>}
                     <div className={cx('containers')}>
                         {data.length > 0 ? (
-                            data.map((item: any) => (
+                            data.map((item: T_Product) => (
                                 <CardItemFlip
                                     key={item.id}
                                     to={`/product/cat/${item.id}`}

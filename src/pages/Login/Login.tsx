@@ -6,6 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import routesConfig from '../../config/routes';
 import { useEffect, useRef } from 'react';
 import { useSessionContext } from '../../context/SessionContext';
+import { T_Login } from '../../models';
 
 const cx = classNames.bind(styles);
 
@@ -48,10 +49,8 @@ function Login() {
             }),
         })
             .then((res) => res.json())
-            .then((data) => {
+            .then((data: T_Login) => {
                 if (data.message === 'success') {
-                    console.log('OK', data);
-
                     setStateContext({
                         isAuth: true,
                         user: {

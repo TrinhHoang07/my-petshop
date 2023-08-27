@@ -2,10 +2,17 @@ import classNames from 'classnames/bind';
 import styles from './Contact.module.scss';
 import { Title } from '../../components/Title';
 import logo from '../../assets/images/sleigh-bell.svg';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEffect, useRef } from 'react';
 
 const cx = classNames.bind(styles);
+
+type TForm = {
+    name: string;
+    email: string;
+    phone: string;
+    description: string;
+};
 
 function Contact() {
     const nameRef = useRef<any>();
@@ -17,8 +24,8 @@ function Contact() {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
-    const onSubmit = (data: any) => console.log(data);
+    } = useForm<TForm>();
+    const onSubmit: SubmitHandler<TForm> = (data: TForm) => console.log(data);
 
     const handleErrorInput = (ele: any) => {
         ele.style.border = '1px solid red';

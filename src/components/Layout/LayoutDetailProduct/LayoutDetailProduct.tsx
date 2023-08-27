@@ -11,11 +11,12 @@ import { formatMoney, getNameFromType } from '../../../Helper';
 import { Loading } from '../../Loading';
 import { useSessionContext } from '../../../context/SessionContext';
 import { useConfirmToast } from '../../../context/ConfirmAndToastContext';
+import { T_AddCart, T_Product } from '../../../models';
 
 const cx = classNames.bind(styles);
 
 type TProps = {
-    data: any;
+    data: T_Product | undefined;
 };
 
 function LayoutDetailProduct(props: TProps) {
@@ -60,15 +61,13 @@ function LayoutDetailProduct(props: TProps) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                product_id: props.data.id,
+                product_id: props.data?.id,
                 customer_id: infoUser.user?.id,
                 quantity: quantity,
             }),
         })
             .then((res) => res.json())
-            .then((data) => {
-                console.log('data: ', data);
-
+            .then((data: T_AddCart) => {
                 if (data.message === 'success') {
                     toast.current?.show({
                         severity: 'success',

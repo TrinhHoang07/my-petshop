@@ -1,11 +1,11 @@
 import { useState, useLayoutEffect } from 'react';
 
 function useWindowPosition() {
-    const [scrollPosition, setPosition] = useState(0);
+    const [scrollPosition, setPosition] = useState<number>(0);
 
     useLayoutEffect(() => {
         function updatePosition() {
-            setPosition(window.pageYOffset);
+            setPosition(window.scrollY);
         }
         window.addEventListener('scroll', updatePosition);
         updatePosition();

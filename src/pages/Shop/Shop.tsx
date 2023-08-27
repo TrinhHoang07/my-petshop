@@ -8,13 +8,13 @@ import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
 import { CardItemFlip } from '../../components/CardItemFlip';
 import { getNameFromType, getValueFilterInArray } from '../../Helper';
 import { Loading } from '../../components/Loading';
-import { T_Products } from '../../models';
+import { T_Product, T_Shop } from '../../models';
 
 const cx = classNames.bind(styles);
 
 function Shop() {
     const [value, setValue] = useState<[number, number]>([0, 100]);
-    const [dataRender, setDataRender] = useState<T_Products[]>([]);
+    const [dataRender, setDataRender] = useState<T_Product[]>([]);
     const [subTitle, setSubTitle] = useState<string>('');
     const setFilterItem = useSetRecoilState(filterItem);
     const valuess = useRecoilValue(filterItemByPrice);
@@ -22,7 +22,7 @@ function Shop() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     // update typescript later
-    const [data, setData] = useState<T_Products[]>([]);
+    const [data, setData] = useState<T_Product[]>([]);
 
     // fake page
     const [first, setFirst] = useState<number>(1);
@@ -34,7 +34,7 @@ function Shop() {
     };
 
     useEffect(() => {
-        setDataRender(data.filter((item: T_Products) => item.price >= valuess[0] && item.price <= valuess[1]));
+        setDataRender(data.filter((item: T_Product) => item.price >= valuess[0] && item.price <= valuess[1]));
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSubmitFilter]);
@@ -51,9 +51,9 @@ function Shop() {
 
         fetch('http://localhost:3009/products/all')
             .then((res) => res.json())
-            .then((data) => {
-                if (data && data.length > 0) {
-                    setData(data);
+            .then((data: T_Shop) => {
+                if (data.message === 'success') {
+                    setData(data.data);
                     setIsLoading(false);
                 }
             })

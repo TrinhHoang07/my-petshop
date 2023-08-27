@@ -10,7 +10,7 @@ import { isMenuMobile } from '../../store';
 const cx = classNames.bind(styles);
 
 function ProfileNoti() {
-    const [active, setActive] = useState(1);
+    const [active, setActive] = useState<number>(1);
     const setState = useSetRecoilState(isMenuMobile);
 
     return (

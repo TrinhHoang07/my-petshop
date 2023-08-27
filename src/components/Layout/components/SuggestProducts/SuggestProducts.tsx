@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './SuggestProducts.module.scss';
 import { useEffect, useState } from 'react';
 import { formatMoney } from '../../../../Helper';
+import { T_Detail } from '../../../../models';
 
 const cx = classNames.bind(styles);
 
@@ -11,10 +12,10 @@ function SuggestProducts() {
     useEffect(() => {
         fetch(`http://localhost:3009/products/random`)
             .then((res) => res.json())
-            .then((data) => {
-                console.log('data suggested: ', data);
-
-                setData(data.data);
+            .then((data: T_Detail) => {
+                if (data.message === 'success') {
+                    setData(data.data);
+                }
             })
             .catch((err) => console.log('err: ', err));
     }, []);

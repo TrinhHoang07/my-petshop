@@ -10,11 +10,23 @@ import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { Voucher } from './Voucher';
 import { useSessionContext } from '../../context/SessionContext';
 import { formatMoney } from '../../Helper';
+import { T_Cart, T_Categorys } from '../../models';
 
 const cx = classNames.bind(styles);
 
+type TData = {
+    id: number;
+    name: string;
+    color: string;
+    price: number;
+    lastPrice: number;
+    quantity: number;
+    previewUrl: string;
+    checked: boolean;
+};
+
 function Categories() {
-    const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<TData[]>([]);
     const [openVoucher, setOpenVoucher] = useState<boolean>(false);
     const [checkAll, setCheckAll] = useState<boolean>(false);
     const toast = useConfirmToast();
@@ -38,10 +50,12 @@ function Categories() {
             },
         })
             .then((res) => res.json())
-            .then((data) => {
+            .then((data: T_Categorys) => {
                 if (data.message === 'success') {
+                    console.log(data);
+
                     if (data.data.length > 0) {
-                        const result = data.data.map((item: any) => ({
+                        const result = data.data.map((item: T_Cart) => ({
                             id: item.carts_id,
                             name: item.product_name,
                             color: item.product_color,
@@ -62,13 +76,10 @@ function Categories() {
     }, []);
 
     const totalMoney = useMemo(() => {
-        const dataChecked: any[] = data.filter((item) => item.checked === true);
-
-        console.log('call', dataChecked);
+        const dataChecked: TData[] = data.filter((item) => item.checked === true);
 
         if (dataChecked.length > 0) {
             const result = dataChecked.reduce((result, cur) => result + cur.lastPrice, 0);
-            console.log(result);
 
             return {
                 price: result,
@@ -77,7 +88,7 @@ function Categories() {
         }
     }, [data]);
 
-    const confirmOne = (value: any) => {
+    const confirmOne = (value: TData) => {
         confirmDialog({
             message: 'Bạn có chắc chắn muốn xóa không?',
             header: 'Xóa sản phẩm',
@@ -124,7 +135,7 @@ function Categories() {
         });
     };
 
-    const handleIncrementQuantity = (value: any) => {
+    const handleIncrementQuantity = (value: TData) => {
         const index = data.findIndex((item) => item.id === value.id);
 
         const dataChanged = [...data];
@@ -137,7 +148,7 @@ function Categories() {
         setData(dataChanged);
     };
 
-    const handleDownQuantity = (value: any) => {
+    const handleDownQuantity = (value: TData) => {
         const index = data.findIndex((item) => item.id === value.id);
 
         const dataChanged = [...data];
@@ -150,7 +161,7 @@ function Categories() {
         setData(dataChanged);
     };
 
-    const handleChecked = (value: any) => {
+    const handleChecked = (value: TData) => {
         const index = data.findIndex((item) => item.id === value.id);
 
         const dataChanged = [...data];

@@ -7,6 +7,7 @@ import img from '../../../../assets/images/cat_item_1.jpg';
 import { useDebounce } from '../../../../hooks';
 import { formatMoney } from '../../../../Helper';
 import { useNavigate } from 'react-router-dom';
+import { T_Product, T_Search } from '../../../../models';
 
 const cx = classNames.bind(styles);
 
@@ -17,7 +18,7 @@ type T_Props = {
 
 function Search(props: T_Props) {
     const [inputValue, setInputValue] = useState<string>('');
-    const [fakeData, setFakeData] = useState<any[]>([]);
+    const [fakeData, setFakeData] = useState<T_Product[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('Không có tìm kiếm gần đây');
     const debounced = useDebounce(inputValue, 750);
@@ -28,14 +29,16 @@ function Search(props: T_Props) {
             setLoading(true);
             fetch(`http://localhost:3009/products/search?search=${debounced}`)
                 .then((res) => res.json())
-                .then((data) => {
-                    setLoading(false);
+                .then((data: T_Search) => {
+                    if (data.message === 'success') {
+                        setLoading(false);
 
-                    if (data.data.length > 0) {
-                        setFakeData(data.data);
-                    } else {
-                        setFakeData([]);
-                        setMessage('Không có kết quả tìm kiếm!');
+                        if (data.data.length > 0) {
+                            setFakeData(data.data);
+                        } else {
+                            setFakeData([]);
+                            setMessage('Không có kết quả tìm kiếm!');
+                        }
                     }
                 })
                 .catch((err) => console.log('err: ', err));

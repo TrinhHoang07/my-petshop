@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-export const filterItem = atom({
+export const filterItem = atom<string>({
     key: 'filter',
     default: '',
 });

@@ -131,7 +131,6 @@ function Profile() {
                         <div className={cx('profile-into-back')}>
                             <span
                                 onClick={() => {
-                                    console.log(111);
                                     setState(true);
                                 }}
                                 className={cx('back-btn-profile')}

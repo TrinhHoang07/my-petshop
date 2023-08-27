@@ -5,12 +5,13 @@ import routesConfig from '../../../../../config/routes';
 import { Button } from '../../../../Button';
 import { useSessionContext } from '../../../../../context/SessionContext';
 import { formatMoney } from '../../../../../Helper';
+import { T_Cart, T_Categorys } from '../../../../../models';
 
 const cx = classNames.bind(styles);
 
 function Carts() {
     const [values] = useSessionContext();
-    const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<T_Cart[]>([]);
 
     useEffect(() => {
         // fetch API
@@ -23,9 +24,8 @@ function Carts() {
                 },
             })
                 .then((res) => res.json())
-                .then((data) => {
+                .then((data: T_Categorys) => {
                     if (data.message === 'success') {
-                        console.log(data);
                         setData(data.data);
                     }
                 })
