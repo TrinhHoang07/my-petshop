@@ -1,6 +1,6 @@
 import logo from '../../../../assets/images/logo-petshop.jpg';
 import { BiSearch } from 'react-icons/bi';
-import { FaUser, FaShoppingCart } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Nav from './Nav';
 import routesConfig from '../../../../config/routes';
@@ -15,34 +15,9 @@ const cx = classNames.bind(styles);
 
 function Header() {
     const [openSearch, setOpenSearch] = useState<boolean>(false);
-    const count = 5;
 
     const handleOpenSearch = () => {
         setOpenSearch(true);
-
-        // const mask: HTMLElement | null = document.getElementById('mask');
-        // const search: HTMLElement | null = document.getElementById('search-wrap');
-
-        // if (mask) {
-        //     mask.style.visibility = 'visible';
-        // }
-        // if (search) {
-        //     search.style.transform = 'translateX(0)';
-        // }
-    };
-
-    const handleOpenCarts = () => {
-        const cart: HTMLElement | null = document.getElementById('carts-list-small');
-        if (cart) {
-            cart.style.transform = 'scale(1)';
-        }
-    };
-
-    const handleCloseCarts = () => {
-        const cart: HTMLElement | null = document.getElementById('carts-list-small');
-        if (cart) {
-            cart.style.transform = 'scale(0)';
-        }
     };
 
     return (
@@ -62,17 +37,7 @@ function Header() {
                 <Link className={cx('action-item', 'user-icon')} to={routesConfig.profile}>
                     <FaUser fontSize={'2.5rem'} />
                 </Link>
-                <div onMouseEnter={handleOpenCarts} onMouseLeave={handleCloseCarts} className={cx('wrapper-cart')}>
-                    <Link className={cx('action-item', 'categories')} to={routesConfig.categories}>
-                        <FaShoppingCart fontSize={'2.5rem'} />
-                        {count > 0 && (
-                            <div className={cx('count-item')}>
-                                <span>{count >= 100 ? '99+' : count}</span>
-                            </div>
-                        )}
-                    </Link>
-                    <Carts />
-                </div>
+                <Carts />
             </div>
         </div>
     );

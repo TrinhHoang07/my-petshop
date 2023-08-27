@@ -99,3 +99,44 @@
         text-decoration: none;
     }
 }
+
+// update
+.wrapper-cart {
+    position: relative;
+}
+
+.categories {
+    &:hover {
+        opacity: 1 !important;
+    }
+}
+
+.action-item {
+    display: flex;
+    color: var(--primary-color);
+    padding: 4px 18px;
+    position: relative;
+
+    &:hover {
+        opacity: 0.88;
+        cursor: pointer;
+    }
+
+    .count-item {
+        position: absolute;
+        top: -8px;
+        right: 5px;
+
+        span {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-color: red;
+            color: var(--white-color);
+            text-align: center;
+            line-height: 24px;
+            border-radius: 999px;
+            font-size: 12px;
+        }
+    }
+}
