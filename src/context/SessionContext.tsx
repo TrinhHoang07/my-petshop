@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { ReactNode, createContext, useContext, useState } from 'react';
 
 type TProps = {
     children: ReactNode;
@@ -10,6 +10,9 @@ type TUser = {
     phone?: string;
     token?: string;
     id: number;
+    avatar?: string;
+    gender?: string;
+    birthdate?: string;
 };
 
 type TState = {

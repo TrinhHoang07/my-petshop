@@ -3,66 +3,18 @@ import styles from './Categories.module.scss';
 import { Link } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import routesConfig from '../../config/routes';
-import user from '../../assets/images/meoww.jpg';
-import pro from '../../assets/images/cat_item_3.jpg';
+import noCarts from '../../assets/images/no-cart.png';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { MdOutlineDiscount } from 'react-icons/md';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { Voucher } from './Voucher';
 import { useSessionContext } from '../../context/SessionContext';
+import { formatMoney } from '../../Helper';
 
 const cx = classNames.bind(styles);
 
-const fakeData = [
-    {
-        id: 1,
-        name: 'Meow Meow Cuteeeeeeee',
-        color: 'White snow',
-        price: 3000000,
-        lastPrice: 3000000,
-        quantity: 1,
-        checked: false,
-    },
-    {
-        id: 2,
-        name: 'Dog Dog Cuteeeeeeee',
-        color: 'Black',
-        price: 10007770,
-        lastPrice: 10007770,
-        quantity: 1,
-        checked: false,
-    },
-    {
-        id: 3,
-        name: 'Thuc an cho Meow Meow',
-        color: 'White snow',
-        price: 1090000,
-        lastPrice: 1090000,
-        quantity: 1,
-        checked: false,
-    },
-    {
-        id: 4,
-        name: 'Meo anh long dai cute',
-        color: 'Gold',
-        price: 1900000,
-        lastPrice: 1900000,
-        quantity: 1,
-        checked: false,
-    },
-    {
-        id: 5,
-        name: 'Cho ba tu',
-        color: 'Grey',
-        price: 1500000,
-        lastPrice: 1500000,
-        quantity: 1,
-        checked: false,
-    },
-];
-
 function Categories() {
-    const [data, setData] = useState<any[]>(fakeData);
+    const [data, setData] = useState<any[]>([]);
     const [openVoucher, setOpenVoucher] = useState<boolean>(false);
     const [checkAll, setCheckAll] = useState<boolean>(false);
     const toast = useConfirmToast();
@@ -88,7 +40,20 @@ function Categories() {
             .then((res) => res.json())
             .then((data) => {
                 if (data.message === 'success') {
-                    console.log(data);
+                    if (data.data.length > 0) {
+                        const result = data.data.map((item: any) => ({
+                            id: item.carts_id,
+                            name: item.product_name,
+                            color: item.product_color,
+                            price: item.product_price ?? 'Không',
+                            lastPrice: item.product_price * item.carts_quantity,
+                            quantity: item.carts_quantity,
+                            previewUrl: item.product_preview_url,
+                            checked: false,
+                        }));
+
+                        setData(result);
+                    }
                 }
             })
             .catch((err) => console.error(err));
@@ -231,50 +196,59 @@ function Categories() {
                 >
                     <div className={cx('user')}>
                         <div className={cx('preview')}>
-                            <img src={user} alt="user" />
+                            <img src={values.user?.avatar} alt="user" />
                         </div>
-                        <h3 className={cx('user-name')}>hoangtrinh</h3>
+                        <h3 className={cx('user-name')}>{values.user?.name}</h3>
                     </div>
                 </Link>
             </div>
             <div className={cx('carts-list')}>
                 <div className={cx('wrapper-carts')}>
-                    {data.map((item) => (
-                        <div key={item.id} className={cx('cart-item')}>
-                            <div className={cx('input-product-wrap')}>
-                                <input
-                                    checked={item.checked}
-                                    onChange={() => handleChecked(item)}
-                                    type="checkbox"
-                                    name="check-cart"
-                                />
-                                <div className={cx('info-item')}>
-                                    <div className={cx('preview-product')}>
-                                        <img src={pro} alt="preview product" />
-                                    </div>
-                                    <div className={cx('wrapper-info')}>
-                                        <p className={cx('name-item-cart')}>{item.name}</p>
-                                        <p className={cx('color-product')}>Màu sắc: {item.color}</p>
-                                        <p className={cx('item-price')}>{item.price}</p>
-                                        <div className={cx('count-item')}>
-                                            <p onClick={() => handleDownQuantity(item)} className={cx('p_1')}>
-                                                -
-                                            </p>
-                                            <p className={cx('p_2')}>{item.quantity}</p>
-                                            <p onClick={() => handleIncrementQuantity(item)} className={cx('p_3')}>
-                                                +
+                    {data.length > 0 ? (
+                        data.map((item) => (
+                            <div key={item.id} className={cx('cart-item')}>
+                                <div className={cx('input-product-wrap')}>
+                                    <input
+                                        checked={item.checked}
+                                        onChange={() => handleChecked(item)}
+                                        type="checkbox"
+                                        name="check-cart"
+                                    />
+                                    <div className={cx('info-item')}>
+                                        <div className={cx('preview-product')}>
+                                            <img src={item.previewUrl} alt="preview product" />
+                                        </div>
+                                        <div className={cx('wrapper-info')}>
+                                            <p className={cx('name-item-cart')}>{item.name}</p>
+                                            <p className={cx('color-product')}>Màu sắc: {item.color}</p>
+                                            <p className={cx('item-price')}>{formatMoney(item.price)}đ</p>
+                                            <div className={cx('count-item')}>
+                                                <p onClick={() => handleDownQuantity(item)} className={cx('p_1')}>
+                                                    -
+                                                </p>
+                                                <p className={cx('p_2')}>{item.quantity}</p>
+                                                <p onClick={() => handleIncrementQuantity(item)} className={cx('p_3')}>
+                                                    +
+                                                </p>
+                                            </div>
+
+                                            <p className={cx('last-price')}>{formatMoney(item.lastPrice)}đ</p>
+                                            <p onClick={() => confirmOne(item)} className={cx('remove-item')}>
+                                                Xóa
                                             </p>
                                         </div>
-
-                                        <p className={cx('last-price')}>{item.lastPrice}</p>
-                                        <p onClick={() => confirmOne(item)} className={cx('remove-item')}>
-                                            Xóa
-                                        </p>
                                     </div>
                                 </div>
                             </div>
+                        ))
+                    ) : (
+                        <div style={{ padding: '32px 0' }}>
+                            <p>Giỏ hàng trống!!!</p>
+                            <div className={cx('preview-no-carts')}>
+                                <img src={noCarts} alt="no-carts" />
+                            </div>
                         </div>
-                    ))}
+                    )}
                 </div>
                 <div className={cx('footer')}>
                     <div className={cx('voucher')}>
@@ -311,7 +285,7 @@ function Categories() {
                                 {totalMoney?.length && (
                                     <span className={cx('total-count')}>({totalMoney?.length} sản phẩm)</span>
                                 )}
-                                <span>₫{totalMoney?.price ?? 0}</span>
+                                <span>₫{formatMoney(totalMoney?.price ?? 0)}</span>
                             </p>
                             <button className={cx('btn-buy')}>Mua Hàng</button>
                         </div>

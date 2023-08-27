@@ -50,6 +50,8 @@ function Login() {
             .then((res) => res.json())
             .then((data) => {
                 if (data.message === 'success') {
+                    console.log('OK', data);
+
                     setStateContext({
                         isAuth: true,
                         user: {
@@ -58,6 +60,9 @@ function Login() {
                             email: data.data.email,
                             phone: data.data.phone_number,
                             token: data.data.access_token,
+                            avatar: data.data.avatar,
+                            gender: data.data.gender,
+                            birthdate: data.data.birth_day,
                         },
                     });
 

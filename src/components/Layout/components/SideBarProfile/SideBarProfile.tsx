@@ -4,21 +4,23 @@ import { Link, NavLink } from 'react-router-dom';
 import { AiOutlineEdit, AiOutlineUser } from 'react-icons/ai';
 import { CiViewList } from 'react-icons/ci';
 import { IoMdNotificationsOutline } from 'react-icons/io';
-import img from '../../../../assets/images/meoww.jpg';
 import { MdOutlineDiscount } from 'react-icons/md';
 import routesConfig from '../../../../config/routes';
+import { useSessionContext } from '../../../../context/SessionContext';
 
 const cx = classNames.bind(styles);
 
 function SideBarProfile() {
+    const [values] = useSessionContext();
+
     return (
         <div className={cx('side-bar-profile')}>
             <div className={cx('header')}>
                 <div className={cx('avatar')}>
-                    <img src={img} alt="avatar-user" />
+                    <img src={values.user?.avatar} alt="avatar-user" />
                 </div>
                 <div className={cx('info-user')}>
-                    <h3 className={cx('user-name')}>Name user</h3>
+                    <h3 className={cx('user-name')}>{values.user?.name}</h3>
                     <Link to={routesConfig.profile}>
                         <AiOutlineEdit />
                         <span>Sửa hồ sơ</span>

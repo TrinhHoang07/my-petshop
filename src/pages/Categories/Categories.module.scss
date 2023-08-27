@@ -120,6 +120,13 @@ $tablet-width: 1023px;
     background-color: #fff;
 }
 
+.preview-no-carts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+}
+
 .wrapper-info {
     display: flex;
     align-items: center;
