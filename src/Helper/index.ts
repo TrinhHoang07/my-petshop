@@ -29,3 +29,11 @@ export const getValueFilterInArray = (arr: Array<any>): [number, number] => {
 
     return [min, max];
 };
+
+export const base64Encode = (str: string | object) => {
+    return btoa(JSON.stringify(str));
+};
+
+export const base64Decode = (str: string) => {
+    return JSON.parse(atob(str));
+};

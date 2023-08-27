@@ -11,6 +11,7 @@ import { Voucher } from './Voucher';
 import { useSessionContext } from '../../context/SessionContext';
 import { formatMoney } from '../../Helper';
 import { T_Cart, T_Categorys } from '../../models';
+import { ApiService } from '../../axios/ApiService';
 
 const cx = classNames.bind(styles);
 
@@ -30,6 +31,7 @@ function Categories() {
     const [openVoucher, setOpenVoucher] = useState<boolean>(false);
     const [checkAll, setCheckAll] = useState<boolean>(false);
     const toast = useConfirmToast();
+    const apiService = new ApiService();
     const [values] = useSessionContext();
 
     useEffect(() => {
@@ -43,19 +45,12 @@ function Categories() {
     useEffect(() => {
         // fetch API
 
-        fetch(`http://localhost:3009/carts/cart-by-customer/${values.user?.id}`, {
-            method: 'GET',
-            headers: {
-                Authorization: 'Bearer ' + values.user?.token,
-            },
-        })
-            .then((res) => res.json())
-            .then((data: T_Categorys) => {
-                if (data.message === 'success') {
-                    console.log(data);
-
-                    if (data.data.length > 0) {
-                        const result = data.data.map((item: T_Cart) => ({
+        apiService.carts
+            .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')
+            .then((res: T_Categorys) => {
+                if (res.message === 'success') {
+                    if (res.data.length > 0) {
+                        const result = res.data.map((item: T_Cart) => ({
                             id: item.carts_id,
                             name: item.product_name,
                             color: item.product_color,

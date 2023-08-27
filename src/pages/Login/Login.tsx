@@ -7,6 +7,7 @@ import routesConfig from '../../config/routes';
 import { useEffect, useRef } from 'react';
 import { useSessionContext } from '../../context/SessionContext';
 import { T_Login } from '../../models';
+import { ApiService } from '../../axios/ApiService';
 
 const cx = classNames.bind(styles);
 
@@ -25,6 +26,7 @@ function Login() {
     const navigate = useNavigate();
     const { state }: { state: TStateRedirect } = useLocation();
     const [, setStateContext] = useSessionContext();
+    const apiService = new ApiService();
 
     const {
         register,
@@ -33,35 +35,24 @@ function Login() {
     } = useForm<TForm>();
 
     const onSubmit: SubmitHandler<TForm> = (data: TForm) => {
-        const dataUser = {
-            name: data.name,
-            password: data.password,
-        };
-
-        fetch('http://localhost:3009/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                username: dataUser.name,
-                password: dataUser.password,
-            }),
-        })
-            .then((res) => res.json())
-            .then((data: T_Login) => {
-                if (data.message === 'success') {
+        apiService.auth
+            .login({
+                username: data.name,
+                password: data.password,
+            })
+            .then((res: T_Login) => {
+                if (res.message === 'success') {
                     setStateContext({
                         isAuth: true,
                         user: {
-                            id: data.data.id,
-                            name: data.data.name,
-                            email: data.data.email,
-                            phone: data.data.phone_number,
-                            token: data.data.access_token,
-                            avatar: data.data.avatar,
-                            gender: data.data.gender,
-                            birthdate: data.data.birth_day,
+                            id: res.data.id,
+                            name: res.data.name,
+                            email: res.data.email,
+                            phone: res.data.phone_number,
+                            token: res.data.access_token,
+                            avatar: res.data.avatar,
+                            gender: res.data.gender,
+                            birthdate: res.data.birth_day,
                         },
                     });
 
@@ -73,15 +64,6 @@ function Login() {
                 }
             })
             .catch((err) => console.error(err));
-
-        // localStorage.setItem('user', JSON.stringify(dataUser));
-        // setStateContext({
-        //     isAuth: true,
-        //     user: {
-        //         name: data.name,
-        //         token: data.password,
-        //     },
-        // });
     };
 
     const handleErrorInput = (ele: HTMLInputElement) => {

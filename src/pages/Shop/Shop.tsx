@@ -9,6 +9,7 @@ import { CardItemFlip } from '../../components/CardItemFlip';
 import { getNameFromType, getValueFilterInArray } from '../../Helper';
 import { Loading } from '../../components/Loading';
 import { T_Product, T_Shop } from '../../models';
+import { ApiService } from '../../axios/ApiService';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +21,7 @@ function Shop() {
     const valuess = useRecoilValue(filterItemByPrice);
     const isSubmitFilter = useRecoilValue(isFilter);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const apiService = new ApiService();
 
     // update typescript later
     const [data, setData] = useState<T_Product[]>([]);
@@ -49,15 +51,17 @@ function Shop() {
     useEffect(() => {
         setIsLoading(true);
 
-        fetch('http://localhost:3009/products/all')
-            .then((res) => res.json())
-            .then((data: T_Shop) => {
-                if (data.message === 'success') {
-                    setData(data.data);
+        apiService.products
+            .getProducts()
+            .then((res: T_Shop) => {
+                if (res.message === 'success') {
+                    setData(res.data);
                     setIsLoading(false);
                 }
             })
             .catch((err) => console.error(err));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {

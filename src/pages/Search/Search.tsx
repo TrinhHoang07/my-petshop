@@ -7,6 +7,7 @@ import { useDebounce } from '../../hooks';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { CardItemFlip } from '../../components/CardItemFlip';
 import { T_Product, T_Search } from '../../models';
+import { ApiService } from '../../axios/ApiService';
 
 const cx = classNames.bind(styles);
 
@@ -20,18 +21,22 @@ function Search() {
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('Không có tìm kiếm gần đây');
     const [data, setData] = useState<T_Product[]>([]);
+    const apiService = new ApiService();
     const debounced = useDebounce(searchText, 750);
 
     useEffect(() => {
         if (debounced.trim().length > 0) {
             setLoading(true);
-            fetch(`http://localhost:3009/products/search?search=${debounced}`)
-                .then((res) => res.json())
-                .then((data: T_Search) => {
+
+            apiService.products
+                .searchProducts({
+                    search: debounced,
+                })
+                .then((res: T_Search) => {
                     setLoading(false);
 
-                    if (data.data.length > 0) {
-                        setData(data.data);
+                    if (res.data.length > 0) {
+                        setData(res.data);
                     } else {
                         setData([]);
                         setMessage('Không có kết quả tìm kiếm !');
@@ -39,6 +44,8 @@ function Search() {
                 })
                 .catch((err) => console.log('err: ', err));
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debounced]);
 
     useEffect(() => {

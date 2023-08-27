@@ -8,27 +8,24 @@ import { formatMoney } from '../../../../../Helper';
 import { T_Cart, T_Categorys } from '../../../../../models';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
+import { ApiService } from '../../../../../axios/ApiService';
 
 const cx = classNames.bind(styles);
 
 function Carts() {
     const [values] = useSessionContext();
     const [data, setData] = useState<T_Cart[]>([]);
+    const apiService = new ApiService();
 
     useEffect(() => {
         // fetch API
 
         if (values.isAuth) {
-            fetch(`http://localhost:3009/carts/cart-by-customer/${values.user?.id}`, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + values.user?.token,
-                },
-            })
-                .then((res) => res.json())
-                .then((data: T_Categorys) => {
-                    if (data.message === 'success') {
-                        setData(data.data);
+            apiService.carts
+                .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')
+                .then((res: T_Categorys) => {
+                    if (res.message === 'success') {
+                        setData(res.data);
                     }
                 })
                 .catch((err) => console.error(err));

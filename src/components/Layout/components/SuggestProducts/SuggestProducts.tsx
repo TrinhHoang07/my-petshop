@@ -3,21 +3,25 @@ import styles from './SuggestProducts.module.scss';
 import { useEffect, useState } from 'react';
 import { formatMoney } from '../../../../Helper';
 import { T_Detail } from '../../../../models';
+import { ApiService } from '../../../../axios/ApiService';
 
 const cx = classNames.bind(styles);
 
 function SuggestProducts() {
     const [data, setData] = useState<any>([]);
+    const apiService = new ApiService();
 
     useEffect(() => {
-        fetch(`http://localhost:3009/products/random`)
-            .then((res) => res.json())
-            .then((data: T_Detail) => {
-                if (data.message === 'success') {
-                    setData(data.data);
+        apiService.products
+            .randomProducts()
+            .then((res: T_Detail) => {
+                if (res.message === 'success') {
+                    setData(res.data);
                 }
             })
             .catch((err) => console.log('err: ', err));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

@@ -12,6 +12,7 @@ import { Loading } from '../../Loading';
 import { useSessionContext } from '../../../context/SessionContext';
 import { useConfirmToast } from '../../../context/ConfirmAndToastContext';
 import { T_AddCart, T_Product } from '../../../models';
+import { ApiService } from '../../../axios/ApiService';
 
 const cx = classNames.bind(styles);
 
@@ -23,6 +24,7 @@ function LayoutDetailProduct(props: TProps) {
     const [quantity, setQuantity] = useState<number>(1);
     const [infoUser] = useSessionContext();
     const toast = useConfirmToast();
+    const apiService = new ApiService();
 
     const data = [
         {
@@ -54,37 +56,42 @@ function LayoutDetailProduct(props: TProps) {
     }, []);
 
     const handleAddToCart = () => {
-        fetch('http://localhost:3009/carts/add-to-cart', {
-            method: 'POST',
-            headers: {
-                Authorization: 'Bearer ' + infoUser.user?.token,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                product_id: props.data?.id,
-                customer_id: infoUser.user?.id,
-                quantity: quantity,
-            }),
-        })
-            .then((res) => res.json())
-            .then((data: T_AddCart) => {
-                if (data.message === 'success') {
-                    toast.current?.show({
-                        severity: 'success',
-                        summary: 'Thành công',
-                        detail: 'Thêm thành công',
-                        life: 1500,
-                    });
-                } else {
-                    toast.current?.show({
-                        severity: 'error',
-                        summary: 'Có lỗi',
-                        detail: 'Sản phẩm này đã tồn tại trong giỏ hàng!',
-                        life: 1500,
-                    });
-                }
-            })
-            .catch((err) => console.error(err));
+        if (infoUser.isAuth) {
+            apiService.carts
+                .addToCart(
+                    {
+                        product_id: props.data?.id,
+                        customer_id: infoUser.user?.id,
+                        quantity: quantity,
+                    },
+                    infoUser.user?.token ?? '',
+                )
+                .then((res: T_AddCart) => {
+                    if (res.message === 'success') {
+                        toast.current?.show({
+                            severity: 'success',
+                            summary: 'Thành công',
+                            detail: 'Thêm thành công',
+                            life: 1500,
+                        });
+                    } else {
+                        toast.current?.show({
+                            severity: 'error',
+                            summary: 'Có lỗi',
+                            detail: 'Sản phẩm này đã tồn tại trong giỏ hàng!',
+                            life: 1500,
+                        });
+                    }
+                })
+                .catch((err) => console.error(err));
+        } else {
+            toast.current?.show({
+                severity: 'error',
+                summary: 'Có lỗi',
+                detail: 'Bạn chưa đăng nhập, vui lòng đăng nhập để mua hàng!',
+                life: 1500,
+            });
+        }
     };
 
     const itemTemplate = (item: any) => {
