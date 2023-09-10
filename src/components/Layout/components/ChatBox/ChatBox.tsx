@@ -9,6 +9,7 @@ import cat from '../../../../assets/images/meoww.jpg';
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { TypingAdmin } from '../TypingAdmin';
+import { useSocketContext } from '../../../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +21,8 @@ type TMes = {
 };
 
 function ChatBox() {
+    const socketProvider = useSocketContext();
+
     // test chats
     const socketRef = useRef<Socket>();
 
@@ -53,10 +56,13 @@ function ChatBox() {
         });
 
         socketRef.current = socket;
+        socketProvider.current = socket;
 
         return () => {
             socketRef.current?.disconnect();
         };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -74,6 +80,10 @@ function ChatBox() {
                             role: 'admin',
                         },
                     ]);
+                });
+
+                socketRef.current?.on('add-to-cart-give', (data: any) => {
+                    console.log('DATA ADD TO CART: ', data);
                 });
 
                 if (socketRef.current?.id) {

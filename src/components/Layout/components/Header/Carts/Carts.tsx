@@ -9,6 +9,7 @@ import { T_Cart, T_Categorys } from '../../../../../models';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { ApiService } from '../../../../../axios/ApiService';
+import { useSocketContext } from '../../../../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +17,24 @@ function Carts() {
     const [values] = useSessionContext();
     const [data, setData] = useState<T_Cart[]>([]);
     const apiService = new ApiService();
+    const socket = useSocketContext();
+
+    // chưa tối ưu, gọi quá nhiều lần
+    console.log('socket CARTS :', socket.current?.id);
+    socket.current?.on('add-to-cart-give', (data: any) => {
+        console.log('DATA ADD TO CART @@@@@: ', data);
+
+        if (values.isAuth) {
+            apiService.carts
+                .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')
+                .then((res: T_Categorys) => {
+                    if (res.message === 'success') {
+                        setData(res.data);
+                    }
+                })
+                .catch((err) => console.error(err));
+        }
+    });
 
     useEffect(() => {
         // fetch API

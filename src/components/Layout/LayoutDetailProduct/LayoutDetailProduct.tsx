@@ -13,6 +13,7 @@ import { useSessionContext } from '../../../context/SessionContext';
 import { useConfirmToast } from '../../../context/ConfirmAndToastContext';
 import { T_AddCart, T_Product } from '../../../models';
 import { ApiService } from '../../../axios/ApiService';
+import { useSocketContext } from '../../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -25,6 +26,11 @@ function LayoutDetailProduct(props: TProps) {
     const [infoUser] = useSessionContext();
     const toast = useConfirmToast();
     const apiService = new ApiService();
+
+    // testtttttttt => OK
+    const socket = useSocketContext();
+
+    console.log('socket: ' + socket.current?.id);
 
     const data = [
         {
@@ -68,6 +74,11 @@ function LayoutDetailProduct(props: TProps) {
                 )
                 .then((res: T_AddCart) => {
                     if (res.message === 'success') {
+                        socket.current?.emit('add-to-cart', {
+                            id: res.data.product_id,
+                            status: 'success',
+                        });
+
                         toast.current?.show({
                             severity: 'success',
                             summary: 'Thành công',

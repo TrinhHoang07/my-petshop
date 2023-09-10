@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { AosContext } from './components/AosContext';
 import SessionContextProvider from './context/SessionContext';
 import ConfirmAndToastContext from './context/ConfirmAndToastContext';
+import SocketContextProvider from './context/SocketContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -15,9 +16,11 @@ root.render(
             <RecoilRoot>
                 <SessionContextProvider>
                     <ConfirmAndToastContext>
-                        <AosContext>
-                            <App />
-                        </AosContext>
+                        <SocketContextProvider>
+                            <AosContext>
+                                <App />
+                            </AosContext>
+                        </SocketContextProvider>
                     </ConfirmAndToastContext>
                 </SessionContextProvider>
             </RecoilRoot>
