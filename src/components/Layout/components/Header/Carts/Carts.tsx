@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Carts.module.scss';
 import routesConfig from '../../../../../config/routes';
@@ -9,7 +9,7 @@ import { T_Cart, T_Categorys } from '../../../../../models';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { ApiService } from '../../../../../axios/ApiService';
-import { useSocketContext } from '../../../../../context/SocketContext';
+import { Socket, io } from 'socket.io-client';
 
 const cx = classNames.bind(styles);
 
@@ -17,24 +17,51 @@ function Carts() {
     const [values] = useSessionContext();
     const [data, setData] = useState<T_Cart[]>([]);
     const apiService = new ApiService();
-    const socket = useSocketContext();
+    const socketRef = useRef<Socket>();
 
-    // chưa tối ưu, gọi quá nhiều lần
-    console.log('socket CARTS :', socket.current?.id);
-    socket.current?.on('add-to-cart-give', (data: any) => {
-        console.log('DATA ADD TO CART @@@@@: ', data);
+    useEffect(() => {
+        const socket = io('http://localhost:3008', {
+            timeout: 5000,
+            autoConnect: true,
+        });
 
-        if (values.isAuth) {
-            apiService.carts
-                .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')
-                .then((res: T_Categorys) => {
-                    if (res.message === 'success') {
-                        setData(res.data);
+        socketRef.current = socket;
+
+        return () => {
+            socketRef.current?.disconnect();
+        };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (socketRef.current) {
+            socketRef.current.on('connect', () => {
+                console.log('id connected USER: ', socketRef.current?.id);
+
+                socketRef.current?.on('add-to-cart-give', (data: any) => {
+                    console.log('data GIVE: ', data);
+
+                    if (values.isAuth) {
+                        apiService.carts
+                            .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')
+                            .then((res: T_Categorys) => {
+                                if (res.message === 'success') {
+                                    setData(res.data);
+                                }
+                            })
+                            .catch((err) => console.error(err));
                     }
-                })
-                .catch((err) => console.error(err));
+                });
+            });
+
+            socketRef.current.on('disconnect', () => {
+                console.log('id disconnected: ', socketRef.current?.id);
+            });
         }
-    });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         // fetch API
