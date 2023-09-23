@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import logo from '../../assets/images/logo-petshop.jpg';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import routesConfig from '../../config/routes';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSessionContext } from '../../context/SessionContext';
 import { T_Login } from '../../models';
 import { ApiService } from '../../axios/ApiService';
@@ -23,6 +23,7 @@ type TStateRedirect = {
 function Login() {
     const nameRef = useRef<any>();
     const passwordRef = useRef<any>();
+    const [error, setError] = useState<boolean>(false);
     const navigate = useNavigate();
     const { state }: { state: TStateRedirect } = useLocation();
     const [, setStateContext] = useSessionContext();
@@ -63,7 +64,11 @@ function Login() {
                     }
                 }
             })
-            .catch((err) => console.error(err));
+            .catch(() => {
+                setError(true);
+                handleErrorInput(nameRef.current);
+                handleErrorInput(passwordRef.current);
+            });
     };
 
     const handleErrorInput = (ele: HTMLInputElement) => {
@@ -139,6 +144,7 @@ function Login() {
                                 onBlur={(e) => handleBlur(e.target)}
                             />
                             {errors.password && <p className={cx('error-field')}>This field is required!</p>}
+                            {error && <p className={cx('error-field')}>Tên tài khoản hoặc mật khẩu không chính xác!</p>}
                         </div>
                         <div className={cx('form-submit')}>
                             <button type="submit">ĐĂNG NHẬP</button>

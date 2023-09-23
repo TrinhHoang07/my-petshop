@@ -12,6 +12,7 @@ import { useSessionContext } from '../../context/SessionContext';
 import { formatMoney } from '../../Helper';
 import { T_Cart, T_Categorys } from '../../models';
 import { ApiService } from '../../axios/ApiService';
+import { Loading } from '../../components/Loading';
 
 const cx = classNames.bind(styles);
 
@@ -28,11 +29,13 @@ type TData = {
 
 function Categories() {
     const [data, setData] = useState<TData[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [openVoucher, setOpenVoucher] = useState<boolean>(false);
     const [checkAll, setCheckAll] = useState<boolean>(false);
     const toast = useConfirmToast();
     const apiService = new ApiService();
     const [values] = useSessionContext();
+    const [orders, setOrders] = useState<TData[]>([]);
 
     useEffect(() => {
         document.title = 'Trang chủ | Petshop chất lượng số 1 Việt Nam!';
@@ -44,6 +47,7 @@ function Categories() {
 
     useEffect(() => {
         // fetch API
+        setIsLoading(true);
 
         apiService.carts
             .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')
@@ -62,6 +66,7 @@ function Categories() {
                         }));
 
                         setData(result);
+                        setIsLoading(false);
                     }
                 }
             })
@@ -69,6 +74,22 @@ function Categories() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (data.length > 0) {
+            const isCheckAll = data.every((item) => item.checked);
+
+            setCheckAll(() => isCheckAll);
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (checkAll) {
+            setOrders(data);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [checkAll]);
 
     const totalMoney = useMemo(() => {
         const dataChecked: TData[] = data.filter((item) => item.checked === true);
@@ -130,20 +151,40 @@ function Categories() {
         });
     };
 
+    //// chưa tối ưu
     const handleIncrementQuantity = (value: TData) => {
+        ////// update quantity data
         const index = data.findIndex((item) => item.id === value.id);
 
+        console.log('calll OK', index);
         const dataChanged = [...data];
         dataChanged[index] = {
             ...data[index],
-            quantity: ++data[index].quantity,
+            quantity: data[index].quantity + 1,
             lastPrice: data[index].quantity * data[index].price,
         };
 
         setData(dataChanged);
+
+        ///// update quantity orders
+        if (orders.length > 0) {
+            const indexOrder = orders.findIndex((item) => item.id === value.id);
+
+            if (indexOrder !== -1) {
+                const data = [...orders];
+                data[indexOrder] = {
+                    ...data[indexOrder],
+                    quantity: data[indexOrder].quantity + 1,
+                };
+
+                setOrders(data);
+            }
+        }
     };
 
+    ////// chưa tối ưu
     const handleDownQuantity = (value: TData) => {
+        ////// update quantity data
         const index = data.findIndex((item) => item.id === value.id);
 
         const dataChanged = [...data];
@@ -154,9 +195,36 @@ function Categories() {
         };
 
         setData(dataChanged);
+
+        /// update quantity orders
+        if (orders.length > 0) {
+            const indexOrder = orders.findIndex((item) => item.id === value.id);
+
+            if (indexOrder !== -1) {
+                const data = [...orders];
+                data[indexOrder] = {
+                    ...data[indexOrder],
+                    quantity: --data[indexOrder].quantity <= 1 ? 1 : data[indexOrder].quantity,
+                };
+
+                setOrders(data);
+            }
+        }
     };
 
     const handleChecked = (value: TData) => {
+        console.log('item checked: ', value);
+
+        if (value.checked) {
+            setOrders((prev) => {
+                return prev.filter((item) => item.id !== value.id);
+            });
+        } else {
+            setOrders((prev) => {
+                return [...prev, value];
+            });
+        }
+
         const index = data.findIndex((item) => item.id === value.id);
 
         const dataChanged = [...data];
@@ -169,7 +237,13 @@ function Categories() {
     };
 
     const handeSelectAll = () => {
-        setCheckAll((prev) => !prev);
+        setCheckAll((prev) => {
+            if (prev) {
+                setOrders([]);
+            }
+
+            return !prev;
+        });
         const dataChecked = data.map((item) => ({
             ...item,
             checked: !checkAll ? true : false,
@@ -210,50 +284,62 @@ function Categories() {
             </div>
             <div className={cx('carts-list')}>
                 <div className={cx('wrapper-carts')}>
-                    {data.length > 0 ? (
-                        data.map((item) => (
-                            <div key={item.id} className={cx('cart-item')}>
-                                <div className={cx('input-product-wrap')}>
-                                    <input
-                                        checked={item.checked}
-                                        onChange={() => handleChecked(item)}
-                                        type="checkbox"
-                                        name="check-cart"
-                                    />
-                                    <div className={cx('info-item')}>
-                                        <div className={cx('preview-product')}>
-                                            <img src={item.previewUrl} alt="preview product" />
-                                        </div>
-                                        <div className={cx('wrapper-info')}>
-                                            <p className={cx('name-item-cart')}>{item.name}</p>
-                                            <p className={cx('color-product')}>Màu sắc: {item.color}</p>
-                                            <p className={cx('item-price')}>{formatMoney(item.price)}đ</p>
-                                            <div className={cx('count-item')}>
-                                                <p onClick={() => handleDownQuantity(item)} className={cx('p_1')}>
-                                                    -
-                                                </p>
-                                                <p className={cx('p_2')}>{item.quantity}</p>
-                                                <p onClick={() => handleIncrementQuantity(item)} className={cx('p_3')}>
-                                                    +
-                                                </p>
-                                            </div>
+                    {isLoading ? (
+                        <Loading />
+                    ) : (
+                        <>
+                            {data.length > 0 ? (
+                                data.map((item) => (
+                                    <div key={item.id} className={cx('cart-item')}>
+                                        <div className={cx('input-product-wrap')}>
+                                            <input
+                                                checked={item.checked}
+                                                onChange={() => handleChecked(item)}
+                                                type="checkbox"
+                                                name="check-cart"
+                                            />
+                                            <div className={cx('info-item')}>
+                                                <div className={cx('preview-product')}>
+                                                    <img src={item.previewUrl} alt="preview product" />
+                                                </div>
+                                                <div className={cx('wrapper-info')}>
+                                                    <p className={cx('name-item-cart')}>{item.name}</p>
+                                                    <p className={cx('color-product')}>Màu sắc: {item.color}</p>
+                                                    <p className={cx('item-price')}>{formatMoney(item.price)}đ</p>
+                                                    <div className={cx('count-item')}>
+                                                        <p
+                                                            onClick={() => handleDownQuantity(item)}
+                                                            className={cx('p_1')}
+                                                        >
+                                                            -
+                                                        </p>
+                                                        <p className={cx('p_2')}>{item.quantity}</p>
+                                                        <p
+                                                            onClick={() => handleIncrementQuantity(item)}
+                                                            className={cx('p_3')}
+                                                        >
+                                                            +
+                                                        </p>
+                                                    </div>
 
-                                            <p className={cx('last-price')}>{formatMoney(item.lastPrice)}đ</p>
-                                            <p onClick={() => confirmOne(item)} className={cx('remove-item')}>
-                                                Xóa
-                                            </p>
+                                                    <p className={cx('last-price')}>{formatMoney(item.lastPrice)}đ</p>
+                                                    <p onClick={() => confirmOne(item)} className={cx('remove-item')}>
+                                                        Xóa
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                ))
+                            ) : (
+                                <div style={{ padding: '32px 0' }}>
+                                    <p>Giỏ hàng trống!!!</p>
+                                    <div className={cx('preview-no-carts')}>
+                                        <img src={noCarts} alt="no-carts" />
+                                    </div>
                                 </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div style={{ padding: '32px 0' }}>
-                            <p>Giỏ hàng trống!!!</p>
-                            <div className={cx('preview-no-carts')}>
-                                <img src={noCarts} alt="no-carts" />
-                            </div>
-                        </div>
+                            )}
+                        </>
                     )}
                 </div>
                 <div className={cx('footer')}>
@@ -293,7 +379,9 @@ function Categories() {
                                 )}
                                 <span>₫{formatMoney(totalMoney?.price ?? 0)}</span>
                             </p>
-                            <button className={cx('btn-buy')}>Mua Hàng</button>
+                            <button onClick={() => console.log('orders: ', orders)} className={cx('btn-buy')}>
+                                Mua Hàng
+                            </button>
                         </div>
                     </div>
                 </div>
