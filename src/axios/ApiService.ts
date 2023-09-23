@@ -56,4 +56,20 @@ export class ApiService {
             route,
         };
     }
+
+    get orders() {
+        const route = {
+            addOrder: 'orders/create',
+        };
+
+        return {
+            addOrder: (data: any, token: string) =>
+                AxiosClientApi.post(route.addOrder, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            route,
+        };
+    }
 }

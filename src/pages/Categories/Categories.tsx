@@ -256,6 +256,25 @@ function Categories() {
         setOpenVoucher(true);
     };
 
+    const handleOrder = () => {
+        console.log('token: ', values.user?.token);
+        const data = {
+            customer_id: values.user?.id,
+            product_id: orders[0].id,
+            quantity: orders[0].quantity,
+            price: orders[0].price,
+        };
+
+        console.log('data created: ', data);
+
+        apiService.orders
+            .addOrder(data, values.user?.token ?? '')
+            .then((res) => {
+                console.log('res orders: ', res);
+            })
+            .catch((err) => console.error(err));
+    };
+
     return (
         <div className={cx('categories')}>
             <Voucher open={openVoucher} setOpen={setOpenVoucher} />
@@ -379,7 +398,7 @@ function Categories() {
                                 )}
                                 <span>₫{formatMoney(totalMoney?.price ?? 0)}</span>
                             </p>
-                            <button onClick={() => console.log('orders: ', orders)} className={cx('btn-buy')}>
+                            <button onClick={handleOrder} className={cx('btn-buy')}>
                                 Mua Hàng
                             </button>
                         </div>

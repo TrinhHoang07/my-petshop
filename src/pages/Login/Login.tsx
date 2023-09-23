@@ -43,6 +43,8 @@ function Login() {
             })
             .then((res: T_Login) => {
                 if (res.message === 'success') {
+                    console.log('token login: ', res.data.access_token);
+
                     setStateContext({
                         isAuth: true,
                         user: {
