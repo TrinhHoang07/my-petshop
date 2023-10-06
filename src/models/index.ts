@@ -88,3 +88,45 @@ export type T_AddCart = {
         quantity: number;
     };
 };
+
+// type orders
+export type Orders = {
+    orders_id: number;
+    orders_product_id: number;
+    orders_customer_id: number;
+    orders_quantity: number;
+    orders_status: string;
+    orders_price: number;
+    customer_address: string;
+    customer_avatar_path: string;
+    customer_birth_date: string;
+    customer_gender: string;
+    customer_name: string;
+    customer_phone_number: string;
+    product_color: string;
+    product_description: string;
+    product_name: string;
+    product_preview_url: string;
+    product_price: number;
+    product_rate: number;
+    product_type: string;
+    orders_created_at: string;
+};
+export type T_Orders = {
+    message: string;
+    statusCode: number;
+    data: Orders[];
+};
+
+// type add order
+export type T_AddOrder = {
+    message: string;
+    statusCode: number;
+    data: {
+        customer_id: number;
+        product_id: number;
+        quantity: number;
+        price: number;
+        status: string;
+    };
+};

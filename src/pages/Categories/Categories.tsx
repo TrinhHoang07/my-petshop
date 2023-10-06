@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './Categories.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import routesConfig from '../../config/routes';
 import noCarts from '../../assets/images/no-cart.png';
@@ -10,7 +10,7 @@ import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { Voucher } from './Voucher';
 import { useSessionContext } from '../../context/SessionContext';
 import { formatMoney } from '../../Helper';
-import { T_Cart, T_Categorys } from '../../models';
+import { T_AddOrder, T_Cart, T_Categorys } from '../../models';
 import { ApiService } from '../../axios/ApiService';
 import { Loading } from '../../components/Loading';
 
@@ -35,6 +35,7 @@ function Categories() {
     const toast = useConfirmToast();
     const apiService = new ApiService();
     const [values] = useSessionContext();
+    const navigate = useNavigate();
     const [orders, setOrders] = useState<TData[]>([]);
 
     useEffect(() => {
@@ -53,9 +54,11 @@ function Categories() {
             .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')
             .then((res: T_Categorys) => {
                 if (res.message === 'success') {
+                    console.log('data:', res.data);
+
                     if (res.data.length > 0) {
                         const result = res.data.map((item: T_Cart) => ({
-                            id: item.carts_id,
+                            id: item.carts_product_id,
                             name: item.product_name,
                             color: item.product_color,
                             price: item.product_price ?? 'Không',
@@ -266,13 +269,33 @@ function Categories() {
         };
 
         console.log('data created: ', data);
+        console.log('orders: ', orders);
 
         apiService.orders
             .addOrder(data, values.user?.token ?? '')
-            .then((res) => {
-                console.log('res orders: ', res);
+            .then((res: T_AddOrder) => {
+                if (res.message === 'success') {
+                    toast.current?.show({
+                        severity: 'success',
+                        summary: 'Thành công',
+                        detail: 'Đặt hàng thành công!',
+                        life: 3000,
+                    });
+
+                    setTimeout(() => {
+                        navigate(routesConfig.profile_buy);
+                    }, 1500);
+                }
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+                console.error(err);
+                toast.current?.show({
+                    severity: 'error',
+                    summary: 'Thất bại',
+                    detail: 'Đã xảy ra lỗi, vui lòng thử lại!',
+                    life: 3000,
+                });
+            });
     };
 
     return (

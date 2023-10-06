@@ -13,6 +13,14 @@ export const getNameFromType = (type: string) => {
     else return 'PHỤ KIỆN';
 };
 
+export const getNameFromStatus = (status: string) => {
+    if (status === 'processing') return 'Đang xử lý';
+    else if (status === 'shipping') return 'Đang giao';
+    else if (status === 'finished') return 'Đã giao';
+    else if (status === 'refund') return 'Hoàn tiền';
+    else return 'Xảy ra lỗi';
+};
+
 export const getShuffledArr = (arr: Array<any>) => {
     const newArr = arr.slice();
     for (let i = newArr.length - 1; i > 0; i--) {

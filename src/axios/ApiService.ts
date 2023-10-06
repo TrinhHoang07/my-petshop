@@ -60,11 +60,18 @@ export class ApiService {
     get orders() {
         const route = {
             addOrder: 'orders/create',
+            getOrderById: (userId: string) => `orders/get-order-id/${userId}`,
         };
 
         return {
             addOrder: (data: any, token: string) =>
                 AxiosClientApi.post(route.addOrder, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            getOrderById: (userId: string, token: string) =>
+                AxiosClientApi.get(route.getOrderById(userId), null, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
