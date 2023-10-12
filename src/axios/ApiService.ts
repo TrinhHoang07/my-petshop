@@ -79,4 +79,15 @@ export class ApiService {
             route,
         };
     }
+
+    get blogs() {
+        const route = {
+            getBlogById: (blogId: string) => `blogs/blog/${blogId}`,
+        };
+
+        return {
+            getBlogById: (blogId: string) => AxiosClientApi.get(route.getBlogById(blogId)),
+            route,
+        };
+    }
 }
