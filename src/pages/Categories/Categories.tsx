@@ -261,41 +261,54 @@ function Categories() {
 
     const handleOrder = () => {
         console.log('token: ', values.user?.token);
-        const data = {
-            customer_id: values.user?.id,
-            product_id: orders[0].id,
-            quantity: orders[0].quantity,
-            price: orders[0].price,
-        };
 
-        console.log('data created: ', data);
-        console.log('orders: ', orders);
+        navigate(routesConfig.orders);
 
-        apiService.orders
-            .addOrder(data, values.user?.token ?? '')
-            .then((res: T_AddOrder) => {
-                if (res.message === 'success') {
-                    toast.current?.show({
-                        severity: 'success',
-                        summary: 'Thành công',
-                        detail: 'Đặt hàng thành công!',
-                        life: 3000,
-                    });
+        // handle BUY PRODUCTS (CALL API)
+        // if (orders.length > 0) {
+        //     const data = {
+        //         customer_id: values.user?.id,
+        //         product_id: orders[0].id,
+        //         quantity: orders[0].quantity,
+        //         price: orders[0].price,
+        //     };
 
-                    setTimeout(() => {
-                        navigate(routesConfig.profile_buy);
-                    }, 1500);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-                toast.current?.show({
-                    severity: 'error',
-                    summary: 'Thất bại',
-                    detail: 'Đã xảy ra lỗi, vui lòng thử lại!',
-                    life: 3000,
-                });
-            });
+        //     console.log('data created: ', data);
+        //     console.log('orders: ', orders);
+
+        //     apiService.orders
+        //         .addOrder(data, values.user?.token ?? '')
+        //         .then((res: T_AddOrder) => {
+        //             if (res.message === 'success') {
+        //                 toast.current?.show({
+        //                     severity: 'success',
+        //                     summary: 'Thành công',
+        //                     detail: 'Đặt hàng thành công!',
+        //                     life: 3000,
+        //                 });
+
+        //                 setTimeout(() => {
+        //                     navigate(routesConfig.profile_buy);
+        //                 }, 1500);
+        //             }
+        //         })
+        //         .catch((err) => {
+        //             console.error(err);
+        //             toast.current?.show({
+        //                 severity: 'error',
+        //                 summary: 'Thất bại',
+        //                 detail: 'Đã xảy ra lỗi, vui lòng thử lại!',
+        //                 life: 3000,
+        //             });
+        //         });
+        // } else {
+        //     toast.current?.show({
+        //         severity: 'error',
+        //         summary: 'Có lỗi',
+        //         detail: 'Vui lòng chọn sản phẩm cần mua!',
+        //         life: 3000,
+        //     });
+        // }
     };
 
     return (

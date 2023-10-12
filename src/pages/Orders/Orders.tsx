@@ -4,6 +4,8 @@ import { TiLocation } from 'react-icons/ti';
 import { Button } from '../../components/Button';
 import img from '../../assets/images/new_3.jpg';
 import { RiCoupon3Fill } from 'react-icons/ri';
+import { AiOutlineDollarCircle } from 'react-icons/ai';
+import { BiDetail } from 'react-icons/bi';
 
 const cx = classNames.bind(styles);
 
@@ -58,7 +60,7 @@ function Orders() {
                         </span>
                         <p>Voucher của Shop</p>
                     </div>
-                    <p className={cx('select-voucher')}>Chọn voucher hoặc nhập mã</p>
+                    <p className={cx('select-voucher')}>Chọn hoặc nhập mã</p>
                 </div>
             </div>
             <div className={cx('shippp')}>
@@ -77,9 +79,63 @@ function Orders() {
                 <h3>Tống số tiền (1 sản phẩm): </h3>
                 <p>2.000.000đ</p>
             </div>
-            <h1>Voucher</h1>
-            <h1>Detail all</h1>
-            <h1>Buy - Order submit</h1>
+            <div className={cx('voucher-shop')}>
+                <div className={cx('heading')}>
+                    <span>
+                        <RiCoupon3Fill />
+                    </span>
+                    <p>Voucher Shopee</p>
+                </div>
+                <p className={cx('select-voucher')}>Chọn hoặc nhập mã</p>
+            </div>
+            <div className={cx('voucher-shop')}>
+                <div className={cx('heading')}>
+                    <span>
+                        <AiOutlineDollarCircle />
+                    </span>
+                    <p>Phương thức thanh toán</p>
+                </div>
+                <p className={cx('select-voucher')}>Chọn phương thức</p>
+            </div>
+            <div className={cx('details-payments')}>
+                <div className={cx('heading-pay')}>
+                    <span>
+                        <BiDetail />
+                    </span>
+                    <p>Chi tiết thanh toán</p>
+                </div>
+                <div className={cx('contents')}>
+                    <div className={cx('item-pay')}>
+                        <p>Tổng tiền hàng</p>
+                        <p>80.000đ</p>
+                    </div>
+                    <div className={cx('item-pay')}>
+                        <p>Giảm giá của Shopee</p>
+                        <p>12.000đ</p>
+                    </div>
+                    <div className={cx('item-pay')}>
+                        <p>Tổng tiền phí vận chuyển</p>
+                        <p>30.000đ</p>
+                    </div>
+                    <div className={cx('item-pay')}>
+                        <p>Giảm giá phí vận chuyển</p>
+                        <p>30.000đ</p>
+                    </div>
+                    <div className={cx('item-total')}>
+                        <p>Tổng thanh toán</p>
+                        <p>68.000đ</p>
+                    </div>
+                </div>
+            </div>
+            <div className={cx('buy-submit')}>
+                <div className={cx('buys-container')}>
+                    <div className={cx('info-total')}>
+                        <p>Tổng thanh toán</p>
+                        <h6>68.000đ</h6>
+                    </div>
+                    <button>Đặt hàng</button>
+                </div>
+            </div>
         </div>
     );
 }
