@@ -130,3 +130,24 @@ export type T_AddOrder = {
         status: string;
     };
 };
+
+// type blogs
+export type Blog = {
+    id: number;
+    title: string;
+    preview_url: string;
+    description: string;
+    created_at: string;
+};
+
+export type T_Blog = {
+    message: string;
+    statusCode: number;
+    data: Blog;
+};
+
+export type T_Blogs = {
+    message: string;
+    statusCode: number;
+    data: Blog[];
+};

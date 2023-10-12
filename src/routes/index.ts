@@ -24,6 +24,7 @@ import { ProfileBuys } from '../pages/ProfileBuys';
 import { ProfileNoti } from '../pages/ProfileNoti';
 import { ProfileVouchers } from '../pages/ProfileVouchers';
 import { Search } from '../pages/Search';
+import { Orders } from '../pages/Orders';
 
 type TRoutes = {
     id: number;
@@ -127,7 +128,7 @@ const publicRoutes: TRoutes[] = [
     },
 ];
 
-const privateRoutes = [
+const privateRoutes: TRoutes[] = [
     {
         id: 1,
         path: routesConfig.profile,
@@ -174,6 +175,12 @@ const privateRoutes = [
         id: 10,
         path: routesConfig.profile_voucher,
         component: ProfileVouchers,
+        layout: DefaultLayout,
+    },
+    {
+        id: 11,
+        path: routesConfig.orders,
+        component: Orders,
         layout: DefaultLayout,
     },
 ];

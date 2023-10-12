@@ -5,6 +5,7 @@ const routesConfig = {
     cat: '/cat',
     dog: '/dog',
     categories: '/categories',
+    orders: '/carts/orders',
     contact: '/contact',
     food: '/food',
     news: '/news',
