@@ -77,7 +77,9 @@ function ProfileBuys() {
                                                 Trạng thái: {getNameFromStatus(item.orders_status)}
                                             </p>
                                             <div className={cx('status-order-item')}>
-                                                <Button small={'true'}>Đã nhận được hàng</Button>
+                                                <Button disabled={item.orders_status === 'processing'} small={'true'}>
+                                                    Đã nhận được hàng
+                                                </Button>
                                             </div>
                                         </div>
                                     ))

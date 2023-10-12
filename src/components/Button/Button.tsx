@@ -18,12 +18,13 @@ type TProps = {
 };
 
 function Button(props: TProps) {
-    const { small, medium, large } = props;
+    const { small, medium, large, disabled } = props;
 
     let Component: any = 'button';
 
     if (props.disabled) {
-        delete props.disabled;
+        // delete props.disabled;
+        // handle off event
     }
 
     if (props.href) {
@@ -36,6 +37,7 @@ function Button(props: TProps) {
         small,
         medium,
         large,
+        disabled,
     });
 
     return (
