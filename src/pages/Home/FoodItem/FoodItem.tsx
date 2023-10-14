@@ -23,7 +23,7 @@ function FoodItem() {
                         title="ĐỒ ĂN"
                         name={item.name}
                         src={item.previewUrl}
-                        price={item.price.toString()}
+                        price={item.price}
                     />
                 ))}
             </div>

@@ -6,10 +6,104 @@ import img from '../../assets/images/new_3.jpg';
 import { RiCoupon3Fill } from 'react-icons/ri';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
 import { BiDetail } from 'react-icons/bi';
+import { useEffect, useMemo, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { orderItems } from '../../store';
+import { useConfirmToast } from '../../context/ConfirmAndToastContext';
+import { ApiService } from '../../axios/ApiService';
+import { useSessionContext } from '../../context/SessionContext';
+import { useNavigate } from 'react-router-dom';
+import { TData, T_AddOrder } from '../../models';
+import routesConfig from '../../config/routes';
+import { formatVND } from '../../Helper';
 
 const cx = classNames.bind(styles);
 
 function Orders() {
+    const [data, setData] = useRecoilState(orderItems);
+    const toast = useConfirmToast();
+    const apiService = new ApiService();
+    const [values] = useSessionContext();
+    const navigate = useNavigate();
+    const [init, setInit] = useState<boolean>(false);
+
+    useEffect(() => {
+        document.title = 'Mua sắm | Petshop chất lượng số 1 Việt Nam!';
+        window.scrollTo({
+            behavior: 'smooth',
+            top: 0,
+        });
+    }, []);
+
+    const totalMoney = useMemo(() => {
+        if (data.length > 0) {
+            const result = data.reduce((result, cur) => result + cur.lastPrice, 0);
+
+            return {
+                price: result,
+                length: data.length,
+            };
+        }
+    }, [data]);
+
+    useEffect(() => {
+        console.log('data: ', data);
+        setInit(true);
+
+        return () => {
+            init && setData([]);
+        };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [init]);
+
+    const handleOrders = () => {
+        // handle BUY PRODUCTS (CALL API)
+        if (data.length > 0) {
+            const dataPost = {
+                customer_id: values.user?.id,
+                product_id: data[0].id,
+                quantity: data[0].quantity,
+                price: data[0].price,
+            };
+
+            console.log('orders: ', dataPost);
+
+            apiService.orders
+                .addOrder(dataPost, values.user?.token ?? '')
+                .then((res: T_AddOrder) => {
+                    if (res.message === 'success') {
+                        toast.current?.show({
+                            severity: 'success',
+                            summary: 'Thành công',
+                            detail: 'Đặt hàng thành công!',
+                            life: 3000,
+                        });
+
+                        setTimeout(() => {
+                            navigate(routesConfig.profile_buy);
+                        }, 1500);
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                    toast.current?.show({
+                        severity: 'error',
+                        summary: 'Thất bại',
+                        detail: 'Đã xảy ra lỗi, vui lòng thử lại!',
+                        life: 3000,
+                    });
+                });
+        } else {
+            toast.current?.show({
+                severity: 'error',
+                summary: 'Có lỗi',
+                detail: 'Vui lòng chọn sản phẩm cần mua!',
+                life: 3000,
+            });
+        }
+    };
+
     return (
         <div className={cx('orders')}>
             <div className={cx('address')}>
@@ -30,28 +124,21 @@ function Orders() {
             <div className={cx('products')}>
                 <h3 className={cx('heading')}>TrinhHoang Shop</h3>
                 <div className={cx('product-container')}>
-                    <div className={cx('product-item')}>
-                        <div className={cx('preview-product')}>
-                            <img src={img} alt="ten san pham" />
-                        </div>
-                        <div className={cx('info-product')}>
-                            <h3>Tên sản phẩm OK</h3>
-                            <p>Phân loại: (size, màu)</p>
-                            <p>x5 (SL)</p>
-                            <p>Giá : 100.000.000đ</p>
-                        </div>
-                    </div>
-                    <div className={cx('product-item')}>
-                        <div className={cx('preview-product')}>
-                            <img src={img} alt="ten san pham" />
-                        </div>
-                        <div className={cx('info-product')}>
-                            <h3>Tên sản phẩm: OK</h3>
-                            <p>Phân loại: (size, màu)</p>
-                            <p>x5 (SL)</p>
-                            <p>Giá : 100.000.000đ</p>
-                        </div>
-                    </div>
+                    {data.length > 0 &&
+                        data.map((item: TData) => (
+                            <div key={item.id} className={cx('product-item')}>
+                                <div className={cx('preview-product')}>
+                                    <img src={item.previewUrl} alt={item.name} />
+                                </div>
+                                <div className={cx('info-product')}>
+                                    <h3>{item.name}</h3>
+                                    <p>Phân loại: {item.color ?? 'Không có'}</p>
+                                    <p>Số lượng: x{item.quantity}</p>
+                                    <p>Giá : {formatVND.format(item.price)}</p>
+                                    <p>Thành tiền : {formatVND.format(item.lastPrice)}</p>
+                                </div>
+                            </div>
+                        ))}
                 </div>
                 <div className={cx('voucher-shop')}>
                     <div className={cx('heading')}>
@@ -76,8 +163,8 @@ function Orders() {
                 </div>
             </div>
             <div className={cx('total-money')}>
-                <h3>Tống số tiền (1 sản phẩm): </h3>
-                <p>2.000.000đ</p>
+                <h3>Tống số tiền ({totalMoney?.length} sản phẩm): </h3>
+                <p>{formatVND.format(totalMoney?.price ?? 0)}</p>
             </div>
             <div className={cx('voucher-shop')}>
                 <div className={cx('heading')}>
@@ -107,7 +194,7 @@ function Orders() {
                 <div className={cx('contents')}>
                     <div className={cx('item-pay')}>
                         <p>Tổng tiền hàng</p>
-                        <p>80.000đ</p>
+                        <p>{formatVND.format(totalMoney?.price ?? 0)}</p>
                     </div>
                     <div className={cx('item-pay')}>
                         <p>Giảm giá của Shopee</p>
@@ -133,7 +220,7 @@ function Orders() {
                         <p>Tổng thanh toán</p>
                         <h6>68.000đ</h6>
                     </div>
-                    <button>Đặt hàng</button>
+                    <button onClick={handleOrders}>Đặt hàng</button>
                 </div>
             </div>
         </div>

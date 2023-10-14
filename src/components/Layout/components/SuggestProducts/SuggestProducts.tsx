@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './SuggestProducts.module.scss';
 import { useEffect, useState } from 'react';
-import { formatMoney } from '../../../../Helper';
+import { formatVND } from '../../../../Helper';
 import { T_Detail } from '../../../../models';
 import { ApiService } from '../../../../axios/ApiService';
 
@@ -37,7 +37,7 @@ function SuggestProducts() {
                                 </div>
                                 <div className={cx('suggest-info')}>
                                     <h6 className={cx('heading-suggest')}>{item.name}</h6>
-                                    <p className={cx('price-suggest-item')}>{formatMoney(item.price)}đ</p>
+                                    <p className={cx('price-suggest-item')}>{formatVND.format(item.price)}</p>
                                 </div>
                             </div>
                             {/* <div className={cx('line-suggest')}></div> */}

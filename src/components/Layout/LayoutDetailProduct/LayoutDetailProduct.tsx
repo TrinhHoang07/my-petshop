@@ -7,7 +7,7 @@ import { Rating } from 'primereact/rating';
 import { Galleria } from 'primereact/galleria';
 import { useEffect, useState } from 'react';
 import { Similar } from '../components/Similar';
-import { formatMoney, getNameFromType } from '../../../Helper';
+import { formatVND, getNameFromType } from '../../../Helper';
 import { Loading } from '../../Loading';
 import { useSessionContext } from '../../../context/SessionContext';
 import { useConfirmToast } from '../../../context/ConfirmAndToastContext';
@@ -142,7 +142,7 @@ function LayoutDetailProduct(props: TProps) {
                                 </div>
                                 <span className={cx('line')} />
                                 <div className={cx('info-content')}>
-                                    <p className={cx('price')}>{formatMoney(props.data.price)}đ</p>
+                                    <p className={cx('price')}>{formatVND.format(props.data.price)}</p>
                                     <p className={cx('description')}>{props.data.description}</p>
                                 </div>
                                 <div className={cx('info-actions')}>

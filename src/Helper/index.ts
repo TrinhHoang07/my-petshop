@@ -45,3 +45,8 @@ export const base64Encode = (str: string | object) => {
 export const base64Decode = (str: string) => {
     return JSON.parse(atob(str));
 };
+
+export const formatVND = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+});

@@ -4,7 +4,7 @@ import styles from './Carts.module.scss';
 import routesConfig from '../../../../../config/routes';
 import { Button } from '../../../../Button';
 import { useSessionContext } from '../../../../../context/SessionContext';
-import { formatMoney } from '../../../../../Helper';
+import { formatVND } from '../../../../../Helper';
 import { T_Cart, T_Categorys } from '../../../../../models';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
@@ -116,7 +116,7 @@ function Carts() {
                                             <img src={item.product_preview_url} alt="preview images" />
                                         </div>
                                         <h6 className={cx('name-item')}>{item.product_name}</h6>
-                                        <p className={cx('price-item')}>{formatMoney(item.product_price)}đ</p>
+                                        <p className={cx('price-item')}>{formatVND.format(item.product_price)}</p>
                                     </div>
                                 ))
                             ) : (

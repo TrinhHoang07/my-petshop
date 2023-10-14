@@ -63,7 +63,7 @@ function Cat() {
                                 <div key={item.id} className={cx('cat-item')}>
                                     <CardItemZoomInLeft
                                         name={item.name}
-                                        price={`${item.price.toString()}đ`}
+                                        price={item.price}
                                         title="MÈO CẢNH"
                                         src={item.previewUrl}
                                     />

@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import { TData } from '../models';
 
 export const filterItem = atom<string>({
     key: 'filter',
@@ -18,4 +19,9 @@ export const isFilter = atom<boolean>({
 export const isMenuMobile = atom<boolean>({
     key: 'isMenuMobile',
     default: false,
+});
+
+export const orderItems = atom<TData[]>({
+    key: 'orderItems',
+    default: [],
 });

@@ -63,7 +63,7 @@ function Accessories() {
                                 <div key={item.id} className={cx('accessories-item')}>
                                     <CardItemZoomIn
                                         name={item.name}
-                                        price={`${item.price.toString()}đ`}
+                                        price={item.price}
                                         title="PHỤ KIỆN"
                                         src={item.previewUrl}
                                     />

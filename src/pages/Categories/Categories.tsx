@@ -9,23 +9,14 @@ import { MdOutlineDiscount } from 'react-icons/md';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { Voucher } from './Voucher';
 import { useSessionContext } from '../../context/SessionContext';
-import { formatMoney } from '../../Helper';
-import { T_AddOrder, T_Cart, T_Categorys } from '../../models';
+import { formatVND } from '../../Helper';
+import { TData, T_Cart, T_Categorys } from '../../models';
 import { ApiService } from '../../axios/ApiService';
 import { Loading } from '../../components/Loading';
+import { useRecoilState } from 'recoil';
+import { orderItems } from '../../store';
 
 const cx = classNames.bind(styles);
-
-type TData = {
-    id: number;
-    name: string;
-    color: string;
-    price: number;
-    lastPrice: number;
-    quantity: number;
-    previewUrl: string;
-    checked: boolean;
-};
 
 function Categories() {
     const [data, setData] = useState<TData[]>([]);
@@ -36,7 +27,7 @@ function Categories() {
     const apiService = new ApiService();
     const [values] = useSessionContext();
     const navigate = useNavigate();
-    const [orders, setOrders] = useState<TData[]>([]);
+    const [ordersTest, setDataOrders] = useRecoilState(orderItems);
 
     useEffect(() => {
         document.title = 'Trang chủ | Petshop chất lượng số 1 Việt Nam!';
@@ -88,7 +79,7 @@ function Categories() {
 
     useEffect(() => {
         if (checkAll) {
-            setOrders(data);
+            setDataOrders(data);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -170,17 +161,17 @@ function Categories() {
         setData(dataChanged);
 
         ///// update quantity orders
-        if (orders.length > 0) {
-            const indexOrder = orders.findIndex((item) => item.id === value.id);
+        if (ordersTest.length > 0) {
+            const indexOrder = ordersTest.findIndex((item: any) => item.id === value.id);
 
             if (indexOrder !== -1) {
-                const data = [...orders];
+                const data = [...ordersTest];
                 data[indexOrder] = {
                     ...data[indexOrder],
                     quantity: data[indexOrder].quantity + 1,
                 };
 
-                setOrders(data);
+                setDataOrders(data);
             }
         }
     };
@@ -200,17 +191,17 @@ function Categories() {
         setData(dataChanged);
 
         /// update quantity orders
-        if (orders.length > 0) {
-            const indexOrder = orders.findIndex((item) => item.id === value.id);
+        if (ordersTest.length > 0) {
+            const indexOrder = ordersTest.findIndex((item: any) => item.id === value.id);
 
             if (indexOrder !== -1) {
-                const data = [...orders];
+                const data = [...ordersTest];
                 data[indexOrder] = {
                     ...data[indexOrder],
                     quantity: --data[indexOrder].quantity <= 1 ? 1 : data[indexOrder].quantity,
                 };
 
-                setOrders(data);
+                setDataOrders(data);
             }
         }
     };
@@ -219,11 +210,11 @@ function Categories() {
         console.log('item checked: ', value);
 
         if (value.checked) {
-            setOrders((prev) => {
-                return prev.filter((item) => item.id !== value.id);
+            setDataOrders((prev: any) => {
+                return prev.filter((item: any) => item.id !== value.id);
             });
         } else {
-            setOrders((prev) => {
+            setDataOrders((prev: any) => {
                 return [...prev, value];
             });
         }
@@ -242,7 +233,7 @@ function Categories() {
     const handeSelectAll = () => {
         setCheckAll((prev) => {
             if (prev) {
-                setOrders([]);
+                setDataOrders([]);
             }
 
             return !prev;
@@ -260,55 +251,7 @@ function Categories() {
     };
 
     const handleOrder = () => {
-        console.log('token: ', values.user?.token);
-
         navigate(routesConfig.orders);
-
-        // handle BUY PRODUCTS (CALL API)
-        // if (orders.length > 0) {
-        //     const data = {
-        //         customer_id: values.user?.id,
-        //         product_id: orders[0].id,
-        //         quantity: orders[0].quantity,
-        //         price: orders[0].price,
-        //     };
-
-        //     console.log('data created: ', data);
-        //     console.log('orders: ', orders);
-
-        //     apiService.orders
-        //         .addOrder(data, values.user?.token ?? '')
-        //         .then((res: T_AddOrder) => {
-        //             if (res.message === 'success') {
-        //                 toast.current?.show({
-        //                     severity: 'success',
-        //                     summary: 'Thành công',
-        //                     detail: 'Đặt hàng thành công!',
-        //                     life: 3000,
-        //                 });
-
-        //                 setTimeout(() => {
-        //                     navigate(routesConfig.profile_buy);
-        //                 }, 1500);
-        //             }
-        //         })
-        //         .catch((err) => {
-        //             console.error(err);
-        //             toast.current?.show({
-        //                 severity: 'error',
-        //                 summary: 'Thất bại',
-        //                 detail: 'Đã xảy ra lỗi, vui lòng thử lại!',
-        //                 life: 3000,
-        //             });
-        //         });
-        // } else {
-        //     toast.current?.show({
-        //         severity: 'error',
-        //         summary: 'Có lỗi',
-        //         detail: 'Vui lòng chọn sản phẩm cần mua!',
-        //         life: 3000,
-        //     });
-        // }
     };
 
     return (
@@ -360,7 +303,7 @@ function Categories() {
                                                 <div className={cx('wrapper-info')}>
                                                     <p className={cx('name-item-cart')}>{item.name}</p>
                                                     <p className={cx('color-product')}>Màu sắc: {item.color}</p>
-                                                    <p className={cx('item-price')}>{formatMoney(item.price)}đ</p>
+                                                    <p className={cx('item-price')}>{formatVND.format(item.price)}</p>
                                                     <div className={cx('count-item')}>
                                                         <p
                                                             onClick={() => handleDownQuantity(item)}
@@ -377,7 +320,9 @@ function Categories() {
                                                         </p>
                                                     </div>
 
-                                                    <p className={cx('last-price')}>{formatMoney(item.lastPrice)}đ</p>
+                                                    <p className={cx('last-price')}>
+                                                        {formatVND.format(item.lastPrice)}
+                                                    </p>
                                                     <p onClick={() => confirmOne(item)} className={cx('remove-item')}>
                                                         Xóa
                                                     </p>
@@ -432,7 +377,7 @@ function Categories() {
                                 {totalMoney?.length && (
                                     <span className={cx('total-count')}>({totalMoney?.length} sản phẩm)</span>
                                 )}
-                                <span>₫{formatMoney(totalMoney?.price ?? 0)}</span>
+                                <span>₫{formatVND.format(totalMoney?.price ?? 0)}</span>
                             </p>
                             <button onClick={handleOrder} className={cx('btn-buy')}>
                                 Mua Hàng

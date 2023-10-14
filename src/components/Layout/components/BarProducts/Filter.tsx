@@ -4,7 +4,7 @@ import styles from './BarProducts.module.scss';
 import { Slider } from 'primereact/slider';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { filterItemByPrice, isFilter } from '../../../../store';
-import { formatMoney } from '../../../../Helper';
+import { formatVND } from '../../../../Helper';
 import { useDebouneClick } from '../../../../hooks/useDebounceClick';
 
 const cx = classNames.bind(styles);
@@ -45,7 +45,7 @@ function Filter(props: TProps) {
                 <div className={cx('info-filter')}>
                     <button onClick={handleSubmitFilter}>Lọc</button>
                     <p>
-                        Giá: {formatMoney(value[0])}đ - {formatMoney(value[1])}đ
+                        Giá: {formatVND.format(value[0])} - {formatVND.format(value[1])}
                     </p>
                 </div>
             </div>

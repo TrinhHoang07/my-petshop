@@ -5,7 +5,7 @@ import { IoIosCloseCircle } from 'react-icons/io';
 import { AiOutlineLoading } from 'react-icons/ai';
 import img from '../../../../assets/images/cat_item_1.jpg';
 import { useDebounce } from '../../../../hooks';
-import { formatMoney } from '../../../../Helper';
+import { formatVND } from '../../../../Helper';
 import { useNavigate } from 'react-router-dom';
 import { T_Product, T_Search } from '../../../../models';
 import { ApiService } from '../../../../axios/ApiService';
@@ -114,7 +114,7 @@ function Search(props: T_Props) {
                                         </div>
                                         <p className={cx('name-item')}>{item.name}</p>
                                     </div>
-                                    <p className={cx('price-item')}>{formatMoney(item.price)}đ</p>
+                                    <p className={cx('price-item')}>{formatVND.format(item.price)}</p>
                                 </div>
                             ))
                         ) : (

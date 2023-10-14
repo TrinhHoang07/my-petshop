@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import styles from './CardItemZoomIn.module.scss';
 import classNames from 'classnames/bind';
+import { formatVND } from '../../Helper';
 
 const cx = classNames.bind(styles);
 
@@ -8,7 +9,7 @@ type TProps = {
     src: any;
     title: string;
     name: string;
-    price: string;
+    price: number;
     flash?: string;
 };
 
@@ -24,7 +25,7 @@ function CardItemZoomIn(props: TProps) {
                         <div className={cx('info')}>
                             <p className={cx('title')}>{props.title}</p>
                             <h3 className={cx('name-dog')}>{props.name}</h3>
-                            <p className={cx('price')}>{props.price}</p>
+                            <p className={cx('price')}>{formatVND.format(props.price)}</p>
                         </div>
                     </div>
                 </div>

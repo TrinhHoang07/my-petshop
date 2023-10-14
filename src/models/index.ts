@@ -1,3 +1,14 @@
+export type TData = {
+    id: number;
+    name: string;
+    color: string;
+    price: number;
+    lastPrice: number;
+    quantity: number;
+    previewUrl: string;
+    checked: boolean;
+};
+
 export type T_Product = {
     id: number;
     name: string;

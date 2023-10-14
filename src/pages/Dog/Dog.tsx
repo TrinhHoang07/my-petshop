@@ -63,7 +63,7 @@ function Dog() {
                                 <div key={item.id} className={cx('dog-item')}>
                                     <CardItem
                                         name={item.name}
-                                        price={`${item.price.toString()}đ`}
+                                        price={item.price}
                                         title="CHÓ CẢNH"
                                         src={item.previewUrl}
                                     />

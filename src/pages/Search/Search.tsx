@@ -80,7 +80,7 @@ function Search() {
                                     title="MÈO CẢNH"
                                     name={item.name}
                                     src={item.preview_url}
-                                    price={item.price.toString()}
+                                    price={item.price}
                                 />
                             ))
                         ) : (

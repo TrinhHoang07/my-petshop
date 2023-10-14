@@ -23,7 +23,7 @@ function DogItem() {
                         title="CHÓ CẢNH"
                         name={item.name}
                         src={item.previewUrl}
-                        price={item.price.toString()}
+                        price={item.price}
                     />
                 ))}
             </div>

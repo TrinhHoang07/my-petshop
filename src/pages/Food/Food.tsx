@@ -64,7 +64,7 @@ function Food() {
                                 <div key={item.id} className={cx('food-item')}>
                                     <CardItemFlip
                                         name={item.name}
-                                        price={`${item.price.toString()}đ`}
+                                        price={item.price}
                                         title="ĐỒ ĂN"
                                         src={item.previewUrl}
                                     />
