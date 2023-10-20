@@ -90,4 +90,33 @@ export class ApiService {
             route,
         };
     }
+
+    get address() {
+        const route = {
+            getAddresses: 'address/all',
+            getAddressesById: (cusId: string) => `address/address/${cusId}`,
+            createAddress: 'address/create',
+        };
+
+        return {
+            getAddresses: (token: string): Promise<any> =>
+                AxiosClientApi.get(route.getAddresses, null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            getAddressesById: (cusId: string, token: string): Promise<any> =>
+                AxiosClientApi.get(route.getAddressesById(cusId), null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            createAddress: (data: any, token: string) =>
+                AxiosClientApi.post(route.createAddress, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+        };
+    }
 }
