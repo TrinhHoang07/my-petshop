@@ -2,7 +2,6 @@ import classNames from 'classnames/bind';
 import styles from './Orders.module.scss';
 import { TiLocation } from 'react-icons/ti';
 import { Button } from '../../components/Button';
-import img from '../../assets/images/new_3.jpg';
 import { RiCoupon3Fill } from 'react-icons/ri';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
 import { BiDetail } from 'react-icons/bi';

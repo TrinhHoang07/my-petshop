@@ -1,7 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ProfileAddress.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useSessionContext } from '../../context/SessionContext';
+import { ApiService } from '../../axios/ApiService';
+import { useSocketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -22,6 +25,10 @@ function FormAddAddress(props: _T_Props) {
     const phoneRef = useRef<any>();
     const cityRef = useRef<any>();
     const detailRef = useRef<any>();
+    const [values] = useSessionContext();
+    const [typeAddress, setTypeAddress] = useState<string>('home');
+    const apiService = new ApiService();
+    const socket = useSocketContext();
 
     const {
         register,
@@ -30,22 +37,31 @@ function FormAddAddress(props: _T_Props) {
         formState: { errors },
     } = useForm<TForm>();
 
-    const onSubmit: SubmitHandler<TForm> = (data: TForm) => {};
+    const onSubmit: SubmitHandler<TForm> = (data: TForm) => {
+        const dataPost = {
+            full_name: data.name,
+            customer_id: values.user?.id,
+            phone_number: data.phone,
+            main_address: data.city,
+            detail_address: data.detail,
+            type: typeAddress,
+        };
 
-    const handleErrorInput = (ele: HTMLInputElement) => {
-        ele.style.border = '1px solid red';
-    };
+        apiService.address
+            .createAddress(dataPost, values.user?.token ?? '')
+            .then((res) => {
+                if (res.message === 'success') {
+                    reset();
+                    props.setIsVisible(false);
+                    console.log('res success: ', res.data);
 
-    const handleClearErrorInput = (ele: HTMLInputElement) => {
-        ele.style.border = '1px solid dodgerblue';
-    };
-
-    const handleFocus = (ele: HTMLInputElement) => {
-        ele.style.border = '1px solid dodgerblue';
-    };
-
-    const handleBlur = (ele: HTMLInputElement) => {
-        ele.style.border = '1px solid #d7d7d7';
+                    socket.current?.emit('create-address', {
+                        id: values.user?.id,
+                        status: 'success',
+                    });
+                }
+            })
+            .catch((err) => console.error(err));
     };
 
     useEffect(() => {
@@ -85,6 +101,22 @@ function FormAddAddress(props: _T_Props) {
             }
         }
     }, [errors.name, errors.phone, errors.city, errors.detail]);
+
+    const handleErrorInput = (ele: HTMLInputElement) => {
+        ele.style.border = '1px solid red';
+    };
+
+    const handleClearErrorInput = (ele: HTMLInputElement) => {
+        ele.style.border = '1px solid dodgerblue';
+    };
+
+    const handleFocus = (ele: HTMLInputElement) => {
+        ele.style.border = '1px solid dodgerblue';
+    };
+
+    const handleBlur = (ele: HTMLInputElement) => {
+        ele.style.border = '1px solid #d7d7d7';
+    };
 
     return (
         <>
@@ -158,8 +190,24 @@ function FormAddAddress(props: _T_Props) {
                         <div className={cx('type-address')}>
                             <h3 className={cx('type-address-heading')}>Loại địa chỉ</h3>
                             <div className={cx('type-item')}>
-                                <button>Nhà Riêng</button>
-                                <button>Văn Phòng</button>
+                                <button
+                                    type="button"
+                                    onClick={() => setTypeAddress('home')}
+                                    style={{
+                                        borderColor: typeAddress === 'home' ? 'blue' : '#d7d7d7',
+                                    }}
+                                >
+                                    Nhà Riêng
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setTypeAddress('office')}
+                                    style={{
+                                        borderColor: typeAddress === 'office' ? 'blue' : '#d7d7d7',
+                                    }}
+                                >
+                                    Văn Phòng
+                                </button>
                             </div>
                             <div className={cx('add-default-type')}>
                                 <input type="checkbox" id="address-type" />
