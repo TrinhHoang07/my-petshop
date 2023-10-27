@@ -10,14 +10,30 @@ import { useSessionContext } from '../../../../context/SessionContext';
 
 const cx = classNames.bind(styles);
 
-function SideBarProfile() {
+type _T_Props = {
+    temporaryImage?: string;
+};
+
+function SideBarProfile(props: _T_Props) {
     const [values] = useSessionContext();
 
     return (
         <div className={cx('side-bar-profile')}>
             <div className={cx('header')}>
                 <div className={cx('avatar')}>
-                    <img src={values.user?.avatar} alt="avatar-user" />
+                    <img
+                        src={
+                            props.temporaryImage
+                                ? props.temporaryImage
+                                : values.user?.avatar && values.user.avatar.length > 0
+                                ? values.user.avatar
+                                : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
+                            // props.temporaryImage ?? (values.user?.avatar?.length as any) > 0
+                            //     ? values.user?.avatar
+                            //     : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
+                        }
+                        alt="avatar-user"
+                    />
                 </div>
                 <div className={cx('info-user')}>
                     <h3 className={cx('user-name')}>{values.user?.name}</h3>

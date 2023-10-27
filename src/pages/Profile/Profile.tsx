@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Profile.module.scss';
 import { useEffect } from 'react';
@@ -11,12 +11,34 @@ import { useSessionContext } from '../../context/SessionContext';
 
 const cx = classNames.bind(styles);
 
+type _T_Data = {
+    day?: {
+        day?: string;
+    };
+    month?: {
+        month?: string;
+    };
+    year?: {
+        year?: string;
+    };
+    name?: string;
+    email?: string;
+    phoneNumber?: string;
+    gender?: string;
+    imageRaw?: any;
+    avatar?: string;
+};
+
 function Profile() {
     const setState = useSetRecoilState(isMenuMobile);
     const [values] = useSessionContext();
-    const [day, setDay] = useState<{ day: string }>();
-    const [month, setMonth] = useState<{ month: string }>();
-    const [year, setYear] = useState<{ year: string }>();
+
+    // test opject data
+    const [data, setData] = useState<_T_Data>({});
+
+    const [imageAvatar, setImageAvatar] = useState<string>(
+        'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg',
+    );
 
     const days = [
         { day: '01' },
@@ -110,21 +132,57 @@ function Profile() {
     }, []);
 
     useEffect(() => {
-        if (values.user?.birthdate) {
-            setDay({
-                day: values.user.birthdate.split('/')[0],
-            });
-            setMonth({
-                month: values.user.birthdate.split('/')[1],
-            });
-            setYear({
-                year: values.user.birthdate.split('/')[2],
+        if (values.user) {
+            setData({
+                day: {
+                    day: values.user.birthdate && values.user.birthdate.split('/')[0],
+                },
+                month: {
+                    month: values.user.birthdate && values.user.birthdate.split('/')[1],
+                },
+                year: {
+                    year: values.user.birthdate && values.user.birthdate.split('/')[2],
+                },
+                email: values.user.email,
+                gender: values.user.gender,
+                name: values.user.name,
+                phoneNumber: values.user.phone,
+                avatar: values.user.avatar,
             });
         }
     }, [values]);
 
+    useEffect(() => {
+        return () => {
+            imageAvatar && URL.revokeObjectURL(imageAvatar);
+        };
+    });
+
+    useEffect(() => {
+        console.log('data: ', data);
+    }, [data]);
+
+    const handleUpdateAvatar = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const files = (event.target as HTMLInputElement).files;
+
+        if (files && files?.length > 0) {
+            console.log('file change: ', files[0]);
+
+            setData((prev: _T_Data) => ({
+                ...prev,
+                imageRaw: files[0],
+            }));
+
+            setImageAvatar(URL.createObjectURL(files[0]));
+        }
+    };
+
+    const handleSubmit = () => {
+        console.log('data submit: ', data);
+    };
+
     return (
-        <LayoutProfile>
+        <LayoutProfile temporaryImage={imageAvatar}>
             <div className={cx('profile')}>
                 <div className={cx('header')}>
                     <h3 className={cx('title')}>
@@ -147,23 +205,63 @@ function Profile() {
                         <form className={cx('form-container')}>
                             <div className={cx('form-item')}>
                                 <label htmlFor="name">Tên đăng nhập</label>
-                                <input defaultValue={values.user?.name} type="text" id="name" placeholder="Aa..." />
+                                <input
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                        setData((prev: _T_Data) => ({
+                                            ...prev,
+                                            name: e.target.value,
+                                        }))
+                                    }
+                                    value={data?.name ?? ''}
+                                    type="text"
+                                    id="name"
+                                    placeholder="Aa..."
+                                />
                             </div>
                             <div className={cx('form-item')}>
                                 <label htmlFor="mail">Email</label>
-                                <input defaultValue={values.user?.email} type="text" id="mail" placeholder="Aa..." />
+                                <input
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                        setData((prev: _T_Data) => ({
+                                            ...prev,
+                                            email: e.target.value,
+                                        }))
+                                    }
+                                    value={data?.email ?? ''}
+                                    type="text"
+                                    id="mail"
+                                    placeholder="Aa..."
+                                />
                             </div>
                             <div className={cx('form-item')}>
                                 <label htmlFor="phone">Số điện thoại</label>
-                                <input defaultValue={values.user?.phone} type="text" id="phone" placeholder="Aa..." />
+                                <input
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                        setData((prev: _T_Data) => ({
+                                            ...prev,
+                                            phoneNumber: e.target.value,
+                                        }))
+                                    }
+                                    value={data?.phoneNumber ?? ''}
+                                    type="text"
+                                    id="phone"
+                                    placeholder="Aa..."
+                                />
                             </div>
                             <div className={cx('form-item')}>
                                 <span>Giới tính</span>
                                 <div className={cx('gender-container')}>
                                     <div className={cx('gender-item')}>
                                         <input
-                                            defaultChecked={values.user?.gender?.toLowerCase() === 'male'}
+                                            checked={data?.gender?.toLocaleLowerCase() === 'male'}
+                                            onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+                                                setData((prev: _T_Data) => ({
+                                                    ...prev,
+                                                    gender: e.target.value,
+                                                }));
+                                            }}
                                             type="radio"
+                                            value={'male'}
                                             id="male"
                                             name="gender"
                                         />
@@ -171,7 +269,14 @@ function Profile() {
                                     </div>
                                     <div className={cx('gender-item')}>
                                         <input
-                                            defaultChecked={values.user?.gender?.toLowerCase() === 'female'}
+                                            checked={data?.gender?.toLowerCase() === 'female'}
+                                            onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+                                                setData((prev: any) => ({
+                                                    ...prev,
+                                                    gender: e.target.value,
+                                                }));
+                                            }}
+                                            value={'female'}
                                             type="radio"
                                             id="female"
                                             name="gender"
@@ -180,7 +285,14 @@ function Profile() {
                                     </div>
                                     <div className={cx('gender-item')}>
                                         <input
-                                            defaultChecked={values.user?.gender?.toLowerCase() === 'other'}
+                                            checked={data?.gender?.toLowerCase() === 'other'}
+                                            onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+                                                setData((prev: _T_Data) => ({
+                                                    ...prev,
+                                                    gender: e.target.value,
+                                                }));
+                                            }}
+                                            value={'other'}
                                             type="radio"
                                             id="other"
                                             name="gender"
@@ -194,10 +306,12 @@ function Profile() {
                                 <div className={cx('birth-container')}>
                                     <div className={cx('birth-item')}>
                                         <Dropdown
-                                            value={day}
+                                            value={data?.day}
                                             onChange={(e) => {
-                                                console.log(e.value);
-                                                setDay(e.value);
+                                                setData((prev: _T_Data) => ({
+                                                    ...prev,
+                                                    day: e.value,
+                                                }));
                                             }}
                                             options={days}
                                             optionLabel="day"
@@ -207,8 +321,13 @@ function Profile() {
                                     </div>
                                     <div className={cx('birth-item')}>
                                         <Dropdown
-                                            value={month}
-                                            onChange={(e) => setMonth(e.value)}
+                                            value={data?.month}
+                                            onChange={(e) =>
+                                                setData((prev: _T_Data) => ({
+                                                    ...prev,
+                                                    month: e.value,
+                                                }))
+                                            }
                                             options={months}
                                             optionLabel="month"
                                             placeholder="Tháng"
@@ -217,8 +336,13 @@ function Profile() {
                                     </div>
                                     <div className={cx('birth-item')}>
                                         <Dropdown
-                                            value={year}
-                                            onChange={(e) => setYear(e.value)}
+                                            value={data?.year}
+                                            onChange={(e: any) =>
+                                                setData((prev: _T_Data) => ({
+                                                    ...prev,
+                                                    year: e.value,
+                                                }))
+                                            }
                                             options={years}
                                             optionLabel="year"
                                             placeholder="Năm"
@@ -228,17 +352,19 @@ function Profile() {
                                 </div>
                             </div>
                             <div className={cx('btn-save')}>
-                                <button>Lưu</button>
+                                <button onClick={handleSubmit} type="button">
+                                    Lưu
+                                </button>
                             </div>
                         </form>
                     </div>
                     <div className={cx('preview-avatar')}>
                         <div className={cx('prev-avatar')}>
-                            <img src={values.user?.avatar} alt="prev view avatar" />
+                            <img src={imageAvatar ?? values.user?.avatar} alt="prev view avatar" />
                         </div>
                         <div className={cx('change-avatar')}>
                             <label htmlFor="choose">Chọn Ảnh</label>
-                            <input type="file" id="choose" />
+                            <input onChange={handleUpdateAvatar} type="file" id="choose" />
                         </div>
                         <div className={cx('alert')}>
                             <p>Dụng lượng file tối đa 1 MB</p>

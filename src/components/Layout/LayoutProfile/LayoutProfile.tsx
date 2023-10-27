@@ -8,6 +8,7 @@ const cx = classNames.bind(styles);
 
 type TProps = {
     children: React.ReactNode;
+    temporaryImage?: string;
 };
 
 function LayoutProfile(props: TProps) {
@@ -24,7 +25,7 @@ function LayoutProfile(props: TProps) {
             <MenuPhoneProfile />
             <div className={cx('contents')}>
                 <div className={cx('nav-bar')}>
-                    <SideBarProfile />
+                    <SideBarProfile temporaryImage={props.temporaryImage} />
                 </div>
                 <div className={cx('detail')}>
                     <div className={cx('detail-wrapper')}>{props.children}</div>

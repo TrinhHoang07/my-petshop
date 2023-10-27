@@ -181,6 +181,10 @@ $tablet-width: 1023px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
+
+            &:hover {
+                opacity: 0.75;
+            }
         }
     }
 }
