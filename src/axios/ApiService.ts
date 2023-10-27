@@ -119,4 +119,47 @@ export class ApiService {
                 }),
         };
     }
+
+    get customer() {
+        const route = {
+            getCustomerById: (cusId: string) => `customers/customer/${cusId}`,
+            updateCustomerById: (cusId: string) => `customers/update/${cusId}`,
+            updatePassword: (cusId: string) => `customers/update/password/${cusId}`,
+            updateAddress: (cusId: string) => `customers/update/address/${cusId}`,
+            updateAvatar: (cusId: string) => `customers/test/upload/${cusId}`,
+        };
+
+        return {
+            getCustomerById: (cusId: string, token: string): Promise<any> =>
+                AxiosClientApi.get(route.getCustomerById(cusId), null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            updateCustomerById: (cusId: string, data: any, token: string): Promise<any> =>
+                AxiosClientApi.put(route.updateCustomerById(cusId), data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            updatePassword: (cusId: string, data: any, token: string): Promise<any> =>
+                AxiosClientApi.put(cusId, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            updateAddress: (cusId: string, data: any, token: string): Promise<any> =>
+                AxiosClientApi.put(cusId, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            updateAvatar: (cusId: string, data: any, token: string): Promise<any> =>
+                AxiosClientApi.post(route.updateAvatar(cusId), data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+        };
+    }
 }
