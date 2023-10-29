@@ -8,6 +8,7 @@ import { HiMenu } from 'react-icons/hi';
 import { useSetRecoilState } from 'recoil';
 import { isMenuMobile } from '../../store';
 import { useSessionContext } from '../../context/SessionContext';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
@@ -31,14 +32,12 @@ type _T_Data = {
 
 function Profile() {
     const setState = useSetRecoilState(isMenuMobile);
-    const [values] = useSessionContext();
+    const [values, setValues] = useSessionContext();
 
     // test opject data
     const [data, setData] = useState<_T_Data>({});
 
-    const [imageAvatar, setImageAvatar] = useState<string>(
-        'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg',
-    );
+    const [imageAvatar, setImageAvatar] = useState<string>('');
 
     const days = [
         { day: '01' },
@@ -179,6 +178,30 @@ function Profile() {
 
     const handleSubmit = () => {
         console.log('data submit: ', data);
+
+        const formData = new FormData();
+        formData.append('file', data.imageRaw);
+
+        axios
+            .post(`http://localhost:3009/customers/test/upload/${values.user?.id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then((res) => {
+                if (res.data.message === 'success') {
+                    setValues({
+                        ...values,
+                        user: {
+                            ...values.user,
+                            id: values.user?.id ?? 0,
+                            avatar: res.data.linkAvatar,
+                        },
+                    });
+                }
+            })
+
+            .catch((err) => console.error(err));
     };
 
     return (
@@ -360,7 +383,16 @@ function Profile() {
                     </div>
                     <div className={cx('preview-avatar')}>
                         <div className={cx('prev-avatar')}>
-                            <img src={imageAvatar ?? values.user?.avatar} alt="prev view avatar" />
+                            <img
+                                src={
+                                    imageAvatar.length > 0
+                                        ? imageAvatar
+                                        : (values.user?.avatar as string).length > 0
+                                        ? values.user?.avatar
+                                        : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
+                                }
+                                alt="prev view avatar"
+                            />
                         </div>
                         <div className={cx('change-avatar')}>
                             <label htmlFor="choose">Chọn Ảnh</label>
