@@ -11,10 +11,12 @@ import { isMenuMobile } from '../../store';
 import { ApiService } from '../../axios/ApiService';
 import { useSessionContext } from '../../context/SessionContext';
 import { Socket, io } from 'socket.io-client';
+import { confirmDialog } from 'primereact/confirmdialog';
+import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 
 const cx = classNames.bind(styles);
 
-type _Addresses = {
+export type _Addresses = {
     full_name: string;
     id: number;
     main_address: string;
@@ -25,10 +27,13 @@ type _Addresses = {
 
 function ProfileAddress() {
     const [isVisible, setIsVisible] = useState<boolean>(false);
+    const [typeAction, setTypeAction] = useState<string>('');
+    const [dataAddress, setDataAddress] = useState<_Addresses>();
     const [init, setInit] = useState<boolean>(false);
     const setState = useSetRecoilState(isMenuMobile);
     const [addresses, setAddresses] = useState<_Addresses[]>([]);
     const [values] = useSessionContext();
+    const toast = useConfirmToast();
     const apiService = new ApiService();
     const socketRef = useRef<Socket>();
 
@@ -48,6 +53,10 @@ function ProfileAddress() {
     }, []);
 
     useEffect(() => {
+        console.log('type action: ', typeAction);
+    }, [typeAction]);
+
+    useEffect(() => {
         if (socketRef.current) {
             socketRef.current.on('connect', () => {
                 socketRef.current?.on('create-address-give', (data: any) => {
@@ -62,6 +71,22 @@ function ProfileAddress() {
                                     setAddresses((prev: _Addresses[]) => {
                                         return [...prev, res.data[res.data.length - 1]];
                                     });
+                                }
+                            })
+                            .catch((err) => console.error(err));
+                    }
+                });
+
+                socketRef.current?.on('update-address-give', (data: any) => {
+                    console.log('data GIVE: ', data);
+
+                    if (values.isAuth) {
+                        apiService.address
+                            .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
+                            .then((res) => {
+                                if (res.message === 'success') {
+                                    ///// ERRORRRRRR
+                                    setAddresses(res.data);
                                 }
                             })
                             .catch((err) => console.error(err));
@@ -102,11 +127,58 @@ function ProfileAddress() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [init]);
 
+    const confirm = (value: string) => {
+        confirmDialog({
+            message: 'Bạn có chắc chắn muốn xóa không?',
+            header: 'Xóa sản phẩm',
+            acceptLabel: 'Đồng ý',
+            rejectLabel: 'Hủy bỏ',
+            icon: 'pi pi-exclamation-triangle',
+            accept() {
+                apiService.address.deleteAddressById(value, values.user?.token ?? '').then((res) => {
+                    if (res.message === 'success') {
+                        toast.current?.show({
+                            severity: 'success',
+                            summary: 'Thành công',
+                            detail: 'Đã xóa thành công',
+                            life: 3000,
+                        });
+
+                        apiService.address
+                            .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
+                            .then((res) => {
+                                if (res.message === 'success') {
+                                    setAddresses(res.data);
+                                }
+                            })
+                            .catch((err) => console.error(err));
+                    } else {
+                        toast.current?.show({
+                            severity: 'error',
+                            summary: 'Có lỗi',
+                            detail: 'Xảy ra lỗi!!!',
+                            life: 3000,
+                        });
+                    }
+                });
+
+                // setData((prev) => prev.filter((item) => item.id !== value.id));
+            },
+        });
+    };
+
     return (
         <LayoutProfile>
             <div className={cx('profile-address')}>
                 <div className={cx('my-address')}>
-                    <FormAddAddress visible={isVisible} setIsVisible={setIsVisible} />
+                    <FormAddAddress
+                        visible={isVisible}
+                        setIsVisible={setIsVisible}
+                        data={dataAddress}
+                        setData={setDataAddress}
+                        type={typeAction}
+                        setType={setTypeAction}
+                    />
                     <div className={cx('header')}>
                         <p className={cx('heading')}>
                             <span onClick={() => setState(true)} className={cx('back-btn-profile')}>
@@ -114,7 +186,13 @@ function ProfileAddress() {
                             </span>
                             <span>Địa Chỉ Của Tôi</span>
                         </p>
-                        <p onClick={() => setIsVisible(true)} className={cx('btn-credit')}>
+                        <p
+                            onClick={() => {
+                                setTypeAction('add');
+                                setIsVisible(true);
+                            }}
+                            className={cx('btn-credit')}
+                        >
                             <IoAdd />
                             Thêm Địa Chỉ Mới
                         </p>
@@ -134,8 +212,16 @@ function ProfileAddress() {
                                             <button>Mặc định</button>
                                         </div>
                                         <div className={cx('actions')}>
-                                            <p>Cập nhật</p>
-                                            <p>Xóa</p>
+                                            <p
+                                                onClick={() => {
+                                                    setTypeAction('update');
+                                                    setDataAddress(item);
+                                                    setIsVisible(true);
+                                                }}
+                                            >
+                                                Cập nhật
+                                            </p>
+                                            <p onClick={() => confirm(item.id.toString())}>Xóa</p>
                                         </div>
                                     </div>
                                 ))}

@@ -96,6 +96,8 @@ export class ApiService {
             getAddresses: 'address/all',
             getAddressesById: (cusId: string) => `address/address/${cusId}`,
             createAddress: 'address/create',
+            updateAddress: (id: string) => `address/address/update/${id}`,
+            deleteAddress: (id: string) => `address/address/delete/${id}`,
         };
 
         return {
@@ -117,6 +119,19 @@ export class ApiService {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
+            updateAddressById: (id: string, data: any, token: string) =>
+                AxiosClientApi.put(route.updateAddress(id), data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            deleteAddressById: (id: string, token: string) =>
+                AxiosClientApi.delete(route.deleteAddress(id), {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            route,
         };
     }
 

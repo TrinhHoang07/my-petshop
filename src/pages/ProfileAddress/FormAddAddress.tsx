@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSessionContext } from '../../context/SessionContext';
 import { ApiService } from '../../axios/ApiService';
 import { useSocketContext } from '../../context/SocketContext';
+import { _Addresses } from './ProfileAddress';
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +19,10 @@ type TForm = {
 type _T_Props = {
     visible: boolean;
     setIsVisible: (visible: boolean) => void;
+    data: _Addresses | undefined;
+    type: string;
+    setType: (action: string) => void;
+    setData: Function;
 };
 
 function FormAddAddress(props: _T_Props) {
@@ -34,35 +39,73 @@ function FormAddAddress(props: _T_Props) {
         register,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors },
     } = useForm<TForm>();
 
     const onSubmit: SubmitHandler<TForm> = (data: TForm) => {
         const dataPost = {
             full_name: data.name,
-            customer_id: values.user?.id,
+            id: props.data?.id,
             phone_number: data.phone,
             main_address: data.city,
             detail_address: data.detail,
             type: typeAddress,
         };
 
-        apiService.address
-            .createAddress(dataPost, values.user?.token ?? '')
-            .then((res) => {
-                if (res.message === 'success') {
-                    reset();
-                    props.setIsVisible(false);
-                    console.log('res success: ', res.data);
+        console.log('data post: ', dataPost);
 
-                    socket.current?.emit('create-address', {
-                        id: values.user?.id,
-                        status: 'success',
-                    });
-                }
-            })
-            .catch((err) => console.error(err));
+        if (props.type === 'add') {
+            apiService.address
+                .createAddress(dataPost, values.user?.token ?? '')
+                .then((res) => {
+                    if (res.message === 'success') {
+                        handleCloseForm();
+                        console.log('res success: ', res.data);
+
+                        socket.current?.emit('create-address', {
+                            id: values.user?.id,
+                            status: 'success',
+                        });
+                    }
+                })
+                .catch((err) => console.error(err));
+        } else if (props.type === 'update') {
+            console.log('call api update');
+
+            apiService.address
+                .updateAddressById(values.user?.id.toString() ?? '', dataPost, values.user?.token ?? '')
+                .then((res) => {
+                    if (res.message === 'success') {
+                        console.log('update successfully', res);
+                        handleCloseForm();
+
+                        socket.current?.emit('update-address', {
+                            id: values.user?.id,
+                            status: 'success',
+                        });
+                    }
+                })
+                .catch((err) => console.error(err));
+        }
     };
+
+    useEffect(() => {
+        if (props.type === 'update') {
+            setValue('name', props.data?.full_name as string);
+            setValue('city', props.data?.main_address as string);
+            setValue('phone', props.data?.phone_number as string);
+            setValue('detail', props.data?.detail_address as string);
+            setTypeAddress(props.data?.type as string);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.data]);
+
+    useEffect(() => {
+        console.log('change: ', props.data);
+        console.log('change: ', props.type);
+    }, [props.data, props.type]);
 
     useEffect(() => {
         if (errors.name?.ref) {
@@ -101,6 +144,13 @@ function FormAddAddress(props: _T_Props) {
             }
         }
     }, [errors.name, errors.phone, errors.city, errors.detail]);
+
+    const handleCloseForm = () => {
+        reset();
+        props.setIsVisible(false);
+        props.setData({});
+        props.setType('');
+    };
 
     const handleErrorInput = (ele: HTMLInputElement) => {
         ele.style.border = '1px solid red';
@@ -215,14 +265,7 @@ function FormAddAddress(props: _T_Props) {
                             </div>
                         </div>
                         <div className={cx('form-submit')}>
-                            <button
-                                onClick={() => {
-                                    reset();
-                                    props.setIsVisible(false);
-                                }}
-                                type="button"
-                                className={cx('btn-back')}
-                            >
+                            <button onClick={handleCloseForm} type="button" className={cx('btn-back')}>
                                 Trở lại
                             </button>
                             <button type="submit">SUBMIT</button>
