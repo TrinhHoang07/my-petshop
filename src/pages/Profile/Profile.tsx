@@ -9,6 +9,7 @@ import { useSetRecoilState } from 'recoil';
 import { isMenuMobile } from '../../store';
 import { useSessionContext } from '../../context/SessionContext';
 import axios from 'axios';
+import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 
 const cx = classNames.bind(styles);
 
@@ -33,6 +34,7 @@ type _T_Data = {
 function Profile() {
     const setState = useSetRecoilState(isMenuMobile);
     const [values, setValues] = useSessionContext();
+    const toast = useConfirmToast();
 
     // test opject data
     const [data, setData] = useState<_T_Data>({});
@@ -197,6 +199,13 @@ function Profile() {
                             id: values.user?.id ?? 0,
                             avatar: res.data.linkAvatar,
                         },
+                    });
+
+                    toast.current?.show({
+                        severity: 'success',
+                        summary: 'Thành công',
+                        detail: 'Cập nhật thông tin thành công!',
+                        life: 2000,
                     });
                 }
             })

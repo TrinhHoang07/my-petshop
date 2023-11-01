@@ -158,13 +158,13 @@ export class ApiService {
                     },
                 }),
             updatePassword: (cusId: string, data: any, token: string): Promise<any> =>
-                AxiosClientApi.put(cusId, data, {
+                AxiosClientApi.put(route.updatePassword(cusId), data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
             updateAddress: (cusId: string, data: any, token: string): Promise<any> =>
-                AxiosClientApi.put(cusId, data, {
+                AxiosClientApi.put(route.updateAddress(cusId), data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },

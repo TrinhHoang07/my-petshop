@@ -2,6 +2,9 @@ import { useEffect, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ProfileChangePassword.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useConfirmToast } from '../../context/ConfirmAndToastContext';
+import { ApiService } from '../../axios/ApiService';
+import { useSessionContext } from '../../context/SessionContext';
 
 const cx = classNames.bind(styles);
 
@@ -15,14 +18,57 @@ function FormChangePass() {
     const prevPassRef = useRef<any>();
     const newPassRef = useRef<any>();
     const conNewPassRef = useRef<any>();
+    const toast = useConfirmToast();
+    const [values] = useSessionContext();
+    const apiService = new ApiService();
 
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm<TForm>();
 
-    const onSubmit: SubmitHandler<TForm> = (data: TForm) => {};
+    const onSubmit: SubmitHandler<TForm> = (data: TForm) => {
+        if (data.newPass !== data.conNewPass) {
+            toast.current?.show({
+                severity: 'error',
+                summary: 'Có lỗi',
+                detail: 'Mật khẩu mới không trùng khớp!',
+                life: 1500,
+            });
+        } else {
+            apiService.customer
+                .updatePassword(
+                    (values.user?.id as number).toString(),
+                    {
+                        password: data.newPass,
+                        oldPassword: data.prevPass,
+                    },
+                    values.user?.token ?? '',
+                )
+                .then((res) => {
+                    if (res.message === 'mismatched') {
+                        toast.current?.show({
+                            severity: 'error',
+                            summary: 'Có lỗi',
+                            detail: 'Mật khẩu cũ của bạn chưa chính xác, vui lòng thử lại!',
+                            life: 2500,
+                        });
+                    } else if (res.message === 'success') {
+                        toast.current?.show({
+                            severity: 'success',
+                            summary: 'Thành công',
+                            detail: 'Thay đổi mật khẩu thành công!',
+                            life: 2000,
+                        });
+
+                        reset();
+                    }
+                })
+                .catch((err) => console.error(err));
+        }
+    };
 
     const handleErrorInput = (ele: HTMLInputElement) => {
         ele.style.border = '1px solid red';
