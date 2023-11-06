@@ -45,6 +45,7 @@ function ChatBox() {
     // scroll to message when user submitted
     useEffect(() => {
         scrollToBottom();
+        inputRef.current?.focus();
     }, [messages, open]);
 
     useEffect(() => {
