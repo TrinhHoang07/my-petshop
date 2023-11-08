@@ -25,6 +25,7 @@ import { ProfileNoti } from '../pages/ProfileNoti';
 import { ProfileVouchers } from '../pages/ProfileVouchers';
 import { Search } from '../pages/Search';
 import { Orders } from '../pages/Orders';
+import { ProfileFriends } from '../pages/ProfileFriends';
 
 type TRoutes = {
     id: number;
@@ -151,6 +152,12 @@ const privateRoutes: TRoutes[] = [
         id: 6,
         path: routesConfig.profile_address,
         component: ProfileAddress,
+        layout: DefaultLayout,
+    },
+    {
+        id: 12,
+        path: routesConfig.profile_friends,
+        component: ProfileFriends,
         layout: DefaultLayout,
     },
     {

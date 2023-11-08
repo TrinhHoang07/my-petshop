@@ -1,0 +1,123 @@
+.profile-friend {
+    padding: 16px;
+    width: 100%;
+
+    h1 {
+        font-size: 2rem;
+        font-weight: 500;
+        text-align: center;
+        color: #333;
+    }
+
+    .search-friends {
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        border: 1px solid #d7d7d7;
+        border-radius: 999px;
+        overflow: hidden;
+
+        input {
+            border: none;
+            padding: 12px 12px 12px 16px;
+            outline: none;
+            font-size: 1.6rem;
+            color: #333;
+            caret-color: orange;
+            flex: 1;
+            width: 100%;
+        }
+
+        span {
+            width: 48px;
+            padding: 12px 0;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #f2f3f5;
+            }
+        }
+    }
+
+    .list-friends {
+        margin-top: 16px;
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+
+            &:hover {
+                background-color: #f2f3f5;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+
+            .f-avatar {
+                display: flex;
+                width: 48px;
+                height: 48px;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 999px;
+                    object-fit: cover;
+                }
+            }
+
+            .f-info {
+                margin-left: 16px;
+                flex: 1;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                h5 {
+                    font-size: 1.6rem;
+                    color: #333;
+                    font-weight: 500;
+                }
+
+                p {
+                    margin-top: 4px;
+                    font-size: 1.4rem;
+                    color: #333;
+                    opacity: 0.75;
+                }
+
+                span {
+                    width: 32px;
+                    height: 32px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    &:hover {
+                        background-color: #d7d7d7;
+                        color: #000;
+                        cursor: pointer;
+                        border-radius: 999px;
+                    }
+                }
+            }
+        }
+
+        .no-friends {
+            margin-top: 16px;
+
+            p {
+                font-size: 1.6rem;
+                text-align: center;
+                font-weight: 400;
+                color: #333;
+                opacity: 0.75;
+            }
+        }
+    }
+}

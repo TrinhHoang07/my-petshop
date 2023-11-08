@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './SideBarProfile.module.scss';
 import { Link, NavLink } from 'react-router-dom';
 import { AiOutlineEdit, AiOutlineUser } from 'react-icons/ai';
+import { FaUserFriends } from 'react-icons/fa';
 import { CiViewList } from 'react-icons/ci';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { MdOutlineDiscount } from 'react-icons/md';
@@ -75,6 +76,14 @@ function SideBarProfile(props: _T_Props) {
                     </NavLink>
                 </div>
                 <div className={cx('more-actions')}>
+                    <NavLink
+                        to={routesConfig.profile_friends}
+                        className={(nav) => cx('title-info-private', { active: nav.isActive })}
+                    >
+                        <FaUserFriends size={'2rem'} style={{ color: 'dodgerblue' }} />
+                        <span>Bạn bè</span>
+                    </NavLink>
+
                     <NavLink
                         to={routesConfig.profile_buy}
                         className={(nav) => cx('title-info-private', { active: nav.isActive })}
