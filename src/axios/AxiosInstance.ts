@@ -22,7 +22,9 @@ export class AxiosClientApi {
         let queryUrl = '';
 
         if (query) {
-            queryUrl += '?query=' + base64Encode(query);
+            queryUrl += '?query=' + encodeURIComponent(base64Encode(query));
+
+            console.log('QUERY: ' + queryUrl);
         }
 
         return request

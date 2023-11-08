@@ -142,6 +142,7 @@ export class ApiService {
             updatePassword: (cusId: string) => `customers/update/password/${cusId}`,
             updateAddress: (cusId: string) => `customers/update/address/${cusId}`,
             updateAvatar: (cusId: string) => `customers/test/upload/${cusId}`,
+            searchCustomers: 'customers/search',
         };
 
         return {
@@ -171,6 +172,12 @@ export class ApiService {
                 }),
             updateAvatar: (cusId: string, data: any, token: string): Promise<any> =>
                 AxiosClientApi.post(route.updateAvatar(cusId), data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            searchCustomers: (query: any, token: string) =>
+                AxiosClientApi.get(route.searchCustomers, query, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
