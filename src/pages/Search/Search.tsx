@@ -8,6 +8,7 @@ import { AiOutlineLoading } from 'react-icons/ai';
 import { CardItemFlip } from '../../components/CardItemFlip';
 import { T_Product, T_Search } from '../../models';
 import { ApiService } from '../../axios/ApiService';
+import { App } from '../../const/App';
 
 const cx = classNames.bind(styles);
 
@@ -22,7 +23,7 @@ function Search() {
     const [message, setMessage] = useState<string>('Không có tìm kiếm gần đây');
     const [data, setData] = useState<T_Product[]>([]);
     const apiService = new ApiService();
-    const debounced = useDebounce(searchText, 750);
+    const debounced = useDebounce(searchText, App.DELAY_SEARCH);
 
     useEffect(() => {
         if (debounced.trim().length > 0) {

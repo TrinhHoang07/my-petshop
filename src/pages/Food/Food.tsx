@@ -5,7 +5,7 @@ import { LayoutProducts } from '../../components/Layout/LayoutProducts';
 import { CardItemFlip } from '../../components/CardItemFlip';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { filterItem, filterItemByPrice, isFilter } from '../../store';
-import useDataInHome, { _T_DataItemHome } from '../../hooks/useDataInHome';
+import { _T_DataItemHome, useDataInHome } from '../../hooks';
 import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
 import { getValueFilterInArray } from '../../Helper';
 
@@ -22,7 +22,7 @@ function Food() {
     const [first, setFisrt] = useState<number>(1);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const data: _T_DataItemHome[] = useDataInHome('http://localhost:3009/products/products/home?type=food');
+    const data: _T_DataItemHome[] = useDataInHome('products/products/home?type=food');
 
     useEffect(() => {
         document.title = 'Đồ ăn | Petshop chất lượng số 1 Việt Nam!';

@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { ApiService } from '../../../../../axios/ApiService';
 import { Socket, io } from 'socket.io-client';
+import { App } from '../../../../../const/App';
 
 const cx = classNames.bind(styles);
 
@@ -20,7 +21,7 @@ function Carts() {
     const socketRef = useRef<Socket>();
 
     useEffect(() => {
-        const socket = io('http://localhost:3008', {
+        const socket = io(App.URL_EVENT, {
             timeout: 5000,
             autoConnect: true,
         });

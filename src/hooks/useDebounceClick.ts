@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 
-export const useDebouneClick = (callback: any, delay: number) => {
+const useDebouneClick = (callback: any, delay: number) => {
     const latestCallback = useRef<any>();
     const latestTimeout = useRef<any>();
 
@@ -18,3 +18,5 @@ export const useDebouneClick = (callback: any, delay: number) => {
         }, delay);
     };
 };
+
+export default useDebouneClick;

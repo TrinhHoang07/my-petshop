@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 import { base64Encode } from '../Helper';
+import { App } from '../const/App';
 
 type _T_AxiosOpts = {
     url?: {
@@ -131,7 +132,7 @@ class AxiosRequest {
                 Authorization: this._opts.config?.headers?.Authorization,
             },
             withCredentials: false,
-            baseURL: `http://localhost:3009/`,
+            baseURL: App.URL_MAIN,
         };
 
         return config;

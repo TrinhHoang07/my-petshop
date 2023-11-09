@@ -6,12 +6,12 @@ import { Title } from '../../../components/Title';
 import { CardItemZoomInLeft } from '../../../components/CardItemZoomInLeft';
 import { Button } from '../../../components/Button';
 import routesConfig from '../../../config/routes';
-import useDataInHome, { _T_DataItemHome } from '../../../hooks/useDataInHome';
+import { _T_DataItemHome, useDataInHome } from '../../../hooks';
 
 const cx = classNames.bind(styles);
 
 function CatItem() {
-    const data = useDataInHome('http://localhost:3009/products/products/home?limit=8&type=cat');
+    const data = useDataInHome('products/products/home?limit=8&type=cat');
 
     return (
         <div className={cx('wraper-catitem')}>

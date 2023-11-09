@@ -7,6 +7,7 @@ import FriendItem from './FriendItem';
 import { ApiService } from '../../axios/ApiService';
 import { useDebounce } from '../../hooks';
 import { useSessionContext } from '../../context/SessionContext';
+import { App } from '../../const/App';
 
 const cx = classNames.bind(styles);
 
@@ -14,7 +15,7 @@ function ProfileFriends() {
     const apiService = new ApiService();
     const [values] = useSessionContext();
     const [value, setValue] = useState<string>('');
-    const debounced = useDebounce(value, 750);
+    const debounced = useDebounce(value, App.DELAY_SEARCH);
 
     useEffect(() => {
         if (debounced.trim().length > 0) {

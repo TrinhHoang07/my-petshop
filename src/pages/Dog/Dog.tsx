@@ -5,7 +5,7 @@ import { LayoutProducts } from '../../components/Layout/LayoutProducts';
 import { CardItem } from '../../components/CardItem';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { filterItem, filterItemByPrice, isFilter } from '../../store';
-import useDataInHome, { _T_DataItemHome } from '../../hooks/useDataInHome';
+import { _T_DataItemHome, useDataInHome } from '../../hooks';
 import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
 import { getValueFilterInArray } from '../../Helper';
 import { Loading } from '../../components/Loading';
@@ -21,7 +21,7 @@ function Dog() {
     const [first, setFisrt] = useState<number>(1);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const data: _T_DataItemHome[] = useDataInHome('http://localhost:3009/products/products/home?type=dog');
+    const data: _T_DataItemHome[] = useDataInHome('products/products/home?type=dog');
 
     useEffect(() => {
         document.title = 'Chó cảnh | Petshop chất lượng số 1 Việt Nam!';

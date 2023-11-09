@@ -9,6 +9,7 @@ import cat from '../../../../assets/images/meoww.jpg';
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { TypingAdmin } from '../TypingAdmin';
+import { App } from '../../../../const/App';
 
 const cx = classNames.bind(styles);
 
@@ -49,7 +50,7 @@ function ChatBox() {
     }, [messages, open]);
 
     useEffect(() => {
-        const socket = io('http://localhost:3008', {
+        const socket = io(App.URL_EVENT, {
             timeout: 5000,
             autoConnect: true,
         });

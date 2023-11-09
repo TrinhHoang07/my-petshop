@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { App } from '../const/App';
 
 export type _T_DataItemHome = {
     id: number;
@@ -7,11 +8,11 @@ export type _T_DataItemHome = {
     price: number;
 };
 
-function useDataInHome(url: string) {
+function useDataInHome(path: string) {
     const [data, setData] = useState<_T_DataItemHome[]>([]);
 
     useEffect(() => {
-        fetch(url)
+        fetch(App.URL_MAIN + path)
             .then((res) => res.json())
             .then((data) => {
                 if (data.data.length > 0) {

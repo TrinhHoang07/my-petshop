@@ -13,6 +13,7 @@ import { useSessionContext } from '../../context/SessionContext';
 import { Socket, io } from 'socket.io-client';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
+import { App } from '../../const/App';
 
 const cx = classNames.bind(styles);
 
@@ -38,7 +39,7 @@ function ProfileAddress() {
     const socketRef = useRef<Socket>();
 
     useEffect(() => {
-        const socket = io('http://localhost:3008', {
+        const socket = io(App.URL_EVENT, {
             timeout: 5000,
             autoConnect: true,
         });

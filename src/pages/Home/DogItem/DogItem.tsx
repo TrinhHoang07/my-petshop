@@ -5,12 +5,12 @@ import logo from '../../../assets/images/dog_home_logo.png';
 import { Button } from '../../../components/Button';
 import { CardItem } from '../../../components/CardItem';
 import routesConfig from '../../../config/routes';
-import useDataInHome, { _T_DataItemHome } from '../../../hooks/useDataInHome';
+import { _T_DataItemHome, useDataInHome } from '../../../hooks';
 
 const cx = classNames.bind(styles);
 
 function DogItem() {
-    const data = useDataInHome('http://localhost:3009/products/products/home?limit=8&type=dog');
+    const data = useDataInHome('products/products/home?limit=8&type=dog');
 
     return (
         <div className={cx('wraper-dogitem')}>

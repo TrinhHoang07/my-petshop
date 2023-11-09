@@ -6,7 +6,7 @@ import { CardItemZoomIn } from '../../components/CardItemZoomIn';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { filterItem, filterItemByPrice, isFilter } from '../../store';
 import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
-import useDataInHome, { _T_DataItemHome } from '../../hooks/useDataInHome';
+import { _T_DataItemHome, useDataInHome } from '../../hooks';
 import { getValueFilterInArray } from '../../Helper';
 import { Loading } from '../../components/Loading';
 
@@ -21,7 +21,7 @@ function Accessories() {
     const [dataRender, setDataRender] = useState<_T_DataItemHome[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const data: _T_DataItemHome[] = useDataInHome('http://localhost:3009/products/products/home?type=accessory');
+    const data: _T_DataItemHome[] = useDataInHome('products/products/home?type=accessory');
 
     useEffect(() => {
         document.title = 'Phụ kiện | Petshop chất lượng số 1 Việt Nam!';

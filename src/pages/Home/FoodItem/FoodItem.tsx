@@ -5,12 +5,12 @@ import logo from '../../../assets/images/food_home_logo.png';
 import { Button } from '../../../components/Button';
 import { CardItemFlip } from '../../../components/CardItemFlip';
 import routesConfig from '../../../config/routes';
-import useDataInHome, { _T_DataItemHome } from '../../../hooks/useDataInHome';
+import { _T_DataItemHome, useDataInHome } from '../../../hooks';
 
 const cx = classNames.bind(styles);
 
 function FoodItem() {
-    const data = useDataInHome('http://localhost:3009/products/products/home?limit=8&type=food');
+    const data = useDataInHome('products/products/home?limit=8&type=food');
 
     return (
         <div className={cx('wraper-fooditem')}>

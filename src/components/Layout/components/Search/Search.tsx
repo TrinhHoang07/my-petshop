@@ -9,6 +9,7 @@ import { formatVND } from '../../../../Helper';
 import { useNavigate } from 'react-router-dom';
 import { T_Product, T_Search } from '../../../../models';
 import { ApiService } from '../../../../axios/ApiService';
+import { App } from '../../../../const/App';
 
 const cx = classNames.bind(styles);
 
@@ -22,7 +23,7 @@ function Search(props: T_Props) {
     const [fakeData, setFakeData] = useState<T_Product[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('Không có tìm kiếm gần đây');
-    const debounced = useDebounce(inputValue, 750);
+    const debounced = useDebounce(inputValue, App.DELAY_SEARCH);
     const apiService = new ApiService();
     const navigate = useNavigate();
 

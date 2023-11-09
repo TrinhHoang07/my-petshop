@@ -10,6 +10,7 @@ import { isMenuMobile } from '../../store';
 import { useSessionContext } from '../../context/SessionContext';
 import axios from 'axios';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
+import { App } from '../../const/App';
 
 const cx = classNames.bind(styles);
 
@@ -185,7 +186,7 @@ function Profile() {
         formData.append('file', data.imageRaw);
 
         axios
-            .post(`http://localhost:3009/customers/test/upload/${values.user?.id}`, formData, {
+            .post(`${App.URL_MAIN}customers/test/upload/${values.user?.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

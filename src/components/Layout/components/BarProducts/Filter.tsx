@@ -5,7 +5,7 @@ import { Slider } from 'primereact/slider';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { filterItemByPrice, isFilter } from '../../../../store';
 import { formatVND } from '../../../../Helper';
-import { useDebouneClick } from '../../../../hooks/useDebounceClick';
+import { useDebouneClick } from '../../../../hooks';
 
 const cx = classNames.bind(styles);
 

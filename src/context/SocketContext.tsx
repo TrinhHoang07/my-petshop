@@ -2,6 +2,7 @@
 
 import { ReactNode, createContext, useContext, useEffect, useRef } from 'react';
 import { Socket, io } from 'socket.io-client';
+import { App } from '../const/App';
 
 type TProps = {
     children: ReactNode;
@@ -14,7 +15,7 @@ function SocketContextProvider(props: TProps) {
     const socket = useRef<Socket>();
 
     useEffect(() => {
-        const ioSocket = io('http://localhost:3008', {
+        const ioSocket = io(App.URL_EVENT, {
             timeout: 5000,
             autoConnect: true,
         });
