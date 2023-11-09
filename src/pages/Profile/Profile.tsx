@@ -35,7 +35,7 @@ type _T_Data = {
 function Profile() {
     const setState = useSetRecoilState(isMenuMobile);
     const [values, setValues] = useSessionContext();
-    const toast = useConfirmToast();
+    const message = useConfirmToast();
 
     // test opject data
     const [data, setData] = useState<_T_Data>({});
@@ -202,7 +202,7 @@ function Profile() {
                         },
                     });
 
-                    toast.current?.show({
+                    message?.toast?.current?.show({
                         severity: 'success',
                         summary: 'Thành công',
                         detail: 'Cập nhật thông tin thành công!',

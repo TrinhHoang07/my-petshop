@@ -34,7 +34,7 @@ function ProfileAddress() {
     const setState = useSetRecoilState(isMenuMobile);
     const [addresses, setAddresses] = useState<_Addresses[]>([]);
     const [values] = useSessionContext();
-    const toast = useConfirmToast();
+    const message = useConfirmToast();
     const apiService = new ApiService();
     const socketRef = useRef<Socket>();
 
@@ -138,7 +138,7 @@ function ProfileAddress() {
             accept() {
                 apiService.address.deleteAddressById(value, values.user?.token ?? '').then((res) => {
                     if (res.message === 'success') {
-                        toast.current?.show({
+                        message?.toast?.current?.show({
                             severity: 'success',
                             summary: 'Thành công',
                             detail: 'Đã xóa thành công',
@@ -154,7 +154,7 @@ function ProfileAddress() {
                             })
                             .catch((err) => console.error(err));
                     } else {
-                        toast.current?.show({
+                        message?.toast?.current?.show({
                             severity: 'error',
                             summary: 'Có lỗi',
                             detail: 'Xảy ra lỗi!!!',

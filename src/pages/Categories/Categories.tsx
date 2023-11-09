@@ -23,7 +23,7 @@ function Categories() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [openVoucher, setOpenVoucher] = useState<boolean>(false);
     const [checkAll, setCheckAll] = useState<boolean>(false);
-    const toast = useConfirmToast();
+    const message = useConfirmToast();
     const apiService = new ApiService();
     const [values] = useSessionContext();
     const navigate = useNavigate();
@@ -106,7 +106,7 @@ function Categories() {
             rejectLabel: 'Hủy bỏ',
             icon: 'pi pi-exclamation-triangle',
             accept() {
-                toast.current?.show({
+                message?.toast?.current?.show({
                     severity: 'success',
                     summary: 'Thành công',
                     detail: 'Đã xóa thành công sản phẩm',
@@ -127,14 +127,14 @@ function Categories() {
             accept() {
                 if (checkAll) {
                     setData([]);
-                    toast.current?.show({
+                    message?.toast?.current?.show({
                         severity: 'success',
                         summary: 'Thành công',
                         detail: 'Đã xóa thành công',
                         life: 3000,
                     });
                 } else {
-                    toast.current?.show({
+                    message?.toast?.current?.show({
                         severity: 'error',
                         summary: 'Thất bại',
                         detail: 'Vui lòng chọn sản phẩm cần xóa!',

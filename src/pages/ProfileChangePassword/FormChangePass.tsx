@@ -18,7 +18,7 @@ function FormChangePass() {
     const prevPassRef = useRef<any>();
     const newPassRef = useRef<any>();
     const conNewPassRef = useRef<any>();
-    const toast = useConfirmToast();
+    const message = useConfirmToast();
     const [values] = useSessionContext();
     const apiService = new ApiService();
 
@@ -31,7 +31,7 @@ function FormChangePass() {
 
     const onSubmit: SubmitHandler<TForm> = (data: TForm) => {
         if (data.newPass !== data.conNewPass) {
-            toast.current?.show({
+            message?.toast?.current?.show({
                 severity: 'error',
                 summary: 'Có lỗi',
                 detail: 'Mật khẩu mới không trùng khớp!',
@@ -49,14 +49,14 @@ function FormChangePass() {
                 )
                 .then((res) => {
                     if (res.message === 'mismatched') {
-                        toast.current?.show({
+                        message?.toast?.current?.show({
                             severity: 'error',
                             summary: 'Có lỗi',
                             detail: 'Mật khẩu cũ của bạn chưa chính xác, vui lòng thử lại!',
                             life: 2500,
                         });
                     } else if (res.message === 'success') {
-                        toast.current?.show({
+                        message?.toast?.current?.show({
                             severity: 'success',
                             summary: 'Thành công',
                             detail: 'Thay đổi mật khẩu thành công!',

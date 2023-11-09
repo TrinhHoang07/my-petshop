@@ -20,7 +20,7 @@ const cx = classNames.bind(styles);
 
 function Orders() {
     const [data, setData] = useRecoilState(orderItems);
-    const toast = useConfirmToast();
+    const message = useConfirmToast();
     const apiService = new ApiService();
     const [values] = useSessionContext();
     const navigate = useNavigate();
@@ -72,7 +72,7 @@ function Orders() {
                 .addOrder(dataPost, values.user?.token ?? '')
                 .then((res: T_AddOrder) => {
                     if (res.message === 'success') {
-                        toast.current?.show({
+                        message?.toast?.current?.show({
                             severity: 'success',
                             summary: 'Thành công',
                             detail: 'Đặt hàng thành công!',
@@ -86,7 +86,7 @@ function Orders() {
                 })
                 .catch((err) => {
                     console.error(err);
-                    toast.current?.show({
+                    message?.toast?.current?.show({
                         severity: 'error',
                         summary: 'Thất bại',
                         detail: 'Đã xảy ra lỗi, vui lòng thử lại!',
@@ -94,7 +94,7 @@ function Orders() {
                     });
                 });
         } else {
-            toast.current?.show({
+            message?.toast?.current?.show({
                 severity: 'error',
                 summary: 'Có lỗi',
                 detail: 'Vui lòng chọn sản phẩm cần mua!',

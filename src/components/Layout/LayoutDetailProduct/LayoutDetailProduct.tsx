@@ -24,7 +24,8 @@ type TProps = {
 function LayoutDetailProduct(props: TProps) {
     const [quantity, setQuantity] = useState<number>(1);
     const [infoUser] = useSessionContext();
-    const toast = useConfirmToast();
+    const message = useConfirmToast();
+
     const apiService = new ApiService();
 
     // testtttttttt => OK
@@ -79,14 +80,14 @@ function LayoutDetailProduct(props: TProps) {
                             status: 'success',
                         });
 
-                        toast.current?.show({
+                        message?.toast?.current?.show({
                             severity: 'success',
                             summary: 'Thành công',
                             detail: 'Thêm thành công',
                             life: 1500,
                         });
                     } else {
-                        toast.current?.show({
+                        message?.toast?.current?.show({
                             severity: 'error',
                             summary: 'Có lỗi',
                             detail: 'Sản phẩm này đã tồn tại trong giỏ hàng!',
@@ -96,7 +97,7 @@ function LayoutDetailProduct(props: TProps) {
                 })
                 .catch((err) => console.error(err));
         } else {
-            toast.current?.show({
+            message?.toast?.current?.show({
                 severity: 'error',
                 summary: 'Có lỗi',
                 detail: 'Bạn chưa đăng nhập, vui lòng đăng nhập để mua hàng!',
