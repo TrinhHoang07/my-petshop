@@ -101,6 +101,7 @@ function Categories() {
     const confirmOne = (value: TData) => {
         confirmDialog({
             message: 'Bạn có chắc chắn muốn xóa không?',
+            position: 'top',
             header: 'Xóa sản phẩm',
             acceptLabel: 'Đồng ý',
             rejectLabel: 'Hủy bỏ',
@@ -120,6 +121,7 @@ function Categories() {
     const confirmAll = () => {
         confirmDialog({
             message: 'Bạn có chắc chắn muốn xóa tất cả sản phẩm không?',
+            position: 'top',
             header: 'Xóa sản phẩm',
             acceptLabel: 'Đồng ý',
             rejectLabel: 'Hủy bỏ',

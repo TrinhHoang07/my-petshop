@@ -131,6 +131,7 @@ function ProfileAddress() {
     const confirm = (value: string) => {
         confirmDialog({
             message: 'Bạn có chắc chắn muốn xóa không?',
+            position: 'top',
             header: 'Xóa sản phẩm',
             acceptLabel: 'Đồng ý',
             rejectLabel: 'Hủy bỏ',
