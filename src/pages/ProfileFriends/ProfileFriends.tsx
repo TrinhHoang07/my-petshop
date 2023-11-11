@@ -15,10 +15,13 @@ function ProfileFriends() {
     const apiService = new ApiService();
     const [values] = useSessionContext();
     const [value, setValue] = useState<string>('');
+    const [isModal, setIsModal] = useState<boolean>(false);
     const debounced = useDebounce(value, App.DELAY_SEARCH);
 
     useEffect(() => {
         if (debounced.trim().length > 0) {
+            setIsModal(true);
+
             apiService.customer
                 .searchCustomers(
                     {
@@ -30,6 +33,8 @@ function ProfileFriends() {
                     console.log('res: ' + res.data);
                 })
                 .catch((err) => console.error(err));
+        } else {
+            setIsModal(false);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,11 +49,31 @@ function ProfileFriends() {
                         type="text"
                         placeholder="Tìm kiếm bạn bè..."
                         value={value}
+                        onBlur={() => setIsModal(false)}
+                        onFocus={() => {
+                            if (debounced.trim().length > 0) {
+                                setIsModal(true);
+                            }
+                        }}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
                     />
                     <span>
                         <AiOutlineSearch size={'2rem'} />
                     </span>
+                    {isModal && (
+                        <div className={cx('search-modal')}>
+                            <h3>
+                                Kết quả tìm kiếm cho <strong>{value}</strong>
+                            </h3>
+                            <div className={cx('modal-items')}>
+                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
+                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
+                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
+                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
+                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className={cx('list-friends')}>
                     {/* <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={1} cm_friend="2" />
