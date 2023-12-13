@@ -31,20 +31,41 @@
             padding: 16px;
             padding-bottom: 0;
 
-            h3 {
-                font-size: 1.5rem;
-                color: #333;
-                font-weight: 400;
+            .header-modal {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
                 padding-bottom: 16px;
                 border-bottom: 1px solid #d7d7d7;
+
+                h3 {
+                    font-size: 1.5rem;
+                    color: #333;
+                    font-weight: 400;
+                }
+
+                span {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                }
             }
 
             .modal-items {
                 flex: 1;
                 padding: 8px 0;
-                max-height: calc(100vh - 80px - 215px);
+                min-height: 278px;
+                max-height: 278px;
                 overflow-y: auto;
-                // margin-top: 8px;
+
+                .no-search {
+                    font-size: 1.4rem;
+                    color: #333;
+                    font-weight: 400;
+                    text-align: center;
+                    margin-top: 16px;
+                }
             }
         }
 
@@ -60,7 +81,7 @@
             width: 100%;
         }
 
-        span {
+        .icon-search {
             width: 48px;
             padding: 12px 0;
             border-radius: 6px;

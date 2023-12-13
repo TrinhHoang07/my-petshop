@@ -3,11 +3,12 @@ import classNames from 'classnames/bind';
 import styles from './ProfileFriends.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
 import { AiOutlineSearch } from 'react-icons/ai';
-import FriendItem from './FriendItem';
+// import FriendItem from './FriendItem';
 import { ApiService } from '../../axios/ApiService';
 import { useDebounce } from '../../hooks';
 import { useSessionContext } from '../../context/SessionContext';
 import { App } from '../../const/App';
+import { IoMdClose } from 'react-icons/io';
 
 const cx = classNames.bind(styles);
 
@@ -49,7 +50,6 @@ function ProfileFriends() {
                         type="text"
                         placeholder="Tìm kiếm bạn bè..."
                         value={value}
-                        onBlur={() => setIsModal(false)}
                         onFocus={() => {
                             if (debounced.trim().length > 0) {
                                 setIsModal(true);
@@ -57,20 +57,26 @@ function ProfileFriends() {
                         }}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
                     />
-                    <span>
+                    <span className={cx('icon-search')}>
                         <AiOutlineSearch size={'2rem'} />
                     </span>
                     {isModal && (
                         <div className={cx('search-modal')}>
-                            <h3>
-                                Kết quả tìm kiếm cho <strong>{value}</strong>
-                            </h3>
+                            <div className={cx('header-modal')}>
+                                <h3>
+                                    Kết quả tìm kiếm cho <strong>{value}</strong>
+                                </h3>
+                                <span onClick={() => setIsModal(false)}>
+                                    <IoMdClose size={'2rem'} />
+                                </span>
+                            </div>
                             <div className={cx('modal-items')}>
+                                {/* <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
                                 <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
                                 <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
                                 <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
-                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
-                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
+                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" /> */}
+                                <p className={cx('no-search')}>Không có kết quả tìm kiếm !</p>
                             </div>
                         </div>
                     )}

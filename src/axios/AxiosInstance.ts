@@ -28,6 +28,8 @@ export class AxiosClientApi {
             console.log('QUERY: ' + queryUrl);
         }
 
+        ////// PARAMS
+
         return request
             .getClient()
             .request({
