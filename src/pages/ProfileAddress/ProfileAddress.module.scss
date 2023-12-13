@@ -162,6 +162,8 @@ $tablet-width: 1023px;
 
 .form-contents {
     width: 500px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
     position: fixed;
     background-color: #fff;
     border-radius: 6px;
