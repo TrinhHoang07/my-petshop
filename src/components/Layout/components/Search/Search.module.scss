@@ -2,7 +2,7 @@
     position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.2);
-    z-index: 99999;
+    z-index: 10;
     visibility: hidden;
 }
 
@@ -16,7 +16,7 @@
     bottom: 0;
     background-color: #fff;
     transition: all ease 0.3s;
-    z-index: 999999;
+    z-index: 11;
 }
 
 .heading {

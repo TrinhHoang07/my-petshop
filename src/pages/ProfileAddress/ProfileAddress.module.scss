@@ -167,7 +167,7 @@ $tablet-width: 1023px;
     position: fixed;
     background-color: #fff;
     border-radius: 6px;
-    z-index: 99999;
+    z-index: 10;
     padding: 32px;
     transform: scale(0);
     transition: all ease-in-out 0.25s;

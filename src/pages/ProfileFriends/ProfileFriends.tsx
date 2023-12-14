@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './ProfileFriends.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
 import { AiOutlineSearch } from 'react-icons/ai';
-// import FriendItem from './FriendItem';
+import FriendItem from './FriendItem';
 import { ApiService } from '../../axios/ApiService';
 import { useDebounce } from '../../hooks';
 import { useSessionContext } from '../../context/SessionContext';
@@ -19,19 +19,25 @@ function ProfileFriends() {
     const [isModal, setIsModal] = useState<boolean>(false);
     const debounced = useDebounce(value, App.DELAY_SEARCH);
 
+    // test
+    const [testData, setTestData] = useState<any[]>([]);
+
     useEffect(() => {
         if (debounced.trim().length > 0) {
+            console.log('debounced: ' + debounced.length);
+
             setIsModal(true);
 
             apiService.customer
                 .searchCustomers(
                     {
-                        search: debounced,
+                        search: debounced.trim(),
                     },
                     values.user?.token ?? '',
                 )
                 .then((res) => {
-                    console.log('res: ' + res.data);
+                    console.log('res: ' + res);
+                    setTestData(res.data);
                 })
                 .catch((err) => console.error(err));
         } else {
@@ -76,7 +82,20 @@ function ProfileFriends() {
                                 <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
                                 <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
                                 <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" /> */}
-                                <p className={cx('no-search')}>Không có kết quả tìm kiếm !</p>
+
+                                {testData.length > 0 ? (
+                                    testData.map((item) => (
+                                        <FriendItem
+                                            key={item.id}
+                                            avatar_friend={item.avatar_path}
+                                            name_friend={item.name}
+                                            id_friend={item.id}
+                                            cm_friend="5"
+                                        />
+                                    ))
+                                ) : (
+                                    <p className={cx('no-search')}>Không có kết quả tìm kiếm !</p>
+                                )}
                             </div>
                         </div>
                     )}

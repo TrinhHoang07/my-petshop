@@ -1,7 +1,8 @@
 import classNames from 'classnames/bind';
 import styles from './ProfileFriends.module.scss';
-import avatar from '../../assets/images/beyeu.jpg';
-import { FiMoreVertical } from 'react-icons/fi';
+// import { FiMoreVertical } from 'react-icons/fi';
+import { Button } from '../../components/Button';
+// import { MdPersonAddAlt1 } from 'react-icons/md';
 
 const cx = classNames.bind(styles);
 
@@ -16,16 +17,15 @@ function FriendItem(props: _T_Props) {
     return (
         <div className={cx('friend-item')}>
             <div className={cx('f-avatar')}>
-                <img src={avatar} alt={props.name_friend} />
+                <img src={props.avatar_friend} alt={props.name_friend} />
             </div>
             <div className={cx('f-info')}>
                 <div>
                     <h5>{props.name_friend}</h5>
                     <p>{props.cm_friend} bạn chung</p>
                 </div>
-                <span>
-                    <FiMoreVertical size={'2rem'} />
-                </span>
+                {/* <FiMoreVertical size={'2rem'} /> */}
+                <Button small="true">Thêm bạn bè</Button>
             </div>
         </div>
     );

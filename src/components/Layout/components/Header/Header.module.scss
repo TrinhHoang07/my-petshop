@@ -31,14 +31,14 @@ $tablet-width: 1023px;
     left: 0;
     right: 0;
     background-color: #ffffff;
-    z-index: 99999;
+    z-index: 9;
 }
 
 .menu-header-tablet {
     position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.65);
-    z-index: 99999;
+    z-index: 9;
     display: none;
 
     @include mobileAndTablet {
