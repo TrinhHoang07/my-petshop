@@ -184,4 +184,40 @@ export class ApiService {
                 }),
         };
     }
+    get friendship() {
+        const route = {
+            addNewInviteFriend: 'friendship/friendship/create',
+            getFriendInviteById: (frId: string) => `friendship/friendship/invite/${frId}`,
+            getFriendGiveInviteById: (frId: string) => `friendship/friendship/give-invite/${frId}`,
+            deleteFriendshipById: (frId: string) => `friendship/friendship/delete/${frId}`,
+        };
+
+        return {
+            addNewInviteFriend: (data: any, token: string): Promise<any> =>
+                AxiosClientApi.post(route.addNewInviteFriend, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            getFriendInviteById: (frId: string, token: string) =>
+                AxiosClientApi.get(route.getFriendInviteById(frId), null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+
+            getFriendGiveInviteById: (frId: string, token: string) =>
+                AxiosClientApi.get(route.getFriendGiveInviteById(frId), null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            deleteFriendshipById: (frId: string, token: string) =>
+                AxiosClientApi.delete(route.deleteFriendshipById(frId), {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+        };
+    }
 }
