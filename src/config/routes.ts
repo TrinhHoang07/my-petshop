@@ -18,6 +18,7 @@ const routesConfig = {
     profile_buy: '/profile/buys',
     profile_noti: '/profile/notifycation',
     profile_voucher: '/profile/vouchers',
+    profile_user: '/profile/user/:user_name',
     login: '/login',
     register: '/register',
     shop: '/shop',

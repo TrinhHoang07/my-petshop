@@ -9,6 +9,14 @@ export type TData = {
     checked: boolean;
 };
 
+export type TProfileUser = {
+    userName?: string;
+    gender?: string;
+    avatarPath?: string;
+    address?: string;
+    isFriend: boolean;
+};
+
 export type T_Product = {
     id: number;
     name: string;

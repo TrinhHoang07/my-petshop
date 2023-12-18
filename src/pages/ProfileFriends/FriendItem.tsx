@@ -7,6 +7,10 @@ import { ApiService } from '../../axios/ApiService';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { useEffect, useState } from 'react';
 import { confirmDialog } from 'primereact/confirmdialog';
+import { Link } from 'react-router-dom';
+import { toSeoURL } from '../../Helper';
+import { useSetRecoilState } from 'recoil';
+import { dataProfileUser } from '../../store';
 
 const cx = classNames.bind(styles);
 
@@ -22,6 +26,7 @@ function FriendItem(props: _T_Props) {
     const message = useConfirmToast();
     const apiService = new ApiService();
     const [idsInvited, setIdsInvited] = useState<number[]>([]);
+    const setDataProfileUser = useSetRecoilState(dataProfileUser);
 
     useEffect(() => {
         handleGetIdsInvited();
@@ -110,16 +115,28 @@ function FriendItem(props: _T_Props) {
         });
     };
 
+    const handleUpdateDataProfileUser = () => {
+        setDataProfileUser({
+            isFriend: values.user?.id === props.id_friend,
+            userName: props.name_friend,
+            avatarPath: props.avatar_friend,
+        });
+    };
+
     return (
         <div className={cx('friend-item')}>
-            <div className={cx('f-avatar')}>
-                <img src={props.avatar_friend} alt={props.name_friend} />
-            </div>
-            <div className={cx('f-info')}>
-                <div>
-                    <h5>{props.name_friend}</h5>
-                    <p>{props.cm_friend} bạn chung</p>
+            <Link onClick={handleUpdateDataProfileUser} to={`/profile/user/@${toSeoURL(props.name_friend)}`}>
+                <div className={cx('f-avatar')}>
+                    <img src={props.avatar_friend} alt={props.name_friend} />
                 </div>
+            </Link>
+            <div className={cx('f-info')}>
+                <Link onClick={handleUpdateDataProfileUser} to={`/profile/user/@${toSeoURL(props.name_friend)}`}>
+                    <div>
+                        <h5>{props.name_friend}</h5>
+                        <p>{props.cm_friend} bạn chung</p>
+                    </div>
+                </Link>
                 {values.user?.id === props.id_friend ? (
                     <Button small="true" to={routesConfig.profile}>
                         Trang cá nhân

@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { TData } from '../models';
+import { TData, TProfileUser } from '../models';
 
 export const filterItem = atom<string>({
     key: 'filter',
@@ -24,4 +24,15 @@ export const isMenuMobile = atom<boolean>({
 export const orderItems = atom<TData[]>({
     key: 'orderItems',
     default: [],
+});
+
+export const dataProfileUser = atom<TProfileUser>({
+    key: 'dataProfileUser',
+    default: {
+        userName: 'Trịnh Văn Hoàng',
+        avatarPath: 'https://dogstar.vn/wp-content/uploads/2022/05/hinh-nen-meo-3d-1.jpg',
+        gender: 'Male',
+        address: 'Nhổn - Bắc Từ Liêm - Hà Nội',
+        isFriend: false,
+    },
 });
