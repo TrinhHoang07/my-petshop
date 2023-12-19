@@ -72,7 +72,9 @@ function ProfileBuys() {
                                             <p className={cx('price-item-order')}>
                                                 Thành tiền: {item.orders_price * item.orders_quantity}đ
                                             </p>
-                                            <p className={cx('price-item-order', 'detail-item')}>Xem chi tiết</p>
+                                            <p className={cx('price-item-order', 'detail-item')}>
+                                                Xem chi tiết {item.product_type}
+                                            </p>
                                             <p className={cx('price-item-order')}>
                                                 Trạng thái: {getNameFromStatus(item.orders_status)}
                                             </p>

@@ -8,7 +8,9 @@ import { ApiService } from '../../axios/ApiService';
 import { useDebounce } from '../../hooks';
 import { useSessionContext } from '../../context/SessionContext';
 import { App } from '../../const/App';
+import { FaUserPlus } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
+import { FriendRequest } from './FriendRequest';
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +23,7 @@ function ProfileFriends() {
 
     // test
     const [testData, setTestData] = useState<any[]>([]);
+    const [isOpenFriendRequest, setIsOpenFriendRequest] = useState<boolean>(false);
 
     useEffect(() => {
         if (debounced.trim().length > 0) {
@@ -47,10 +50,24 @@ function ProfileFriends() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debounced]);
 
+    const handleOpenFriendRequest = () => {
+        setIsOpenFriendRequest(true);
+    };
+
     return (
         <LayoutProfile>
             <div className={cx('profile-friend')}>
-                <h1>Tất cả bạn bè</h1>
+                <div className={cx('friends-header')}>
+                    <FriendRequest isOpen={isOpenFriendRequest} setIsOpen={setIsOpenFriendRequest} />
+                    <div className={cx('f-empty')}></div>
+                    <h1>Tất cả bạn bè</h1>
+                    <div onClick={handleOpenFriendRequest} className={cx('icon-request')}>
+                        <span>
+                            <FaUserPlus size={'2rem'} />
+                        </span>
+                        <p>Lời mời kết bạn</p>
+                    </div>
+                </div>
                 <div className={cx('search-friends')}>
                     <input
                         type="text"
