@@ -23,6 +23,7 @@ function ProfileFriends() {
 
     // test
     const [testData, setTestData] = useState<any[]>([]);
+    const [friends, setFriends] = useState<any[]>([]);
     const [isOpenFriendRequest, setIsOpenFriendRequest] = useState<boolean>(false);
 
     useEffect(() => {
@@ -49,6 +50,18 @@ function ProfileFriends() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debounced]);
+
+    useEffect(() => {
+        apiService.friendship
+            .getFriendedById((values.user?.id as number).toString(), values.user?.token ?? '')
+            .then((res: any) => {
+                console.log('res friended: ' + res);
+                setFriends(res.data);
+            })
+            .catch((err) => console.error(err));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleOpenFriendRequest = () => {
         setIsOpenFriendRequest(true);
@@ -94,12 +107,6 @@ function ProfileFriends() {
                                 </span>
                             </div>
                             <div className={cx('modal-items')}>
-                                {/* <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
-                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
-                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
-                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
-                                <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" /> */}
-
                                 {testData.length > 0 ? (
                                     testData.map((item) => (
                                         <FriendItem
@@ -108,6 +115,7 @@ function ProfileFriends() {
                                             name_friend={item.name}
                                             id_friend={item.id}
                                             cm_friend="5"
+                                            status=""
                                         />
                                     ))
                                 ) : (
@@ -118,15 +126,24 @@ function ProfileFriends() {
                     )}
                 </div>
                 <div className={cx('list-friends')}>
-                    {/* <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={1} cm_friend="2" />
-                    <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={2} cm_friend="5" />
-                    <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={3} cm_friend="6" />
-                    <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={4} cm_friend="1" />
-                    <FriendItem avatar_friend="" name_friend="Hoàng Trịnh" id_friend={5} cm_friend="28" /> */}
-
-                    <div className={cx('no-friends')}>
-                        <p>Bạn chưa có bạn bè, hãy thử tìm kiếm bạn bè của bạn và kết bạn với họ!</p>
-                    </div>
+                    {friends.length > 0 ? (
+                        friends
+                            .filter((item) => item.customer_id !== values.user?.id)
+                            .map((item) => (
+                                <FriendItem
+                                    key={item.customer_id}
+                                    avatar_friend={item.customer_avatar_path}
+                                    name_friend={item.customer_name}
+                                    cm_friend="5"
+                                    id_friend={item.customer_id}
+                                    status={item.friendship_status ?? 'waiting'}
+                                />
+                            ))
+                    ) : (
+                        <div className={cx('no-friends')}>
+                            <p>Bạn chưa có bạn bè, hãy thử tìm kiếm bạn bè của bạn và kết bạn với họ!</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </LayoutProfile>

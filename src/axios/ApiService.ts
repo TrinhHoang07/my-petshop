@@ -187,6 +187,7 @@ export class ApiService {
     get friendship() {
         const route = {
             addNewInviteFriend: 'friendship/friendship/create',
+            getFriendedById: (frId: string) => `friendship/friendship/friended/${frId}`,
             getFriendInviteById: (frId: string) => `friendship/friendship/invite/${frId}`,
             getFriendGiveInviteById: (frId: string) => `friendship/friendship/give-invite/${frId}`,
             deleteFriendshipById: (frId: string) => `friendship/friendship/delete/${frId}`,
@@ -195,6 +196,13 @@ export class ApiService {
         return {
             addNewInviteFriend: (data: any, token: string): Promise<any> =>
                 AxiosClientApi.post(route.addNewInviteFriend, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+
+            getFriendedById: (frId: string, token: string): Promise<any> =>
+                AxiosClientApi.get(route.getFriendedById(frId), null, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },

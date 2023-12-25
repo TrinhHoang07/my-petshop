@@ -19,6 +19,7 @@ type _T_Props = {
     avatar_friend: string;
     name_friend: string;
     cm_friend?: string;
+    status: string;
 };
 
 function FriendItem(props: _T_Props) {
@@ -26,6 +27,7 @@ function FriendItem(props: _T_Props) {
     const message = useConfirmToast();
     const apiService = new ApiService();
     const [idsInvited, setIdsInvited] = useState<number[]>([]);
+    const [idsFriended, setIdsFriended] = useState<number[]>([]);
     const setDataProfileUser = useSetRecoilState(dataProfileUser);
 
     useEffect(() => {
@@ -35,8 +37,23 @@ function FriendItem(props: _T_Props) {
     }, []);
 
     useEffect(() => {
+        apiService.friendship
+            .getFriendedById((values.user?.id as number).toString(), values.user?.token ?? '')
+            .then((res: any) => {
+                setIdsFriended(res.data.map((item: any) => item.customer_id));
+            })
+            .catch((err) => console.error(err));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
         console.log(idsInvited);
     }, [idsInvited]);
+
+    useEffect(() => {
+        console.log(idsFriended);
+    }, [idsFriended]);
 
     const handleGetIdsInvited = () => {
         apiService.friendship
@@ -137,10 +154,13 @@ function FriendItem(props: _T_Props) {
                         <p>{props.cm_friend} bạn chung</p>
                     </div>
                 </Link>
+
                 {values.user?.id === props.id_friend ? (
                     <Button small="true" to={routesConfig.profile}>
                         Trang cá nhân
                     </Button>
+                ) : props.status === 'friended' || idsFriended.includes(props.id_friend) ? (
+                    <Button small="true">Bạn bè</Button>
                 ) : idsInvited.includes(props.id_friend) ? (
                     <Button onClick={() => handleRemoveInvite(props.id_friend)} small="true">
                         Hủy yêu cầu

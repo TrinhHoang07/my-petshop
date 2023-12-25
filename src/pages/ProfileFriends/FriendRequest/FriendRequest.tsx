@@ -4,7 +4,11 @@ import { IoClose } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import { toSeoURL } from '../../../Helper';
 import { Button } from '../../../components/Button';
-import img from '../../../assets/images/beyeu.jpg';
+import { useEffect, useState } from 'react';
+import { ApiService } from '../../../axios/ApiService';
+import { useSessionContext } from '../../../context/SessionContext';
+import { useSetRecoilState } from 'recoil';
+import { dataProfileUser } from '../../../store';
 
 const cx = classNames.bind(styles);
 
@@ -14,8 +18,37 @@ type _T_Props = {
 };
 
 function FriendRequest(props: _T_Props) {
+    const [data, setData] = useState<any[]>([]);
+    const apiService = new ApiService();
+    const setDataProfileUser = useSetRecoilState(dataProfileUser);
+    const [values] = useSessionContext();
+
+    useEffect(() => {
+        apiService.friendship
+            .getFriendGiveInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
+            .then((res: any) => {
+                console.log('res give friend invite: ' + res);
+                setData(res.data);
+            })
+            .catch((err) => console.error(err));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        console.log('data: ' + data.length);
+    }, [data]);
+
     const handleCloseRequest = () => {
         props.setIsOpen(false);
+    };
+
+    const handleUpdateDataProfileUser = (item: any) => {
+        setDataProfileUser({
+            isFriend: values.user?.id === item.friendship_customer_id,
+            userName: item.customer_namea,
+            avatarPath: item.customer_avatar_path,
+        });
     };
 
     return (
@@ -41,118 +74,31 @@ function FriendRequest(props: _T_Props) {
                     </span>
                 </div>
                 <div className={cx('request-contents')}>
-                    <div className={cx('friend-item')}>
-                        <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                            <div className={cx('f-avatar')}>
-                                <img src={img} alt={'hehhee'} />
-                            </div>
-                        </Link>
-                        <div className={cx('f-info')}>
-                            <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                                <div>
-                                    <h5>Trịnh Hoàng</h5>
-                                    <p>5 bạn chung</p>
+                    {data.length > 0 ? (
+                        data.map((item: any) => (
+                            <div key={item.friendship_id} className={cx('friend-item')}>
+                                <Link
+                                    onClick={() => handleUpdateDataProfileUser(item)}
+                                    to={`/profile/user/@${toSeoURL(item.customer_name)}`}
+                                >
+                                    <div className={cx('f-avatar')}>
+                                        <img src={item.customer_avatar_path} alt={item.customer_name} />
+                                    </div>
+                                </Link>
+                                <div onClick={() => handleUpdateDataProfileUser(item)} className={cx('f-info')}>
+                                    <Link to={`/profile/user/@${toSeoURL(item.customer_name)}`}>
+                                        <div>
+                                            <h5>{item.customer_name}</h5>
+                                            <p>5 bạn chung</p>
+                                        </div>
+                                    </Link>
+                                    <Button small="true">Xác nhận</Button>
                                 </div>
-                            </Link>
-                            <Button small="true">Xác nhận</Button>
-                        </div>
-                    </div>
-                    <div className={cx('friend-item')}>
-                        <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                            <div className={cx('f-avatar')}>
-                                <img src={img} alt={'hehhee'} />
                             </div>
-                        </Link>
-                        <div className={cx('f-info')}>
-                            <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                                <div>
-                                    <h5>Trịnh Hoàng</h5>
-                                    <p>5 bạn chung</p>
-                                </div>
-                            </Link>
-                            <Button small="true">Xác nhận</Button>
-                        </div>
-                    </div>
-                    <div className={cx('friend-item')}>
-                        <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                            <div className={cx('f-avatar')}>
-                                <img src={img} alt={'hehhee'} />
-                            </div>
-                        </Link>
-                        <div className={cx('f-info')}>
-                            <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                                <div>
-                                    <h5>Trịnh Hoàng</h5>
-                                    <p>5 bạn chung</p>
-                                </div>
-                            </Link>
-                            <Button small="true">Xác nhận</Button>
-                        </div>
-                    </div>
-                    <div className={cx('friend-item')}>
-                        <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                            <div className={cx('f-avatar')}>
-                                <img src={img} alt={'hehhee'} />
-                            </div>
-                        </Link>
-                        <div className={cx('f-info')}>
-                            <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                                <div>
-                                    <h5>Trịnh Hoàng</h5>
-                                    <p>5 bạn chung</p>
-                                </div>
-                            </Link>
-                            <Button small="true">Xác nhận</Button>
-                        </div>
-                    </div>
-                    <div className={cx('friend-item')}>
-                        <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                            <div className={cx('f-avatar')}>
-                                <img src={img} alt={'hehhee'} />
-                            </div>
-                        </Link>
-                        <div className={cx('f-info')}>
-                            <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                                <div>
-                                    <h5>Trịnh Hoàng</h5>
-                                    <p>5 bạn chung</p>
-                                </div>
-                            </Link>
-                            <Button small="true">Xác nhận</Button>
-                        </div>
-                    </div>
-                    <div className={cx('friend-item')}>
-                        <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                            <div className={cx('f-avatar')}>
-                                <img src={img} alt={'hehhee'} />
-                            </div>
-                        </Link>
-                        <div className={cx('f-info')}>
-                            <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                                <div>
-                                    <h5>Trịnh Hoàng</h5>
-                                    <p>5 bạn chung</p>
-                                </div>
-                            </Link>
-                            <Button small="true">Xác nhận</Button>
-                        </div>
-                    </div>
-                    <div className={cx('friend-item')}>
-                        <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                            <div className={cx('f-avatar')}>
-                                <img src={img} alt={'hehhee'} />
-                            </div>
-                        </Link>
-                        <div className={cx('f-info')}>
-                            <Link to={`/profile/user/@${toSeoURL('Trinh Hoang')}`}>
-                                <div>
-                                    <h5>Trịnh Hoàng</h5>
-                                    <p>5 bạn chung</p>
-                                </div>
-                            </Link>
-                            <Button small="true">Xác nhận</Button>
-                        </div>
-                    </div>
+                        ))
+                    ) : (
+                        <p style={{ textAlign: 'center' }}>Bạn chưa có lời mời kết bạn nào!</p>
+                    )}
                 </div>
             </div>
         </>
