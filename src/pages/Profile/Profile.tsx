@@ -36,10 +36,7 @@ function Profile() {
     const setState = useSetRecoilState(isMenuMobile);
     const [values, setValues] = useSessionContext();
     const message = useConfirmToast();
-
-    // test opject data
     const [data, setData] = useState<_T_Data>({});
-
     const [imageAvatar, setImageAvatar] = useState<string>('');
 
     const days = [
@@ -160,16 +157,10 @@ function Profile() {
         };
     });
 
-    useEffect(() => {
-        console.log('data: ', data);
-    }, [data]);
-
     const handleUpdateAvatar = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const files = (event.target as HTMLInputElement).files;
 
         if (files && files?.length > 0) {
-            console.log('file change: ', files[0]);
-
             setData((prev: _T_Data) => ({
                 ...prev,
                 imageRaw: files[0],
@@ -180,8 +171,6 @@ function Profile() {
     };
 
     const handleSubmit = () => {
-        console.log('data submit: ', data);
-
         const formData = new FormData();
         formData.append('file', data.imageRaw);
 

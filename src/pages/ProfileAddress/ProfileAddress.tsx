@@ -54,21 +54,14 @@ function ProfileAddress() {
     }, []);
 
     useEffect(() => {
-        console.log('type action: ', typeAction);
-    }, [typeAction]);
-
-    useEffect(() => {
         if (socketRef.current) {
             socketRef.current.on('connect', () => {
                 socketRef.current?.on('create-address-give', (data: any) => {
-                    console.log('data GIVE: ', data);
-
                     if (values.isAuth) {
                         apiService.address
                             .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
                             .then((res) => {
                                 if (res.message === 'success') {
-                                    ///// ERRORRRRRR
                                     setAddresses((prev: _Addresses[]) => {
                                         return [...prev, res.data[res.data.length - 1]];
                                     });
@@ -79,14 +72,11 @@ function ProfileAddress() {
                 });
 
                 socketRef.current?.on('update-address-give', (data: any) => {
-                    console.log('data GIVE: ', data);
-
                     if (values.isAuth) {
                         apiService.address
                             .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
                             .then((res) => {
                                 if (res.message === 'success') {
-                                    ///// ERRORRRRRR
                                     setAddresses(res.data);
                                 }
                             })
@@ -105,14 +95,10 @@ function ProfileAddress() {
 
     useEffect(() => {
         if (init && values.isAuth) {
-            console.log('caklll OKOKOK');
-
             apiService.address
                 .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
                 .then((res) => {
                     if (res.message === 'success') {
-                        console.log(res.data);
-
                         setAddresses((prev: _Addresses[]) => {
                             console.log('prev: ' + [...prev, ...res.data]);
 

@@ -53,15 +53,12 @@ function FormAddAddress(props: _T_Props) {
             type: typeAddress,
         };
 
-        console.log('data post: ', dataPost);
-
         if (props.type === 'add') {
             apiService.address
                 .createAddress(dataPost, values.user?.token ?? '')
                 .then((res) => {
                     if (res.message === 'success') {
                         handleCloseForm();
-                        console.log('res success: ', res.data);
 
                         socket.current?.emit('create-address', {
                             id: values.user?.id,
@@ -71,13 +68,10 @@ function FormAddAddress(props: _T_Props) {
                 })
                 .catch((err) => console.error(err));
         } else if (props.type === 'update') {
-            console.log('call api update');
-
             apiService.address
                 .updateAddressById(values.user?.id.toString() ?? '', dataPost, values.user?.token ?? '')
                 .then((res) => {
                     if (res.message === 'success') {
-                        console.log('update successfully', res);
                         handleCloseForm();
 
                         socket.current?.emit('update-address', {
@@ -101,11 +95,6 @@ function FormAddAddress(props: _T_Props) {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.data]);
-
-    useEffect(() => {
-        console.log('change: ', props.data);
-        console.log('change: ', props.type);
-    }, [props.data, props.type]);
 
     useEffect(() => {
         if (errors.name?.ref) {

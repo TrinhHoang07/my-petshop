@@ -27,7 +27,6 @@ function ProfileBuys() {
         apiService.orders
             .getOrderById(`${values.user?.id}`, values.user?.token as string)
             .then((res: T_Orders) => {
-                console.log(res);
                 if (res.message === 'success') {
                     setData(res.data);
                     setIsLoading(false);

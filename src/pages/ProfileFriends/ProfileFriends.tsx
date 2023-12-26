@@ -25,13 +25,11 @@ function ProfileFriends() {
     const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
     const [countRequestFriend, setCountRequestFriend] = useState<number>(0);
     const debounced = useDebounce(value, App.DELAY_SEARCH);
-
-    //////
     const socketReal = useRef<any>();
     const socket = useSocketContext();
 
-    // test
-    const [testData, setTestData] = useState<any[]>([]);
+    // NEED UPDATE TYPESCRYPT
+    const [dataCustomers, setDataCustomers] = useState<any[]>([]);
     const [friends, setFriends] = useState<any[]>([]);
     const [isOpenFriendRequest, setIsOpenFriendRequest] = useState<boolean>(false);
 
@@ -42,7 +40,7 @@ function ProfileFriends() {
     }, []);
 
     useEffect(() => {
-        socketReal.current?.on('accept-friend-give', (data: any) => {
+        socketReal.current?.on('accept-friend-give', (_: any) => {
             handleGetCountRequestFriend();
             handleGetFriends();
         });
@@ -52,8 +50,6 @@ function ProfileFriends() {
 
     useEffect(() => {
         if (debounced.trim().length > 0) {
-            console.log('debounced: ' + debounced.length);
-
             setIsModal(true);
             setIsLoadingSearch(true);
 
@@ -65,10 +61,8 @@ function ProfileFriends() {
                     values.user?.token ?? '',
                 )
                 .then((res) => {
-                    console.log('res: ' + res);
-
                     if (res.message === 'success') {
-                        setTestData(res.data);
+                        setDataCustomers(res.data);
                         setIsLoadingSearch(false);
                     }
                 })
@@ -96,8 +90,6 @@ function ProfileFriends() {
         apiService.friendship
             .getFriendedById((values.user?.id as number).toString(), values.user?.token ?? '')
             .then((res: any) => {
-                console.log('res friended: ' + res);
-
                 if (res.message === 'success') {
                     setFriends(res.data);
                     setIsLoading(false);
@@ -167,8 +159,8 @@ function ProfileFriends() {
                                 </span>
                             </div>
                             <div className={cx('modal-items')}>
-                                {testData.length > 0 ? (
-                                    testData.map((item) => (
+                                {dataCustomers.length > 0 ? (
+                                    dataCustomers.map((item) => (
                                         <FriendItem
                                             key={item.id}
                                             avatar_friend={item.avatar_path}

@@ -18,6 +18,8 @@ type _T_Props = {
     setIsOpen: (value: boolean) => void;
 };
 
+// NEED UPDATE TYPESCRYPT
+
 function FriendRequest(props: _T_Props) {
     const [data, setData] = useState<any[]>([]);
     const apiService = new ApiService();
@@ -29,17 +31,12 @@ function FriendRequest(props: _T_Props) {
         apiService.friendship
             .getFriendGiveInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
             .then((res: any) => {
-                console.log('res give friend invite: ' + res);
                 setData(res.data);
             })
             .catch((err) => console.error(err));
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    useEffect(() => {
-        console.log('data: ' + data.length);
-    }, [data]);
 
     const handleCloseRequest = () => {
         props.setIsOpen(false);

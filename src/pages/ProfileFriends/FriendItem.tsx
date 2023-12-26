@@ -23,6 +23,8 @@ type _T_Props = {
     status: string;
 };
 
+// NEED UPDATE TYPESCRYPT
+
 function FriendItem(props: _T_Props) {
     const [values] = useSessionContext();
     const message = useConfirmToast();
@@ -41,9 +43,7 @@ function FriendItem(props: _T_Props) {
     }, []);
 
     useEffect(() => {
-        socketReal.current?.on('accept-friend-give', (data: any) => {
-            console.log('accept-friend-give' + data.status);
-
+        socketReal.current?.on('accept-friend-give', (_: any) => {
             handleGetIdsGiveInvited();
             handleGetIdsFriended();
         });
@@ -82,7 +82,6 @@ function FriendItem(props: _T_Props) {
         apiService.friendship
             .getFriendGiveInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
             .then((res: any) => {
-                console.log('res give invite: ' + res);
                 if (res.message === 'success') {
                     setIdsGiveInvite(res.data.map((item: any) => item.friendship_customerInvite_id));
                 }
@@ -142,8 +141,6 @@ function FriendItem(props: _T_Props) {
                 apiService.friendship
                     .deleteFriendshipById(id.toString(), values.user?.token ?? '')
                     .then((res) => {
-                        console.log('res delete: ' + res.message);
-
                         if (res.message === 'success') {
                             handleGetIdsInvited();
                             message?.toast?.current?.show({
@@ -190,8 +187,6 @@ function FriendItem(props: _T_Props) {
                         id: props.id_friend,
                         status: 'success',
                     });
-
-                    console.log('thanh cong ');
                 }
             })
             .catch((err) => console.error(err));

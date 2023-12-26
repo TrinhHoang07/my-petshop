@@ -64,7 +64,6 @@ function ProfileVouchers() {
     //     // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [socketRef.current]);
 
-    //
     const [searchText, setSearchText] = useState<string>('');
     const setState = useSetRecoilState(isMenuMobile);
 
