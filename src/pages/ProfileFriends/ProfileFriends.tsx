@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from 'react';
+import { useState, ChangeEvent, useEffect, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ProfileFriends.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
@@ -11,6 +11,8 @@ import { App } from '../../const/App';
 import { FaUserPlus } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 import { FriendRequest } from './FriendRequest';
+import { Loading } from '../../components/Loading';
+import { useSocketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -19,7 +21,14 @@ function ProfileFriends() {
     const [values] = useSessionContext();
     const [value, setValue] = useState<string>('');
     const [isModal, setIsModal] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
+    const [countRequestFriend, setCountRequestFriend] = useState<number>(0);
     const debounced = useDebounce(value, App.DELAY_SEARCH);
+
+    //////
+    const socketReal = useRef<any>();
+    const socket = useSocketContext();
 
     // test
     const [testData, setTestData] = useState<any[]>([]);
@@ -27,10 +36,26 @@ function ProfileFriends() {
     const [isOpenFriendRequest, setIsOpenFriendRequest] = useState<boolean>(false);
 
     useEffect(() => {
+        socketReal.current = socket.current;
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        socketReal.current?.on('accept-friend-give', (data: any) => {
+            handleGetCountRequestFriend();
+            handleGetFriends();
+        });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
         if (debounced.trim().length > 0) {
             console.log('debounced: ' + debounced.length);
 
             setIsModal(true);
+            setIsLoadingSearch(true);
 
             apiService.customer
                 .searchCustomers(
@@ -41,7 +66,11 @@ function ProfileFriends() {
                 )
                 .then((res) => {
                     console.log('res: ' + res);
-                    setTestData(res.data);
+
+                    if (res.message === 'success') {
+                        setTestData(res.data);
+                        setIsLoadingSearch(false);
+                    }
                 })
                 .catch((err) => console.error(err));
         } else {
@@ -52,16 +81,44 @@ function ProfileFriends() {
     }, [debounced]);
 
     useEffect(() => {
+        handleGetFriends();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        handleGetCountRequestFriend();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleGetFriends = () => {
         apiService.friendship
             .getFriendedById((values.user?.id as number).toString(), values.user?.token ?? '')
             .then((res: any) => {
                 console.log('res friended: ' + res);
-                setFriends(res.data);
+
+                if (res.message === 'success') {
+                    setFriends(res.data);
+                    setIsLoading(false);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+                setIsLoading(false);
+            });
+    };
+
+    const handleGetCountRequestFriend = () => {
+        apiService.friendship
+            .getFriendGiveInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
+            .then((res: any) => {
+                if (res.message === 'success') {
+                    setCountRequestFriend(res.data.length);
+                }
             })
             .catch((err) => console.error(err));
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    };
 
     const handleOpenFriendRequest = () => {
         setIsOpenFriendRequest(true);
@@ -78,7 +135,10 @@ function ProfileFriends() {
                         <span>
                             <FaUserPlus size={'2rem'} />
                         </span>
-                        <p>Lời mời kết bạn</p>
+                        <div className={cx('title-friend-request')}>
+                            <p>Lời mời kết bạn</p>
+                            <h6 className={cx('count-request')}>{countRequestFriend}</h6>
+                        </div>
                     </div>
                 </div>
                 <div className={cx('search-friends')}>
@@ -118,6 +178,8 @@ function ProfileFriends() {
                                             status=""
                                         />
                                     ))
+                                ) : isLoadingSearch ? (
+                                    <Loading />
                                 ) : (
                                     <p className={cx('no-search')}>Không có kết quả tìm kiếm !</p>
                                 )}
@@ -141,7 +203,11 @@ function ProfileFriends() {
                             ))
                     ) : (
                         <div className={cx('no-friends')}>
-                            <p>Bạn chưa có bạn bè, hãy thử tìm kiếm bạn bè của bạn và kết bạn với họ!</p>
+                            {isLoading ? (
+                                <Loading />
+                            ) : (
+                                <p>Bạn chưa có bạn bè, hãy thử tìm kiếm bạn bè của bạn và kết bạn với họ!</p>
+                            )}
                         </div>
                     )}
                 </div>

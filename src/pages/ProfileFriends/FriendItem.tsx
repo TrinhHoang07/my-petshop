@@ -5,12 +5,13 @@ import { useSessionContext } from '../../context/SessionContext';
 import routesConfig from '../../config/routes';
 import { ApiService } from '../../axios/ApiService';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { Link } from 'react-router-dom';
 import { toSeoURL } from '../../Helper';
 import { useSetRecoilState } from 'recoil';
 import { dataProfileUser } from '../../store';
+import { useSocketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -28,7 +29,27 @@ function FriendItem(props: _T_Props) {
     const apiService = new ApiService();
     const [idsInvited, setIdsInvited] = useState<number[]>([]);
     const [idsFriended, setIdsFriended] = useState<number[]>([]);
+    const [idsGiveInvite, setIdsGiveInvite] = useState<number[]>([]);
     const setDataProfileUser = useSetRecoilState(dataProfileUser);
+    const socketReal = useRef<any>();
+    const socket = useSocketContext();
+
+    useEffect(() => {
+        socketReal.current = socket.current;
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        socketReal.current?.on('accept-friend-give', (data: any) => {
+            console.log('accept-friend-give' + data.status);
+
+            handleGetIdsGiveInvited();
+            handleGetIdsFriended();
+        });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         handleGetIdsInvited();
@@ -37,29 +58,42 @@ function FriendItem(props: _T_Props) {
     }, []);
 
     useEffect(() => {
-        apiService.friendship
-            .getFriendedById((values.user?.id as number).toString(), values.user?.token ?? '')
-            .then((res: any) => {
-                setIdsFriended(res.data.map((item: any) => item.customer_id));
-            })
-            .catch((err) => console.error(err));
+        handleGetIdsFriended();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        console.log(idsInvited);
-    }, [idsInvited]);
+        handleGetIdsGiveInvited();
 
-    useEffect(() => {
-        console.log(idsFriended);
-    }, [idsFriended]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleGetIdsInvited = () => {
         apiService.friendship
             .getFriendInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
             .then((res) => {
                 setIdsInvited(res.data.map((item: any) => item.friendship_customer_id));
+            })
+            .catch((err) => console.error(err));
+    };
+
+    const handleGetIdsGiveInvited = () => {
+        apiService.friendship
+            .getFriendGiveInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
+            .then((res: any) => {
+                console.log('res give invite: ' + res);
+                if (res.message === 'success') {
+                    setIdsGiveInvite(res.data.map((item: any) => item.friendship_customerInvite_id));
+                }
+            });
+    };
+
+    const handleGetIdsFriended = () => {
+        apiService.friendship
+            .getFriendedById((values.user?.id as number).toString(), values.user?.token ?? '')
+            .then((res: any) => {
+                setIdsFriended(res.data.map((item: any) => item.customer_id));
             })
             .catch((err) => console.error(err));
     };
@@ -134,26 +168,66 @@ function FriendItem(props: _T_Props) {
 
     const handleUpdateDataProfileUser = () => {
         setDataProfileUser({
-            isFriend: values.user?.id === props.id_friend,
+            isFriend: props.status === 'friended' || idsFriended.includes(props.id_friend),
             userName: props.name_friend,
             avatarPath: props.avatar_friend,
         });
     };
 
+    const handleAcceptInvite = () => {
+        apiService.friendship
+            .acceptFriendship(
+                {
+                    customer_invite: props.id_friend,
+                    customer_id: values.user?.id,
+                    status: 'friended',
+                },
+                values.user?.token ?? '',
+            )
+            .then((res: any) => {
+                if (res.message === 'success') {
+                    socket.current?.emit('accept-friend', {
+                        id: props.id_friend,
+                        status: 'success',
+                    });
+
+                    console.log('thanh cong ');
+                }
+            })
+            .catch((err) => console.error(err));
+    };
+
     return (
         <div className={cx('friend-item')}>
-            <Link onClick={handleUpdateDataProfileUser} to={`/profile/user/@${toSeoURL(props.name_friend)}`}>
-                <div className={cx('f-avatar')}>
-                    <img src={props.avatar_friend} alt={props.name_friend} />
-                </div>
-            </Link>
-            <div className={cx('f-info')}>
-                <Link onClick={handleUpdateDataProfileUser} to={`/profile/user/@${toSeoURL(props.name_friend)}`}>
-                    <div>
-                        <h5>{props.name_friend}</h5>
-                        <p>{props.cm_friend} bạn chung</p>
+            {values.user?.id === props.id_friend ? (
+                <Link to={routesConfig.profile}>
+                    <div className={cx('f-avatar')}>
+                        <img src={props.avatar_friend} alt={props.name_friend} />
                     </div>
                 </Link>
+            ) : (
+                <Link onClick={handleUpdateDataProfileUser} to={`/profile/user/@${toSeoURL(props.name_friend)}`}>
+                    <div className={cx('f-avatar')}>
+                        <img src={props.avatar_friend} alt={props.name_friend} />
+                    </div>
+                </Link>
+            )}
+            <div className={cx('f-info')}>
+                {values.user?.id === props.id_friend ? (
+                    <Link to={routesConfig.profile}>
+                        <div>
+                            <h5>{props.name_friend}</h5>
+                            <p>{props.cm_friend} bạn chung</p>
+                        </div>
+                    </Link>
+                ) : (
+                    <Link onClick={handleUpdateDataProfileUser} to={`/profile/user/@${toSeoURL(props.name_friend)}`}>
+                        <div>
+                            <h5>{props.name_friend}</h5>
+                            <p>{props.cm_friend} bạn chung</p>
+                        </div>
+                    </Link>
+                )}
 
                 {values.user?.id === props.id_friend ? (
                     <Button small="true" to={routesConfig.profile}>
@@ -164,6 +238,10 @@ function FriendItem(props: _T_Props) {
                 ) : idsInvited.includes(props.id_friend) ? (
                     <Button onClick={() => handleRemoveInvite(props.id_friend)} small="true">
                         Hủy yêu cầu
+                    </Button>
+                ) : idsGiveInvite.includes(props.id_friend) ? (
+                    <Button onClick={handleAcceptInvite} small="true">
+                        Xác nhận
                     </Button>
                 ) : (
                     <Button onClick={() => handleAddNewInviteFriend(props.id_friend)} small="true">

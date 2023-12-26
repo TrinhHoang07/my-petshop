@@ -22,8 +22,14 @@ function ProfileUser() {
                     </div>
                     <h3>{data.userName}</h3>
                     <div className={cx('actions')}>
-                        <Button>Thêm bạn bè</Button>
-                        {data.isFriend && <Button>Nhắn tin</Button>}
+                        {data.isFriend ? (
+                            <>
+                                <Button>Bạn bè</Button>
+                                <Button>Nhắn tin</Button>
+                            </>
+                        ) : (
+                            <Button>Thêm bạn bè</Button>
+                        )}
                     </div>
                     <p className={cx('description')}>
                         description user hehehe hehehe hehehe hehehe hehehe hehehe hehehe
