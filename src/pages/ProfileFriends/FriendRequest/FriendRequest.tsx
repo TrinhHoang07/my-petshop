@@ -44,6 +44,7 @@ function FriendRequest(props: _T_Props) {
 
     const handleUpdateDataProfileUser = (item: any) => {
         setDataProfileUser({
+            id: item.friendship_customerInvite_id,
             isFriend: false,
             userName: item.customer_name,
             avatarPath: item.customer_avatar_path,

@@ -53,17 +53,7 @@ function FriendItem(props: _T_Props) {
 
     useEffect(() => {
         handleGetIdsInvited();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
         handleGetIdsFriended();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
         handleGetIdsGiveInvited();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -139,7 +129,13 @@ function FriendItem(props: _T_Props) {
             icon: 'pi pi-exclamation-triangle',
             accept() {
                 apiService.friendship
-                    .deleteFriendshipById(id.toString(), values.user?.token ?? '')
+                    .deleteFriendshipById(
+                        {
+                            customer_invite: values.user?.id,
+                            customer_id: id,
+                        },
+                        values.user?.token ?? '',
+                    )
                     .then((res) => {
                         if (res.message === 'success') {
                             handleGetIdsInvited();
@@ -165,6 +161,7 @@ function FriendItem(props: _T_Props) {
 
     const handleUpdateDataProfileUser = () => {
         setDataProfileUser({
+            id: props.id_friend,
             isFriend: props.status === 'friended' || idsFriended.includes(props.id_friend),
             userName: props.name_friend,
             avatarPath: props.avatar_friend,

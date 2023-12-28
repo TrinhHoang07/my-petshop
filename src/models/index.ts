@@ -10,6 +10,7 @@ export type TData = {
 };
 
 export type TProfileUser = {
+    id: number;
     userName?: string;
     gender?: string;
     avatarPath?: string;

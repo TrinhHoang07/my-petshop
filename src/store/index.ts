@@ -29,6 +29,7 @@ export const orderItems = atom<TData[]>({
 export const dataProfileUser = atom<TProfileUser>({
     key: 'dataProfileUser',
     default: {
+        id: 0,
         userName: 'Trịnh Văn Hoàng',
         avatarPath: 'https://dogstar.vn/wp-content/uploads/2022/05/hinh-nen-meo-3d-1.jpg',
         gender: 'Male',

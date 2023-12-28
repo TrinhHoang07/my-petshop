@@ -191,7 +191,7 @@ export class ApiService {
             getFriendedById: (frId: string) => `friendship/friendship/friended/${frId}`,
             getFriendInviteById: (frId: string) => `friendship/friendship/invite/${frId}`,
             getFriendGiveInviteById: (frId: string) => `friendship/friendship/give-invite/${frId}`,
-            deleteFriendshipById: (frId: string) => `friendship/friendship/delete/${frId}`,
+            deleteFriendshipById: 'friendship/friendship/delete',
         };
 
         return {
@@ -226,8 +226,8 @@ export class ApiService {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
-            deleteFriendshipById: (frId: string, token: string) =>
-                AxiosClientApi.delete(route.deleteFriendshipById(frId), {
+            deleteFriendshipById: (data: any, token: string) =>
+                AxiosClientApi.put(route.deleteFriendshipById, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
