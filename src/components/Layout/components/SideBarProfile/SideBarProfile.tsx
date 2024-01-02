@@ -8,6 +8,7 @@ import { IoMdNotificationsOutline } from 'react-icons/io';
 import { MdOutlineDiscount } from 'react-icons/md';
 import routesConfig from '../../../../config/routes';
 import { useSessionContext } from '../../../../context/SessionContext';
+import { TbMessageCircle2 } from 'react-icons/tb';
 
 const cx = classNames.bind(styles);
 
@@ -83,7 +84,13 @@ function SideBarProfile(props: _T_Props) {
                         <FaUserFriends size={'2rem'} style={{ color: 'dodgerblue' }} />
                         <span>Bạn bè</span>
                     </NavLink>
-
+                    <NavLink
+                        to={routesConfig.profile_chats}
+                        className={(nav) => cx('title-info-private', { active: nav.isActive })}
+                    >
+                        <TbMessageCircle2 size={'2rem'} style={{ color: 'dodgerblue' }} />
+                        <span>Tin nhắn</span>
+                    </NavLink>
                     <NavLink
                         to={routesConfig.profile_buy}
                         className={(nav) => cx('title-info-private', { active: nav.isActive })}

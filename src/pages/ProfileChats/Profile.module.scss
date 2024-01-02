@@ -1,0 +1,101 @@
+$mobile-width: 739px;
+$tablet-width: 1023px;
+
+@mixin mobileAndTablet {
+    @media (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+.profile-chats {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    .bar-chats {
+        width: 30%;
+        flex-shrink: 0;
+    }
+    .chats-messages {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 16px 0;
+
+        .head-chat {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 8px;
+
+            .image-user {
+                width: 48px;
+                height: 48px;
+                display: flex;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 999px;
+                }
+            }
+
+            h5 {
+                font-weight: 500;
+                font-size: 1.6rem;
+                margin-top: 4px;
+            }
+        }
+
+        .contents-message {
+            flex: 1;
+            max-height: 450px;
+            overflow: overlay;
+            overflow-y: auto;
+        }
+
+        .foot-chat {
+            display: flex;
+            align-items: center;
+            padding-top: 16px;
+
+            .input {
+                display: flex;
+                align-items: center;
+                flex: 1;
+
+                input {
+                    border: none;
+                    outline: none;
+                    padding: 12px;
+                    border-radius: 12px;
+                    width: 100%;
+                    background-color: #f2f3f5;
+                    caret-color: orange;
+                }
+            }
+
+            .btn-submit {
+                font-size: 2rem;
+                color: #0084ff;
+                margin: 0 12px;
+                display: flex;
+                cursor: pointer;
+            }
+        }
+    }
+}

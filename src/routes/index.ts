@@ -27,6 +27,7 @@ import { Search } from '../pages/Search';
 import { Orders } from '../pages/Orders';
 import { ProfileFriends } from '../pages/ProfileFriends';
 import { ProfileUser } from '../pages/ProfileUser';
+import { ProfileChats } from '../pages/ProfileChats';
 
 type TRoutes = {
     id: number;
@@ -195,6 +196,12 @@ const privateRoutes: TRoutes[] = [
         id: 13,
         path: routesConfig.profile_user,
         component: ProfileUser,
+        layout: DefaultLayout,
+    },
+    {
+        id: 14,
+        path: routesConfig.profile_chats,
+        component: ProfileChats,
         layout: DefaultLayout,
     },
 ];

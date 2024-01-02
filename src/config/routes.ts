@@ -14,6 +14,7 @@ const routesConfig = {
     profile_bank: '/profile/banks',
     profile_address: '/profile/address',
     profile_friends: '/profile/friends',
+    profile_chats: '/profile/chats',
     profile_change_password: '/profile/change_password',
     profile_buy: '/profile/buys',
     profile_noti: '/profile/notifycation',
