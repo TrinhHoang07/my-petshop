@@ -21,18 +21,95 @@ $tablet-width: 1023px;
 
 .profile-chats {
     display: flex;
-    align-items: center;
     width: 100%;
 
     .bar-chats {
         width: 30%;
+        border-right: 1px solid #d7d7d7;
         flex-shrink: 0;
+
+        .container-bar {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            h5 {
+                font-size: 1.8rem;
+            }
+
+            .search-user {
+                display: flex;
+                align-items: center;
+                background-color: #f2f3f5;
+                border-radius: 8px;
+                padding-left: 8px;
+                margin-top: 8px;
+                margin-bottom: 16px;
+
+                input {
+                    flex: 1;
+                    background-color: #f2f3f5;
+                    border: none;
+                    border-radius: 8px;
+                    padding: 10px 12px;
+                    caret-color: orange;
+                    font-size: 1.4rem;
+                    outline: none;
+                }
+            }
+
+            .list-user {
+                overflow: overlay;
+                overflow-y: auto;
+                max-height: 500px;
+            }
+        }
+
+        .item-chat {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 10px 12px;
+
+            &:hover {
+                background-color: #f2f3f5;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+
+            .item-avatar {
+                width: 38px;
+                height: 38px;
+                display: flex;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 999px;
+                }
+            }
+
+            .item-info {
+                padding-left: 8px;
+
+                h6 {
+                    font-size: 1.4rem;
+                    font-weight: 500;
+                }
+
+                .last-message {
+                    font-size: 1.2rem;
+                    color: #333;
+                    font-weight: 400;
+                }
+            }
+        }
     }
     .chats-messages {
         flex: 1;
         display: flex;
         flex-direction: column;
-        padding: 16px 0;
+        padding: 16px 8px;
 
         .head-chat {
             display: flex;
