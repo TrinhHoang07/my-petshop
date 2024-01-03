@@ -234,4 +234,19 @@ export class ApiService {
                 }),
         };
     }
+
+    get chats() {
+        const route = {
+            addNewChat: 'chats/conversations/create',
+        };
+
+        return {
+            addNewChat: (data: any, token: string) =>
+                AxiosClientApi.post(route.addNewChat, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+        };
+    }
 }

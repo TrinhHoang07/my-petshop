@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSessionContext } from '../../context/SessionContext';
 import routesConfig from '../../config/routes';
 
@@ -11,12 +11,13 @@ type _T_Props = {
 function PrivateRoute(props: _T_Props) {
     const [values] = useSessionContext();
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         if (!values.isAuth) {
             navigate(routesConfig.login, {
                 state: {
-                    redirect: props.redirect,
+                    redirect: location.pathname ? location.pathname : props.redirect,
                 },
             });
         }

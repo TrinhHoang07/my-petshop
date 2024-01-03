@@ -10,6 +10,7 @@ import { useSessionContext } from '../../context/SessionContext';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { useSocketContext } from '../../context/SocketContext';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -19,6 +20,7 @@ function ProfileUser() {
     const [idsInvited, setIdsInvited] = useState<number[]>([]);
     const [idsGiveInvite, setIdsGiveInvite] = useState<number[]>([]);
     const apiService = new ApiService();
+    const navigate = useNavigate();
     const socket = useSocketContext();
     const [values] = useSessionContext();
 
@@ -146,6 +148,23 @@ function ProfileUser() {
             .catch((err) => console.error(err));
     };
 
+    const handleChat = () => {
+        apiService.chats
+            .addNewChat(
+                {
+                    created_by_customer: values.user?.id,
+                    customer_id: data.id,
+                },
+                values.user?.token ?? '',
+            )
+            .then((res: any) => {
+                if (res.message === 'success') {
+                    navigate(`/profile/chats/${data.id}`);
+                }
+            })
+            .catch((err) => console.error(err));
+    };
+
     return (
         <div className={cx('profile-user')}>
             <div className={cx('profile-user-wrapper')}>
@@ -161,7 +180,7 @@ function ProfileUser() {
                         {data.isFriend ? (
                             <>
                                 <Button>Bạn bè</Button>
-                                <Button>Nhắn tin</Button>
+                                <Button onClick={handleChat}>Nhắn tin</Button>
                             </>
                         ) : idsInvited.includes(data.id) ? (
                             <Button onClick={handleRemoveInvite}>Hủy yêu cầu</Button>

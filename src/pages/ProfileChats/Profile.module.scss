@@ -143,6 +143,49 @@ $tablet-width: 1023px;
             max-height: 450px;
             overflow: overlay;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+
+            .message-item {
+                display: flex;
+                align-items: center;
+                padding-left: 8px;
+                margin: 2px 0;
+
+                .message-item-avatar {
+                    width: 38px;
+                    height: 38px;
+                    display: flex;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        border-radius: 999px;
+                    }
+                }
+
+                .content-message-item {
+                    margin-left: 8px;
+                    word-wrap: break-word;
+                    word-break: break-all;
+                    font-size: 1.4rem;
+                    padding: 10px 12px;
+                    background-color: #d7d7d7;
+                    border-radius: 12px;
+                }
+
+                .content-message-item.content_me_message {
+                    margin-left: 0;
+                    margin-right: 8px;
+                }
+            }
+
+            .message-item.me_message {
+                flex-direction: row-reverse;
+                align-items: flex-end;
+                padding-right: 8px;
+            }
         }
 
         .foot-chat {

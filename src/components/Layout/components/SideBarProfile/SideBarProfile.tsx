@@ -85,7 +85,7 @@ function SideBarProfile(props: _T_Props) {
                         <span>Bạn bè</span>
                     </NavLink>
                     <NavLink
-                        to={routesConfig.profile_chats}
+                        to={'/profile/chats'}
                         className={(nav) => cx('title-info-private', { active: nav.isActive })}
                     >
                         <TbMessageCircle2 size={'2rem'} style={{ color: 'dodgerblue' }} />
