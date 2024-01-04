@@ -238,11 +238,33 @@ export class ApiService {
     get chats() {
         const route = {
             addNewChat: 'chats/conversations/create',
+            checkCreatedConversation: 'chats/conversations/check',
+            getCustomerConversationByCreatedId: (id: string) => `chats/conversations/info/${id}`,
+            getMessagesByConversationId: (id: string) => `chats/messages/all/${id}`,
         };
 
         return {
             addNewChat: (data: any, token: string) =>
                 AxiosClientApi.post(route.addNewChat, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+
+            checkCreatedConversation: (data: any, token: string) =>
+                AxiosClientApi.post(route.checkCreatedConversation, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            getCustomerConversationByCreatedId: (id: string, token: string) =>
+                AxiosClientApi.get(route.getCustomerConversationByCreatedId(id), null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            getMessagesByConversationId: (id: string, token: string) =>
+                AxiosClientApi.get(route.getMessagesByConversationId(id), null, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
