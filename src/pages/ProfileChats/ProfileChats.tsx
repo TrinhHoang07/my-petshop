@@ -9,6 +9,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ApiService } from '../../axios/ApiService';
 import { useSessionContext } from '../../context/SessionContext';
 import { Loading } from '../../components/Loading';
+import { useDebounce } from '../../hooks';
+import { App } from '../../const/App';
 
 const cx = classNames.bind(styles);
 
@@ -21,40 +23,23 @@ function Profile() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [conversations, setConversations] = useState<any[]>([]);
     const [infoUser, setInfoUser] = useState<any>({});
-    const [testData, setTestData] = useState<any[]>([
-        {
-            id: 1,
-            isMe: false,
-            message: 'Hello anh em sky!',
-            img: 'http://localhost:3009/images/uploads/avt_git.jpg',
-        },
-        {
-            id: 2,
-            isMe: false,
-            message: 'My name is Hoang',
-            img: 'http://localhost:3009/images/uploads/avt_git.jpg',
-        },
-        {
-            id: 3,
-            isMe: true,
-            message: 'Hello, Greate to meet you!',
-            img: 'http://localhost:3009/images/uploads/ht.jpg',
-        },
-        {
-            id: 4,
-            isMe: true,
-            message: 'My name is Thuy cute',
-            img: 'http://localhost:3009/images/uploads/ht.jpg',
-        },
-    ]);
+    const paramSubmit = useDebounce(params.id ?? '', App.DELAY_SEARCH);
+    const [testData, setTestData] = useState<any[]>([]);
 
     useEffect(() => {
         apiService.chats
             .getCustomerConversationByCreatedId((values.user?.id as number).toString(), values.user?.token ?? '')
             .then((res: any) => {
                 if (res.message === 'success') {
-                    setConversations(res.data);
-                    setIsLoading(false);
+                    apiService.chats
+                        .getJoinedConversationsById((values.user?.id as number).toString(), values.user?.token ?? '')
+                        .then((response: any) => {
+                            if (response.message === 'success') {
+                                setConversations([...response.data, ...res.data]);
+                                setIsLoading(false);
+                            }
+                        })
+                        .catch((err) => console.error(err));
                 }
             })
             .catch((err) => {
@@ -66,21 +51,24 @@ function Profile() {
     }, []);
 
     useEffect(() => {
-        if (params && params.id) {
+        if (paramSubmit.trim().length > 0) {
             // handle get message from id conversation
 
             apiService.chats
-                .getMessagesByConversationId(params.id, values.user?.token ?? '')
+                .getMessagesByConversationId(paramSubmit.trim(), values.user?.token ?? '')
                 .then((res: any) => {
                     if (res.message === 'success') {
+                        console.log('res: ' + res);
                         res.data.forEach((item: any) => console.log(item));
+
+                        setTestData(res.data);
                     }
                 })
                 .catch((err) => console.error(err));
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params]);
+    }, [paramSubmit]);
 
     const handleSubmit = () => {
         if (inputValue.trim().length > 0) {
@@ -161,20 +149,20 @@ function Profile() {
                             <div className={cx('contents-message')}>
                                 {testData.map((item) => (
                                     <div
-                                        key={item.id}
+                                        key={item.message_id}
                                         className={cx('message-item', {
-                                            me_message: item.isMe,
+                                            me_message: item.message_sender_id === values.user?.id,
                                         })}
                                     >
                                         <div className={cx('message-item-avatar')}>
-                                            <img src={item.img} alt="avaatar user" />
+                                            <img src={item.cus_avatar_path} alt="avaatar user" />
                                         </div>
                                         <p
                                             className={cx('content-message-item', {
-                                                content_me_message: item.isMe,
+                                                content_me_message: item.message_sender_id === values.user?.id,
                                             })}
                                         >
-                                            {item.message}
+                                            {item.message_content}
                                         </p>
                                     </div>
                                 ))}

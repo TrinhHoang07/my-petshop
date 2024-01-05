@@ -241,6 +241,7 @@ export class ApiService {
             checkCreatedConversation: 'chats/conversations/check',
             getCustomerConversationByCreatedId: (id: string) => `chats/conversations/info/${id}`,
             getMessagesByConversationId: (id: string) => `chats/messages/all/${id}`,
+            getJoinedConversationsById: (id: string) => `chats/user-conversations/joined/${id}`,
         };
 
         return {
@@ -265,6 +266,13 @@ export class ApiService {
                 }),
             getMessagesByConversationId: (id: string, token: string) =>
                 AxiosClientApi.get(route.getMessagesByConversationId(id), null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+
+            getJoinedConversationsById: (id: string, token: string) =>
+                AxiosClientApi.get(route.getJoinedConversationsById(id), null, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
