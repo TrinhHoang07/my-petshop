@@ -150,16 +150,31 @@ function ProfileUser() {
 
     const handleChat = () => {
         apiService.chats
-            .addNewChat(
+            .checkCreatedConversation(
                 {
-                    created_by_customer: values.user?.id,
                     customer_id: data.id,
+                    created_id: values.user?.id,
                 },
                 values.user?.token ?? '',
             )
             .then((res: any) => {
                 if (res.message === 'success') {
-                    navigate(`/profile/chats/${data.id}`);
+                    navigate(`/profile/chats/${res.data.conver_id}`);
+                } else {
+                    apiService.chats
+                        .addNewChat(
+                            {
+                                created_by_customer: values.user?.id,
+                                customer_id: data.id,
+                            },
+                            values.user?.token ?? '',
+                        )
+                        .then((res: any) => {
+                            if (res.message === 'success') {
+                                navigate(`/profile/chats/${res.data.id_conver}`);
+                            }
+                        })
+                        .catch((err) => console.error(err));
                 }
             })
             .catch((err) => console.error(err));

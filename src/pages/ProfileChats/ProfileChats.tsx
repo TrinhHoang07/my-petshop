@@ -4,13 +4,14 @@ import img from '../../assets/images/beyeu.jpg';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
 import { IoSend } from 'react-icons/io5';
 import { MdOutlineSearch } from 'react-icons/md';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ApiService } from '../../axios/ApiService';
 import { useSessionContext } from '../../context/SessionContext';
 import { Loading } from '../../components/Loading';
 import { useDebounce } from '../../hooks';
 import { App } from '../../const/App';
+import { useSocketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -22,9 +23,23 @@ function Profile() {
     const [inputValue, setInputValue] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [conversations, setConversations] = useState<any[]>([]);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
     const [infoUser, setInfoUser] = useState<any>({});
-    const paramSubmit = useDebounce(params.id ?? '', App.DELAY_SEARCH);
+    const [stateParam, setStateParam] = useState<string>('');
+    const paramSubmit = useDebounce(stateParam, App.DELAY_SEARCH);
     const [testData, setTestData] = useState<any[]>([]);
+    const socketReal = useRef<any>();
+    const socket = useSocketContext();
+
+    useEffect(() => {
+        setStateParam(params.id ?? '');
+    }, [params]);
+
+    useEffect(() => {
+        socketReal.current = socket.current;
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         apiService.chats
@@ -52,15 +67,34 @@ function Profile() {
 
     useEffect(() => {
         if (paramSubmit.trim().length > 0) {
+            const user = conversations.find((conver) => conver.conver_id === +paramSubmit);
+
+            if (user) {
+                setInfoUser({
+                    id: user.cus_id,
+                    name: user.cus_name,
+                    avatar: user.cus_avatar_path,
+                });
+            }
+
+            socketReal.current?.on(`chat-message-user-give-${paramSubmit}`, (data: any) => {
+                setTestData((prev: any[]) => [
+                    ...prev,
+                    {
+                        message_id: data.id,
+                        message_sender_id: data.sender_,
+                        cus_avatar_path: data.cus_avatar_path,
+                        message_content: data.content,
+                    },
+                ]);
+            });
+
             // handle get message from id conversation
 
             apiService.chats
                 .getMessagesByConversationId(paramSubmit.trim(), values.user?.token ?? '')
                 .then((res: any) => {
                     if (res.message === 'success') {
-                        console.log('res: ' + res);
-                        res.data.forEach((item: any) => console.log(item));
-
                         setTestData(res.data);
                     }
                 })
@@ -70,23 +104,37 @@ function Profile() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [paramSubmit]);
 
+    useEffect(() => {
+        testData.length > 0 && scrollToBottom();
+    }, [testData]);
+
     const handleSubmit = () => {
         if (inputValue.trim().length > 0) {
-            console.log('id conversation: ' + params.id);
+            const dataSent = {
+                conversation_id: params.id,
+                sender_id: values.user?.id,
+                receiver_id: infoUser.id,
+                content: inputValue.trim(),
+            };
 
-            setTestData((prev: any[]) => {
-                return [
-                    ...prev,
-                    {
-                        id: Math.floor(Math.random() * 10000),
-                        isMe: true,
-                        message: inputValue,
-                        img: 'http://localhost:3009/images/uploads/ht.jpg',
-                    },
-                ];
-            });
-            setInputValue('');
+            apiService.chats
+                .addNewMessageByConversationId(dataSent, values.user?.token ?? '')
+                .then((res: any) => {
+                    if (res.message === 'success') {
+                        socketReal.current?.emit(`chat-message-user`, {
+                            ...res.data,
+                            cus_avatar_path: values.user?.avatar,
+                        });
+
+                        setInputValue('');
+                    }
+                })
+                .catch((err) => console.error(err));
         }
+    };
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     };
 
     const handleSubmitMessage = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -113,11 +161,6 @@ function Profile() {
                                         className={cx('item-chat')}
                                         onClick={() => {
                                             navigate(`/profile/chats/${item.conver_id}`);
-                                            setInfoUser({
-                                                id: item.cus_id,
-                                                name: item.cus_name,
-                                                avatar: item.cus_avatar_path,
-                                            });
                                         }}
                                     >
                                         <div className={cx('item-avatar')}>
@@ -166,6 +209,7 @@ function Profile() {
                                         </p>
                                     </div>
                                 ))}
+                                {testData.length > 0 && <div ref={messagesEndRef} />}
                             </div>
                             <div className={cx('foot-chat')}>
                                 <div className={cx('input')}>
