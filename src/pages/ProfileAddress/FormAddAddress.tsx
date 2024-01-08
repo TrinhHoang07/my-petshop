@@ -6,6 +6,7 @@ import { useSessionContext } from '../../context/SessionContext';
 import { ApiService } from '../../axios/ApiService';
 import { useSocketContext } from '../../context/SocketContext';
 import { _Addresses } from './ProfileAddress';
+import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 
 const cx = classNames.bind(styles);
 
@@ -30,6 +31,7 @@ function FormAddAddress(props: _T_Props) {
     const phoneRef = useRef<any>();
     const cityRef = useRef<any>();
     const detailRef = useRef<any>();
+    const message = useConfirmToast();
     const [values] = useSessionContext();
     const [typeAddress, setTypeAddress] = useState<string>('home');
     const apiService = new ApiService();
@@ -60,13 +62,27 @@ function FormAddAddress(props: _T_Props) {
                     if (res.message === 'success') {
                         handleCloseForm();
 
+                        message?.toast?.current?.show({
+                            severity: 'success',
+                            summary: 'Thành công',
+                            detail: 'Thêm thành công',
+                            life: 3000,
+                        });
+
                         socket.current?.emit('create-address', {
                             id: values.user?.id,
                             status: 'success',
                         });
                     }
                 })
-                .catch((err) => console.error(err));
+                .catch((_) => {
+                    message?.toast?.current?.show({
+                        severity: 'error',
+                        summary: 'Có lỗi',
+                        detail: 'Xảy ra lỗi!!!',
+                        life: 3000,
+                    });
+                });
         } else if (props.type === 'update') {
             apiService.address
                 .updateAddressById(values.user?.id.toString() ?? '', dataPost, values.user?.token ?? '')
@@ -74,13 +90,27 @@ function FormAddAddress(props: _T_Props) {
                     if (res.message === 'success') {
                         handleCloseForm();
 
+                        message?.toast?.current?.show({
+                            severity: 'success',
+                            summary: 'Thành công',
+                            detail: 'Cập nhật thành công',
+                            life: 3000,
+                        });
+
                         socket.current?.emit('update-address', {
                             id: values.user?.id,
                             status: 'success',
                         });
                     }
                 })
-                .catch((err) => console.error(err));
+                .catch((_) => {
+                    message?.toast?.current?.show({
+                        severity: 'error',
+                        summary: 'Có lỗi',
+                        detail: 'Xảy ra lỗi!!!',
+                        life: 3000,
+                    });
+                });
         }
     };
 

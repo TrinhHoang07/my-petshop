@@ -10,12 +10,14 @@ const cx = classNames.bind(styles);
 
 type TForm = {
     name: string;
+    email: string;
     password: string;
     confirmPassword: string;
 };
 
 function Register() {
     const nameRef = useRef<any>();
+    const emailRef = useRef<any>();
     const passwordRef = useRef<any>();
     const confirmPasswordRef = useRef<any>();
     const [checkPassword, setCheckPassword] = useState<boolean>(false);
@@ -63,6 +65,15 @@ function Register() {
             }
         }
 
+        if (errors.email?.ref) {
+            emailRef.current = errors.email.ref;
+            handleErrorInput(errors.email.ref as HTMLInputElement);
+        } else {
+            if (emailRef.current) {
+                handleClearErrorInput(emailRef.current);
+            }
+        }
+
         if (errors.password?.ref) {
             passwordRef.current = errors.password.ref;
             handleErrorInput(errors.password.ref as HTMLInputElement);
@@ -80,7 +91,7 @@ function Register() {
                 handleClearErrorInput(confirmPasswordRef.current);
             }
         }
-    }, [errors.name, errors.password, errors.confirmPassword]);
+    }, [errors.name, errors.password, errors.confirmPassword, errors.email]);
 
     return (
         <div className={cx('login')}>
@@ -105,6 +116,22 @@ function Register() {
                                 onBlur={(e) => handleBlur(e.target)}
                             />
                             {errors.name && <p className={cx('error-field')}>This field is required!</p>}
+                        </div>
+                        <div className={cx('form-item')}>
+                            <label htmlFor="email">Email: </label>
+                            <input
+                                id="email"
+                                type="text"
+                                {...register('email', {
+                                    required: true,
+                                    minLength: 1,
+                                    pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                                })}
+                                placeholder="Your name..."
+                                onInput={(e) => handleFocus(e.target as HTMLInputElement)}
+                                onBlur={(e) => handleBlur(e.target)}
+                            />
+                            {errors.email && <p className={cx('error-field')}>This field is required!</p>}
                         </div>
                         <div className={cx('form-item')}>
                             <label htmlFor="password">Mật khẩu: </label>

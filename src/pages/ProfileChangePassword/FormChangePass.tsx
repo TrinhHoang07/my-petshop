@@ -66,7 +66,14 @@ function FormChangePass() {
                         reset();
                     }
                 })
-                .catch((err) => console.error(err));
+                .catch((_) => {
+                    message?.toast?.current?.show({
+                        severity: 'error',
+                        summary: 'Có lỗi',
+                        detail: 'Xảy ra lỗi!!!',
+                        life: 3000,
+                    });
+                });
         }
     };
 
