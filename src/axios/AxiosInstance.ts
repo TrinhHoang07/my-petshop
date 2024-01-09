@@ -124,8 +124,6 @@ class AxiosRequest {
     getClient = () => this._client;
 
     protected getConfig = (): AxiosRequestConfig => {
-        console.log('urL: ', this._opts);
-
         const config: AxiosRequestConfig = {
             headers: {
                 'Content-Type': 'application/json',

@@ -168,7 +168,10 @@ function Profile() {
                                         </div>
                                         <div className={cx('item-info')}>
                                             <h6>{item.cus_name}</h6>
-                                            <p className={cx('last-message')}>Bạn: hehe hehehe</p>
+                                            <p className={cx('last-message')}>
+                                                {item.sender_id === values.user?.id ? 'Bạn: ' : ''}
+                                                {item.messages_content}
+                                            </p>
                                         </div>
                                     </div>
                                 ))
