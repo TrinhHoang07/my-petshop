@@ -24,6 +24,7 @@ function Profile() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [conversations, setConversations] = useState<any[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
     const [infoUser, setInfoUser] = useState<any>({});
     const [stateParam, setStateParam] = useState<string>('');
     const paramSubmit = useDebounce(stateParam, App.DELAY_SEARCH);
@@ -96,6 +97,7 @@ function Profile() {
                 .then((res: any) => {
                     if (res.message === 'success') {
                         setTestData(res.data);
+                        inputRef.current?.focus();
                     }
                 })
                 .catch((err) => console.error(err));
@@ -193,30 +195,34 @@ function Profile() {
                                 <h5>{infoUser.name}</h5>
                             </div>
                             <div className={cx('contents-message')}>
-                                {testData.map((item) => (
-                                    <div
-                                        key={item.message_id}
-                                        className={cx('message-item', {
-                                            me_message: item.message_sender_id === values.user?.id,
-                                        })}
-                                    >
-                                        <div className={cx('message-item-avatar')}>
-                                            <img src={item.cus_avatar_path} alt="avaatar user" />
-                                        </div>
-                                        <p
-                                            className={cx('content-message-item', {
-                                                content_me_message: item.message_sender_id === values.user?.id,
-                                            })}
-                                        >
-                                            {item.message_content}
-                                        </p>
-                                    </div>
-                                ))}
+                                {testData.map(
+                                    (item) =>
+                                        item.message_content.trim().length > 0 && (
+                                            <div
+                                                key={item.message_id}
+                                                className={cx('message-item', {
+                                                    me_message: item.message_sender_id === values.user?.id,
+                                                })}
+                                            >
+                                                <div className={cx('message-item-avatar')}>
+                                                    <img src={item.cus_avatar_path} alt="avaatar user" />
+                                                </div>
+                                                <p
+                                                    className={cx('content-message-item', {
+                                                        content_me_message: item.message_sender_id === values.user?.id,
+                                                    })}
+                                                >
+                                                    {item.message_content}
+                                                </p>
+                                            </div>
+                                        ),
+                                )}
                                 {testData.length > 0 && <div ref={messagesEndRef} />}
                             </div>
                             <div className={cx('foot-chat')}>
                                 <div className={cx('input')}>
                                     <input
+                                        ref={inputRef}
                                         value={inputValue}
                                         onKeyUp={handleSubmitMessage}
                                         onChange={(e) => setInputValue(e.target.value)}
