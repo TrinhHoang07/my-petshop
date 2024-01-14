@@ -22,6 +22,7 @@ function Profile() {
     const [values] = useSessionContext();
     const [inputValue, setInputValue] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [init, setInit] = useState<boolean>(false);
     const [conversations, setConversations] = useState<any[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -41,6 +42,41 @@ function Profile() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (init) {
+            socketReal.current?.on(`chat-message-user-give`, (data: any) => {
+                setTestData((prev: any[]) => [
+                    ...prev,
+                    {
+                        message_id: data.id,
+                        message_sender_id: data.sender_,
+                        cus_avatar_path: data.cus_avatar_path,
+                        message_content: data.content,
+                    },
+                ]);
+
+                setConversations((prev: any[]) => {
+                    const user = prev.find((item) => item.conver_id === +data.conversation_);
+                    if (user) {
+                        return [
+                            {
+                                ...user,
+                                messages_content: data.content,
+                            },
+                            ...prev.filter((item) => item.conver_id !== +data.conversation_),
+                        ];
+                    }
+
+                    return prev;
+                });
+            });
+        }
+
+        setInit(true);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [init]);
 
     useEffect(() => {
         apiService.chats
@@ -77,18 +113,6 @@ function Profile() {
                     avatar: user.cus_avatar_path,
                 });
             }
-
-            socketReal.current?.on(`chat-message-user-give-${paramSubmit}`, (data: any) => {
-                setTestData((prev: any[]) => [
-                    ...prev,
-                    {
-                        message_id: data.id,
-                        message_sender_id: data.sender_,
-                        cus_avatar_path: data.cus_avatar_path,
-                        message_content: data.content,
-                    },
-                ]);
-            });
 
             // handle get message from id conversation
 
