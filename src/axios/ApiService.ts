@@ -174,6 +174,7 @@ export class ApiService {
                 AxiosClientApi.post(route.updateAvatar(cusId), data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
+                        'Content-Type': 'multipart/form-data',
                     },
                 }),
             searchCustomers: (query: any, token: string) =>

@@ -11,6 +11,7 @@ import { useSessionContext } from '../../context/SessionContext';
 import axios from 'axios';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { App } from '../../const/App';
+import { ApiService } from '../../axios/ApiService';
 
 const cx = classNames.bind(styles);
 
@@ -28,7 +29,6 @@ type _T_Data = {
     email?: string;
     phoneNumber?: string;
     gender?: string;
-    imageRaw?: any;
     avatar?: string;
 };
 
@@ -38,6 +38,7 @@ function Profile() {
     const message = useConfirmToast();
     const [data, setData] = useState<_T_Data>({});
     const [imageAvatar, setImageAvatar] = useState<string>('');
+    const apiService = new ApiService();
 
     const days = [
         { day: '01' },
@@ -157,37 +158,78 @@ function Profile() {
         };
     });
 
+    useEffect(() => {
+        console.log('data change: ' + JSON.stringify(data));
+    }, [data]);
+
     const handleUpdateAvatar = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const files = (event.target as HTMLInputElement).files;
 
         if (files && files?.length > 0) {
-            setData((prev: _T_Data) => ({
-                ...prev,
-                imageRaw: files[0],
-            }));
+            const formData = new FormData();
+            formData.append('file', files[0]);
+
+            axios
+                .post(`${App.URL_MAIN}customers/test/upload/${values.user?.id}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                })
+                .then((res) => {
+                    if (res.data.message === 'success') {
+                        setValues({
+                            ...values,
+                            user: {
+                                ...values.user,
+                                id: values.user?.id ?? 0,
+                                avatar: res.data.linkAvatar,
+                            },
+                        });
+
+                        message?.toast?.current?.show({
+                            severity: 'success',
+                            summary: 'Thành công',
+                            detail: 'Cập nhật avatar thành công!',
+                            life: 2000,
+                        });
+                    }
+                })
+
+                .catch((_) => {
+                    message?.toast?.current?.show({
+                        severity: 'error',
+                        summary: 'Có lỗi',
+                        detail: 'Xảy ra lỗi!!!',
+                        life: 3000,
+                    });
+                });
 
             setImageAvatar(URL.createObjectURL(files[0]));
         }
     };
 
     const handleSubmit = () => {
-        const formData = new FormData();
-        formData.append('file', data.imageRaw);
-
-        axios
-            .post(`${App.URL_MAIN}customers/test/upload/${values.user?.id}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
+        apiService.customer
+            .updateCustomerById(
+                `${values.user?.id}`,
+                {
+                    phone_number: data.phoneNumber,
+                    gender: data.gender,
+                    birth_date: `${data.day?.day}/${data.month?.month}/${data.year?.year}`,
                 },
-            })
-            .then((res) => {
-                if (res.data.message === 'success') {
+                values.user?.token ?? '',
+            )
+            .then((res: any) => {
+                if (res.message === 'success') {
                     setValues({
                         ...values,
                         user: {
                             ...values.user,
                             id: values.user?.id ?? 0,
-                            avatar: res.data.linkAvatar,
+                            name: res.data.name,
+                            phone: res.data.phone_number,
+                            birthdate: res.data.birth_date,
+                            gender: res.data.gender,
                         },
                     });
 
@@ -199,7 +241,6 @@ function Profile() {
                     });
                 }
             })
-
             .catch((_) => {
                 message?.toast?.current?.show({
                     severity: 'error',
@@ -393,7 +434,9 @@ function Profile() {
                                 src={
                                     imageAvatar.length > 0
                                         ? imageAvatar
-                                        : (values.user?.avatar as string).length > 0
+                                        : values.user &&
+                                          values.user.avatar &&
+                                          (values.user?.avatar as string).length > 0
                                         ? values.user?.avatar
                                         : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
                                 }
