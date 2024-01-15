@@ -21,10 +21,7 @@ type TMes = {
 };
 
 function ChatBox() {
-    // test chats
     const socketRef = useRef<Socket>();
-
-    // //////////////////////////////////////////////////////////////////
     const [open, setOpen] = useState<boolean>(false);
     const [visible, setVisible] = useState<boolean>(false);
     const [value, setValue] = useState<string>('');
@@ -69,7 +66,7 @@ function ChatBox() {
             socketRef.current.on('connect', () => {
                 console.log('id connected USER: ', socketRef.current?.id);
 
-                socketRef.current?.once(`init_user_${socketRef.current.id}`, (data) => {
+                socketRef.current?.once(`init_user_${socketRef.current.id}`, (_) => {
                     setMessages((prev) => [
                         ...prev,
                         {

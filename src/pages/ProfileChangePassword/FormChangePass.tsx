@@ -47,7 +47,7 @@ function FormChangePass() {
                     },
                     values.user?.token ?? '',
                 )
-                .then((res) => {
+                .then((res: { message: string; statusCode: number; detail?: string }) => {
                     if (res.message === 'mismatched') {
                         message?.toast?.current?.show({
                             severity: 'error',
@@ -78,19 +78,27 @@ function FormChangePass() {
     };
 
     const handleErrorInput = (ele: HTMLInputElement) => {
-        ele.style.border = '1px solid red';
+        if (ele) {
+            ele.style.border = '1px solid red';
+        }
     };
 
     const handleClearErrorInput = (ele: HTMLInputElement) => {
-        ele.style.border = '1px solid dodgerblue';
+        if (ele) {
+            ele.style.border = '1px solid dodgerblue';
+        }
     };
 
     const handleFocus = (ele: HTMLInputElement) => {
-        ele.style.border = '1px solid dodgerblue';
+        if (ele) {
+            ele.style.border = '1px solid dodgerblue';
+        }
     };
 
     const handleBlur = (ele: HTMLInputElement) => {
-        ele.style.border = '1px solid #d7d7d7';
+        if (ele) {
+            ele.style.border = '1px solid #d7d7d7';
+        }
     };
 
     useEffect(() => {

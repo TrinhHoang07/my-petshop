@@ -12,6 +12,7 @@ import axios from 'axios';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { App } from '../../const/App';
 import { ApiService } from '../../axios/ApiService';
+import { T_CustomerUpdate } from '../../models';
 
 const cx = classNames.bind(styles);
 
@@ -158,10 +159,6 @@ function Profile() {
         };
     });
 
-    useEffect(() => {
-        console.log('data change: ' + JSON.stringify(data));
-    }, [data]);
-
     const handleUpdateAvatar = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const files = (event.target as HTMLInputElement).files;
 
@@ -219,7 +216,7 @@ function Profile() {
                 },
                 values.user?.token ?? '',
             )
-            .then((res: any) => {
+            .then((res: T_CustomerUpdate) => {
                 if (res.message === 'success') {
                     setValues({
                         ...values,

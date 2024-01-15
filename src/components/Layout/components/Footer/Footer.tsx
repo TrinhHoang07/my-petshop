@@ -1,10 +1,8 @@
 import classNames from 'classnames/bind';
 import images from '../../../../assets/images/footer.png';
-
 import Nav from './Nav';
 import ActionFooter from './ActionFooter';
 import Contact from './Contact';
-
 import styles from './Footer.module.scss';
 
 const cx = classNames.bind(styles);

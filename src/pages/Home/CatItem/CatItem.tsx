@@ -1,7 +1,6 @@
 import styles from './CatItem.module.scss';
 import classNames from 'classnames/bind';
 import logo from '../../../assets/images/cat_home_logo.png';
-// import beyeu from '../../../assets/images/beyeu.jpg';
 import { Title } from '../../../components/Title';
 import { CardItemZoomInLeft } from '../../../components/CardItemZoomInLeft';
 import { Button } from '../../../components/Button';

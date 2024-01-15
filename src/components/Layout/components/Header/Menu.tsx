@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { FaFacebookF, FaShoppingCart } from 'react-icons/fa';
 import { AiOutlineInstagram, AiOutlineMail, AiOutlineTwitter } from 'react-icons/ai';
 import { IoMenu } from 'react-icons/io5';
+
 const cx = classNames.bind(styles);
 
 type TData = {

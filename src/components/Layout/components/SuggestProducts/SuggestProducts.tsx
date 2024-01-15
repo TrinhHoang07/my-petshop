@@ -2,19 +2,19 @@ import classNames from 'classnames/bind';
 import styles from './SuggestProducts.module.scss';
 import { useEffect, useState } from 'react';
 import { formatVND } from '../../../../Helper';
-import { T_Detail } from '../../../../models';
+import { T_Product, T_Suggest } from '../../../../models';
 import { ApiService } from '../../../../axios/ApiService';
 
 const cx = classNames.bind(styles);
 
 function SuggestProducts() {
-    const [data, setData] = useState<any>([]);
+    const [data, setData] = useState<T_Product[]>([]);
     const apiService = new ApiService();
 
     useEffect(() => {
         apiService.products
             .randomProducts()
-            .then((res: T_Detail) => {
+            .then((res: T_Suggest) => {
                 if (res.message === 'success') {
                     setData(res.data);
                 }
@@ -29,7 +29,7 @@ function SuggestProducts() {
             <h6 className={cx('heading-menu')}>SẢN PHẨM</h6>
             <div className={cx('wrapper-suggest')}>
                 {data.length > 0 &&
-                    data.map((item: any) => (
+                    data.map((item: T_Product) => (
                         <div key={item.id}>
                             <div className={cx('suggest-item')}>
                                 <div className={cx('preview-suggest')}>
@@ -40,7 +40,6 @@ function SuggestProducts() {
                                     <p className={cx('price-suggest-item')}>{formatVND.format(item.price)}</p>
                                 </div>
                             </div>
-                            {/* <div className={cx('line-suggest')}></div> */}
                         </div>
                     ))}
             </div>

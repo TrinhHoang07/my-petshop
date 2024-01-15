@@ -7,6 +7,7 @@ const cx = classNames.bind(styles);
 
 type TProps = {
     src: any;
+    to?: string;
     title: string;
     name: string;
     price: number;
@@ -15,7 +16,7 @@ type TProps = {
 
 function CardItemZoomIn(props: TProps) {
     return (
-        <Link className={cx('link-detail')} to={'/'}>
+        <Link className={cx('link-detail')} to={props.to ?? '/'}>
             <div className={cx('detail-dog')}>
                 <div data-aos="zoom-in">
                     <div className={cx('wrap')}>

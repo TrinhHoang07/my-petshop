@@ -38,7 +38,6 @@ function Categories() {
     }, []);
 
     useEffect(() => {
-        // fetch API
         setIsLoading(true);
 
         apiService.carts
@@ -152,7 +151,6 @@ function Categories() {
         ////// update quantity data
         const index = data.findIndex((item) => item.id === value.id);
 
-        console.log('calll OK', index);
         const dataChanged = [...data];
         dataChanged[index] = {
             ...data[index],
@@ -209,8 +207,6 @@ function Categories() {
     };
 
     const handleChecked = (value: TData) => {
-        console.log('item checked: ', value);
-
         if (value.checked) {
             setDataOrders((prev: any) => {
                 return prev.filter((item: any) => item.id !== value.id);

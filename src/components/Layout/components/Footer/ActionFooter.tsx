@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import classNames from 'classnames/bind';
-
 import logo from '../../../../assets/images/dark.png';
 import styles from './Footer.module.scss';
 

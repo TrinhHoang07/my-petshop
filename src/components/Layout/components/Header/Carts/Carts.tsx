@@ -38,11 +38,7 @@ function Carts() {
     useEffect(() => {
         if (socketRef.current) {
             socketRef.current.on('connect', () => {
-                console.log('id connected USER: ', socketRef.current?.id);
-
                 socketRef.current?.on('add-to-cart-give', (data: any) => {
-                    console.log('data GIVE: ', data);
-
                     if (values.isAuth) {
                         apiService.carts
                             .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')
@@ -65,8 +61,6 @@ function Carts() {
     }, []);
 
     useEffect(() => {
-        // fetch API
-
         if (values.isAuth) {
             apiService.carts
                 .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')

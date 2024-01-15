@@ -66,6 +66,7 @@ function Food() {
                                         name={item.name}
                                         price={item.price}
                                         title="ĐỒ ĂN"
+                                        to={`product/food/${item.id}`}
                                         src={item.previewUrl}
                                     />
                                 </div>

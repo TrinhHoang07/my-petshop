@@ -12,15 +12,6 @@ type T_Props = {
 function Voucher(props: T_Props) {
     const handleCloseVoucher = () => {
         props.setOpen(false);
-        // const mask: HTMLElement | null = document.getElementById('mask');
-        // const voucher: HTMLElement | null = document.getElementById('voucher');
-
-        // if (mask) {
-        //     mask.style.visibility = 'hidden';
-        // }
-        // if (voucher) {
-        //     voucher.style.transform = 'translate(-50%, -50%) scale(0)';
-        // }
     };
 
     return (

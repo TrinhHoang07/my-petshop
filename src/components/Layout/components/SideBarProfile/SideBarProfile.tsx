@@ -30,9 +30,6 @@ function SideBarProfile(props: _T_Props) {
                                 : values.user?.avatar && values.user.avatar.length > 0
                                 ? values.user.avatar
                                 : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
-                            // props.temporaryImage ?? (values.user?.avatar?.length as any) > 0
-                            //     ? values.user?.avatar
-                            //     : 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg'
                         }
                         alt="avatar-user"
                     />

@@ -1,6 +1,5 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-
 import { Button } from '../../../components/Button';
 import routesConfig from '../../../config/routes';
 import styles from './Sliders.module.scss';

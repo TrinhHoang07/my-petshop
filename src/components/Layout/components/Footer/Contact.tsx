@@ -1,9 +1,7 @@
 import classNames from 'classnames/bind';
-
 import { MdLocationPin, MdMail } from 'react-icons/md';
 import { AiFillFacebook, AiFillGithub } from 'react-icons/ai';
 import { RiPhoneFill } from 'react-icons/ri';
-
 import styles from './Footer.module.scss';
 
 const cx = classNames.bind(styles);

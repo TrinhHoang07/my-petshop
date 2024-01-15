@@ -65,6 +65,7 @@ function Cat() {
                                         name={item.name}
                                         price={item.price}
                                         title="MÈO CẢNH"
+                                        to={`product/cat/${item.id}`}
                                         src={item.previewUrl}
                                     />
                                 </div>

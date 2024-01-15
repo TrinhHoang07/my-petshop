@@ -13,8 +13,6 @@ function Detail() {
     const [data, setData] = useState<T_Product>();
     const apiService = new ApiService();
 
-    console.log(params);
-
     useEffect(() => {
         apiService.products
             .getProduct(`${params.id}`)

@@ -14,6 +14,7 @@ import { Socket, io } from 'socket.io-client';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { App } from '../../const/App';
+import { T_ProfileAddress } from '../../models';
 
 const cx = classNames.bind(styles);
 
@@ -56,11 +57,11 @@ function ProfileAddress() {
     useEffect(() => {
         if (socketRef.current) {
             socketRef.current.on('connect', () => {
-                socketRef.current?.on('create-address-give', (data: any) => {
+                socketRef.current?.on('create-address-give', (_) => {
                     if (values.isAuth) {
                         apiService.address
                             .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
-                            .then((res) => {
+                            .then((res: T_ProfileAddress) => {
                                 if (res.message === 'success') {
                                     setAddresses((prev: _Addresses[]) => {
                                         return [...prev, res.data[res.data.length - 1]];
@@ -71,11 +72,11 @@ function ProfileAddress() {
                     }
                 });
 
-                socketRef.current?.on('update-address-give', (data: any) => {
+                socketRef.current?.on('update-address-give', (_) => {
                     if (values.isAuth) {
                         apiService.address
                             .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
-                            .then((res) => {
+                            .then((res: T_ProfileAddress) => {
                                 if (res.message === 'success') {
                                     setAddresses(res.data);
                                 }
@@ -97,7 +98,7 @@ function ProfileAddress() {
         if (init && values.isAuth) {
             apiService.address
                 .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
-                .then((res) => {
+                .then((res: T_ProfileAddress) => {
                     if (res.message === 'success') {
                         setAddresses((prev: _Addresses[]) => {
                             console.log('prev: ' + [...prev, ...res.data]);
@@ -123,32 +124,34 @@ function ProfileAddress() {
             rejectLabel: 'Hủy bỏ',
             icon: 'pi pi-exclamation-triangle',
             accept() {
-                apiService.address.deleteAddressById(value, values.user?.token ?? '').then((res) => {
-                    if (res.message === 'success') {
-                        message?.toast?.current?.show({
-                            severity: 'success',
-                            summary: 'Thành công',
-                            detail: 'Đã xóa thành công',
-                            life: 3000,
-                        });
+                apiService.address
+                    .deleteAddressById(value, values.user?.token ?? '')
+                    .then((res: { message: string; statusCode: number }) => {
+                        if (res.message === 'success') {
+                            message?.toast?.current?.show({
+                                severity: 'success',
+                                summary: 'Thành công',
+                                detail: 'Đã xóa thành công',
+                                life: 3000,
+                            });
 
-                        apiService.address
-                            .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
-                            .then((res) => {
-                                if (res.message === 'success') {
-                                    setAddresses(res.data);
-                                }
-                            })
-                            .catch((err) => console.error(err));
-                    } else {
-                        message?.toast?.current?.show({
-                            severity: 'error',
-                            summary: 'Có lỗi',
-                            detail: 'Xảy ra lỗi!!!',
-                            life: 3000,
-                        });
-                    }
-                });
+                            apiService.address
+                                .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
+                                .then((res: T_ProfileAddress) => {
+                                    if (res.message === 'success') {
+                                        setAddresses(res.data);
+                                    }
+                                })
+                                .catch((err) => console.error(err));
+                        } else {
+                            message?.toast?.current?.show({
+                                severity: 'error',
+                                summary: 'Có lỗi',
+                                detail: 'Xảy ra lỗi!!!',
+                                life: 3000,
+                            });
+                        }
+                    });
 
                 // setData((prev) => prev.filter((item) => item.id !== value.id));
             },

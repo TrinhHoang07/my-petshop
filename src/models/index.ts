@@ -66,6 +66,78 @@ export type T_Detail = {
     data: T_Product;
 };
 
+// suggest page
+export type T_Suggest = {
+    message: string;
+    statusCode: number;
+    data: T_Product[];
+};
+
+// conversation
+export type Conversation = {
+    conver_id: number;
+    cus_avatar_path: string;
+    cus_name: string;
+    cus_id: number;
+    sender_id: number;
+    messages_content: string;
+};
+
+export type T_Conversation = {
+    message: string;
+    statusCode: number;
+    data: Conversation[];
+};
+
+// messages
+export type Message = {
+    message_id: number;
+    message_sender_id: number;
+    cus_avatar_path: string;
+    message_content: string;
+};
+
+export type T_Message = {
+    message: string;
+    statusCode: number;
+    data: Message[];
+};
+
+// Profile address
+export type Address = {
+    id: number;
+    full_name: string;
+    customer_: string;
+    phone_number: string;
+    main_address: string;
+    detail_address: string;
+    type: string;
+};
+
+export type T_ProfileAddress = {
+    message: string;
+    statusCode: number;
+    data: Address[];
+};
+
+export type T_Customer = {
+    id: number;
+    name: string;
+    email: string;
+    address: string;
+    phone_number: string;
+    gender: string;
+    birth_date: string;
+    avatar_path: string;
+};
+
+// customer update
+export type T_CustomerUpdate = {
+    message: string;
+    statusCode: number;
+    data: T_Customer;
+};
+
 // type login page
 export type Customer = {
     id: number;

@@ -19,8 +19,6 @@ function LayoutDetailNew() {
     const [data, setData] = useState<Blog>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    console.log('params', params.id);
-
     useEffect(() => {
         document.title = 'Trang chủ | Petshop chất lượng số 1 Việt Nam!';
         window.scrollTo({
@@ -31,13 +29,9 @@ function LayoutDetailNew() {
 
     useEffect(() => {
         if (params.id) {
-            console.log('call API: ', params.id);
-
             apiService.blogs
                 .getBlogById(params.id)
                 .then((res: T_Blog) => {
-                    console.log('data: ', res);
-
                     if (res.message === 'success') {
                         setData(res.data);
                         setIsLoading(false);

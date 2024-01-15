@@ -1,5 +1,3 @@
-// NO COMPLETE
-
 import { ReactNode, createContext, useContext, useEffect, useRef } from 'react';
 import { Socket, io } from 'socket.io-client';
 import { App } from '../const/App';
@@ -21,7 +19,6 @@ function SocketContextProvider(props: TProps) {
         });
 
         socket.current = ioSocket;
-        // socketProvider.current = socket;
 
         return () => {
             socket.current?.disconnect();

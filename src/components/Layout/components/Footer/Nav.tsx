@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { RxDotFilled } from 'react-icons/rx';
-
 import styles from './Footer.module.scss';
 
 const cx = classNames.bind(styles);

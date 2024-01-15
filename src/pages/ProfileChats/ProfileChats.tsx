@@ -12,6 +12,7 @@ import { Loading } from '../../components/Loading';
 import { useDebounce } from '../../hooks';
 import { App } from '../../const/App';
 import { useSocketContext } from '../../context/SocketContext';
+import { Conversation, Message, T_Conversation, T_Message } from '../../models';
 
 const cx = classNames.bind(styles);
 
@@ -23,13 +24,13 @@ function Profile() {
     const [inputValue, setInputValue] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [init, setInit] = useState<boolean>(false);
-    const [conversations, setConversations] = useState<any[]>([]);
+    const [conversations, setConversations] = useState<Conversation[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    const [infoUser, setInfoUser] = useState<any>({});
+    const [infoUser, setInfoUser] = useState<{ id?: number; name?: string; avatar?: string }>({});
     const [stateParam, setStateParam] = useState<string>('');
     const paramSubmit = useDebounce(stateParam, App.DELAY_SEARCH);
-    const [testData, setTestData] = useState<any[]>([]);
+    const [testData, setTestData] = useState<Message[]>([]);
     const socketReal = useRef<any>();
     const socket = useSocketContext();
 
@@ -45,32 +46,42 @@ function Profile() {
 
     useEffect(() => {
         if (init) {
-            socketReal.current?.on(`chat-message-user-give`, (data: any) => {
-                setTestData((prev: any[]) => [
-                    ...prev,
-                    {
-                        message_id: data.id,
-                        message_sender_id: data.sender_,
-                        cus_avatar_path: data.cus_avatar_path,
-                        message_content: data.content,
-                    },
-                ]);
+            socketReal.current?.on(
+                `chat-message-user-give`,
+                (data: {
+                    id: number;
+                    conversation_: number;
+                    content: string;
+                    sender_: number;
+                    receiver_: number;
+                    cus_avatar_path: string;
+                }) => {
+                    setTestData((prev: Message[]) => [
+                        ...prev,
+                        {
+                            message_id: data.id,
+                            message_sender_id: data.sender_,
+                            cus_avatar_path: data.cus_avatar_path,
+                            message_content: data.content,
+                        },
+                    ]);
 
-                setConversations((prev: any[]) => {
-                    const user = prev.find((item) => item.conver_id === +data.conversation_);
-                    if (user) {
-                        return [
-                            {
-                                ...user,
-                                messages_content: data.content,
-                            },
-                            ...prev.filter((item) => item.conver_id !== +data.conversation_),
-                        ];
-                    }
+                    setConversations((prev: Conversation[]) => {
+                        const user = prev.find((item: Conversation) => item.conver_id === +data.conversation_);
+                        if (user) {
+                            return [
+                                {
+                                    ...user,
+                                    messages_content: data.content,
+                                },
+                                ...prev.filter((item: Conversation) => item.conver_id !== +data.conversation_),
+                            ];
+                        }
 
-                    return prev;
-                });
-            });
+                        return prev;
+                    });
+                },
+            );
         }
 
         setInit(true);
@@ -81,11 +92,11 @@ function Profile() {
     useEffect(() => {
         apiService.chats
             .getCustomerConversationByCreatedId((values.user?.id as number).toString(), values.user?.token ?? '')
-            .then((res: any) => {
+            .then((res: T_Conversation) => {
                 if (res.message === 'success') {
                     apiService.chats
                         .getJoinedConversationsById((values.user?.id as number).toString(), values.user?.token ?? '')
-                        .then((response: any) => {
+                        .then((response: T_Conversation) => {
                             if (response.message === 'success') {
                                 setConversations([...response.data, ...res.data]);
                                 setIsLoading(false);
@@ -118,7 +129,7 @@ function Profile() {
 
             apiService.chats
                 .getMessagesByConversationId(paramSubmit.trim(), values.user?.token ?? '')
-                .then((res: any) => {
+                .then((res: T_Message) => {
                     if (res.message === 'success') {
                         setTestData(res.data);
                         inputRef.current?.focus();
@@ -145,16 +156,28 @@ function Profile() {
 
             apiService.chats
                 .addNewMessageByConversationId(dataSent, values.user?.token ?? '')
-                .then((res: any) => {
-                    if (res.message === 'success') {
-                        socketReal.current?.emit(`chat-message-user`, {
-                            ...res.data,
-                            cus_avatar_path: values.user?.avatar,
-                        });
+                .then(
+                    (res: {
+                        message: string;
+                        statusCode: number;
+                        data: {
+                            id: number;
+                            conversation_: number;
+                            content: string;
+                            sender_: number;
+                            receiver_: number;
+                        };
+                    }) => {
+                        if (res.message === 'success') {
+                            socketReal.current?.emit(`chat-message-user`, {
+                                ...res.data,
+                                cus_avatar_path: values.user?.avatar,
+                            });
 
-                        setInputValue('');
-                    }
-                })
+                            setInputValue('');
+                        }
+                    },
+                )
                 .catch((err) => console.error(err));
         }
     };
@@ -181,7 +204,7 @@ function Profile() {
                         </div>
                         <div className={cx('list-user')}>
                             {conversations.length > 0 ? (
-                                conversations.map((item: any) => (
+                                conversations.map((item: Conversation) => (
                                     <div
                                         key={item.conver_id}
                                         className={cx('item-chat')}

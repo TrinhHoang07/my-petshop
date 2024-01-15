@@ -57,7 +57,6 @@ function Orders() {
     }, [init]);
 
     const handleOrders = () => {
-        // handle BUY PRODUCTS (CALL API)
         if (data.length > 0) {
             const dataPost = {
                 customer_id: values.user?.id,

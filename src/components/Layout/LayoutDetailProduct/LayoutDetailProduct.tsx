@@ -25,13 +25,8 @@ function LayoutDetailProduct(props: TProps) {
     const [quantity, setQuantity] = useState<number>(1);
     const [infoUser] = useSessionContext();
     const message = useConfirmToast();
-
     const apiService = new ApiService();
-
-    // testtttttttt => OK
     const socket = useSocketContext();
-
-    console.log('socket: ' + socket.current?.id);
 
     const data = [
         {

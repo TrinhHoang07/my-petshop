@@ -4,7 +4,6 @@ import { Autoplay, Pagination, EffectCreative } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-
 import classNames from 'classnames/bind';
 import SliderItem from './SliderItem';
 import img_1 from '../../../assets/images/img-1-desktop-slider.jpg';

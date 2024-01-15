@@ -4,7 +4,6 @@ import { Autoplay } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-
 import { Title } from '../../../components/Title';
 import styles from './UseFul.module.scss';
 import classNames from 'classnames/bind';
