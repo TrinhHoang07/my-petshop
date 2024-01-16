@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './ProfileUser.module.scss';
 import { useRecoilState } from 'recoil';
 import { dataProfileUser } from '../../store';
-import { TProfileUser } from '../../models';
+import { TCheckConversation, TProfileUser, T_FriendGiveInvite } from '../../models';
 import { Button } from '../../components/Button';
 import { useEffect, useState } from 'react';
 import { ApiService } from '../../axios/ApiService';
@@ -34,7 +34,7 @@ function ProfileUser() {
     const handleGetIdsInvited = () => {
         apiService.friendship
             .getFriendInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
-            .then((res) => {
+            .then((res: T_FriendGiveInvite) => {
                 setIdsInvited(res.data.map((item: any) => item.friendship_customer_id));
             })
             .catch((err) => console.error(err));
@@ -43,7 +43,7 @@ function ProfileUser() {
     const handleGetIdsGiveInvited = () => {
         apiService.friendship
             .getFriendGiveInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
-            .then((res: any) => {
+            .then((res: T_FriendGiveInvite) => {
                 if (res.message === 'success') {
                     setIdsGiveInvite(res.data.map((item: any) => item.friendship_customerInvite_id));
                 }
@@ -55,12 +55,12 @@ function ProfileUser() {
             .addNewInviteFriend(
                 {
                     status: 'waiting',
-                    customer_invite: values.user?.id,
+                    customer_invite: values.user?.id ?? 0,
                     customer_id: data.id,
                 },
                 values.user?.token ?? '',
             )
-            .then((res) => {
+            .then((res: { message: string; statusCode: number }) => {
                 if (res.message === 'success') {
                     handleGetIdsInvited();
 
@@ -94,12 +94,12 @@ function ProfileUser() {
                 apiService.friendship
                     .deleteFriendshipById(
                         {
-                            customer_invite: values.user?.id,
+                            customer_invite: values.user?.id ?? 0,
                             customer_id: data.id,
                         },
                         values.user?.token ?? '',
                     )
-                    .then((res) => {
+                    .then((res: { message: string; statusCode: number }) => {
                         if (res.message === 'success') {
                             handleGetIdsInvited();
                             message?.toast?.current?.show({
@@ -127,12 +127,12 @@ function ProfileUser() {
             .acceptFriendship(
                 {
                     customer_invite: data.id,
-                    customer_id: values.user?.id,
+                    customer_id: values.user?.id ?? 0,
                     status: 'friended',
                 },
                 values.user?.token ?? '',
             )
-            .then((res: any) => {
+            .then((res: { message: string; statusCode: number }) => {
                 if (res.message === 'success') {
                     setData((prev: TProfileUser) => ({
                         ...prev,
@@ -153,23 +153,23 @@ function ProfileUser() {
             .checkCreatedConversation(
                 {
                     customer_id: data.id,
-                    created_id: values.user?.id,
+                    created_id: values.user?.id ?? 0,
                 },
                 values.user?.token ?? '',
             )
-            .then((res: any) => {
+            .then((res: TCheckConversation) => {
                 if (res.message === 'success') {
                     navigate(`/profile/chats/${res.data.conver_id}`);
                 } else {
                     apiService.chats
                         .addNewChat(
                             {
-                                created_by_customer: values.user?.id,
+                                created_by_customer: values.user?.id ?? 0,
                                 customer_id: data.id,
                             },
                             values.user?.token ?? '',
                         )
-                        .then((res: any) => {
+                        .then((res: { message: string; statusCode: number; data: { id_conver: number } }) => {
                             if (res.message === 'success') {
                                 navigate(`/profile/chats/${res.data.id_conver}`);
                             }

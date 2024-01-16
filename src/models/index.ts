@@ -1,3 +1,83 @@
+export type TPostLogin = {
+    username: string;
+    password: string;
+};
+
+export type TPostRegister = {
+    name: string;
+    email: string;
+    confirm_password: string;
+    password: string;
+};
+
+export type TPostAddToCart = {
+    product_id: number;
+    customer_id: number;
+    quantity: number;
+};
+
+export type TPostOrders = {
+    customer_id?: number;
+    product_id: number;
+    quantity: number;
+    price: number;
+    status?: string;
+};
+
+export type TPostCreateAddress = {
+    full_name: string;
+    customer_id: number;
+    phone_number: string;
+    main_address: string;
+    detail_address: string;
+    type: string;
+};
+
+export type TPostUpdateAddress = {
+    full_name: string;
+    id: number;
+    phone_number: string;
+    main_address: string;
+    detail_address: string;
+    type: string;
+};
+
+export type TPostUpdateCustomer = {
+    address?: string;
+    phone_number?: string;
+    gender?: string;
+    birth_date?: string;
+    avatar_path?: string;
+};
+
+export type TPostUpdatePassword = {
+    oldPassword: string;
+    password: string;
+};
+
+export type TPostAddNewInviteFr = {
+    customer_invite: number;
+    customer_id: number;
+    status?: string;
+};
+
+export type TPostAddNewChat = {
+    created_by_customer: number;
+    customer_id: number;
+};
+
+export type TPostNewMessage = {
+    conversation_id: number;
+    sender_id: number;
+    receiver_id: number;
+    content: string;
+};
+
+export type TPostCheckConversation = {
+    customer_id: number;
+    created_id: number;
+};
+
 export type TData = {
     id: number;
     name: string;
@@ -73,6 +153,55 @@ export type T_Suggest = {
     data: T_Product[];
 };
 
+// friend
+export type FriendGiveInvite = {
+    friendship_id: number;
+    customer_name: string;
+    customer_avatar_path: string;
+    friendship_customerInvite_id: number;
+    friendship_customer_id: number;
+};
+
+export type Friended = {
+    friendship_id: number;
+    friendship_customerInvite_id: number;
+    friendship_customer_id: number;
+    customer_id: number;
+    friendship_status: string;
+    customer_name: string;
+    customer_address: string;
+    customer_phone_number: string;
+    customer_gender: string;
+    customer_birth_date: string;
+    customer_avatar_path: string;
+};
+
+export type TFriended = {
+    message: string;
+    statusCode: number;
+    data: Friended[];
+};
+
+export type T_FriendGiveInvite = {
+    message: string;
+    statusCode: number;
+    data: FriendGiveInvite[];
+};
+
+export type CheckConversation = {
+    conver_conversation_type: string;
+    conver_id: number;
+    conver_createdByCustomer_id: number;
+    customer_id: number;
+    createdByCustomer_id: number;
+};
+
+export type TCheckConversation = {
+    message: string;
+    statusCode: number;
+    data: CheckConversation;
+};
+
 // conversation
 export type Conversation = {
     conver_id: number;
@@ -107,7 +236,7 @@ export type T_Message = {
 export type Address = {
     id: number;
     full_name: string;
-    customer_: string;
+    customer_: number;
     phone_number: string;
     main_address: string;
     detail_address: string;
@@ -131,6 +260,12 @@ export type T_Customer = {
     avatar_path: string;
 };
 
+export type T_Customers = {
+    message: string;
+    statusCode: number;
+    data: T_Customer[];
+};
+
 // customer update
 export type T_CustomerUpdate = {
     message: string;
@@ -150,7 +285,7 @@ export type Customer = {
     birth_day: string;
     access_token: string;
 };
-export type T_Login = {
+export type T_Auth = {
     message: string;
     statusCode: number;
     data: Customer;

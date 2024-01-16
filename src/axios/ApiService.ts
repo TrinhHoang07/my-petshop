@@ -1,5 +1,19 @@
 // UPDATE TYPESCRIPT LATER
 
+import {
+    TPostAddNewChat,
+    TPostAddNewInviteFr,
+    TPostAddToCart,
+    TPostCheckConversation,
+    TPostCreateAddress,
+    TPostLogin,
+    TPostNewMessage,
+    TPostOrders,
+    TPostRegister,
+    TPostUpdateAddress,
+    TPostUpdateCustomer,
+    TPostUpdatePassword,
+} from '../models';
 import { AxiosClientApi } from './AxiosInstance';
 
 export class ApiService {
@@ -10,8 +24,8 @@ export class ApiService {
         };
 
         return {
-            register: (data: any): Promise<any> => AxiosClientApi.post(route.register, data),
-            login: (data: any): Promise<any> => AxiosClientApi.post(route.login, data),
+            register: (data: TPostRegister): Promise<any> => AxiosClientApi.post(route.register, data),
+            login: (data: TPostLogin): Promise<any> => AxiosClientApi.post(route.login, data),
         };
     }
 
@@ -46,7 +60,7 @@ export class ApiService {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
-            addToCart: (data: any, token: string) =>
+            addToCart: (data: TPostAddToCart, token: string) =>
                 AxiosClientApi.post(route.addToCart, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
@@ -64,7 +78,7 @@ export class ApiService {
         };
 
         return {
-            addOrder: (data: any, token: string) =>
+            addOrder: (data: TPostOrders, token: string) =>
                 AxiosClientApi.post(route.addOrder, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
@@ -113,13 +127,13 @@ export class ApiService {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
-            createAddress: (data: any, token: string) =>
+            createAddress: (data: TPostCreateAddress, token: string) =>
                 AxiosClientApi.post(route.createAddress, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
-            updateAddressById: (id: string, data: any, token: string) =>
+            updateAddressById: (id: string, data: TPostUpdateAddress, token: string) =>
                 AxiosClientApi.put(route.updateAddress(id), data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
@@ -152,19 +166,19 @@ export class ApiService {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
-            updateCustomerById: (cusId: string, data: any, token: string): Promise<any> =>
+            updateCustomerById: (cusId: string, data: TPostUpdateCustomer, token: string): Promise<any> =>
                 AxiosClientApi.put(route.updateCustomerById(cusId), data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
-            updatePassword: (cusId: string, data: any, token: string): Promise<any> =>
+            updatePassword: (cusId: string, data: TPostUpdatePassword, token: string): Promise<any> =>
                 AxiosClientApi.put(route.updatePassword(cusId), data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
-            updateAddress: (cusId: string, data: any, token: string): Promise<any> =>
+            updateAddress: (cusId: string, data: { address: string }, token: string): Promise<any> =>
                 AxiosClientApi.put(route.updateAddress(cusId), data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
@@ -196,13 +210,13 @@ export class ApiService {
         };
 
         return {
-            addNewInviteFriend: (data: any, token: string): Promise<any> =>
+            addNewInviteFriend: (data: TPostAddNewInviteFr, token: string): Promise<any> =>
                 AxiosClientApi.post(route.addNewInviteFriend, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
-            acceptFriendship: (data: any, token: string): Promise<any> =>
+            acceptFriendship: (data: TPostAddNewInviteFr, token: string): Promise<any> =>
                 AxiosClientApi.post(route.acceptFriendship, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
@@ -227,7 +241,7 @@ export class ApiService {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
-            deleteFriendshipById: (data: any, token: string) =>
+            deleteFriendshipById: (data: TPostAddNewInviteFr, token: string) =>
                 AxiosClientApi.put(route.deleteFriendshipById, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
@@ -247,21 +261,21 @@ export class ApiService {
         };
 
         return {
-            addNewChat: (data: any, token: string) =>
+            addNewChat: (data: TPostAddNewChat, token: string) =>
                 AxiosClientApi.post(route.addNewChat, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
 
-            addNewMessageByConversationId: (data: any, token: string) =>
+            addNewMessageByConversationId: (data: TPostNewMessage, token: string) =>
                 AxiosClientApi.post(route.addNewMessageByConversationId, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
 
-            checkCreatedConversation: (data: any, token: string) =>
+            checkCreatedConversation: (data: TPostCheckConversation, token: string) =>
                 AxiosClientApi.post(route.checkCreatedConversation, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,

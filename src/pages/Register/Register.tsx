@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ApiService } from '../../axios/ApiService';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { useSessionContext } from '../../context/SessionContext';
+import { T_Auth } from '../../models';
 
 const cx = classNames.bind(styles);
 
@@ -50,7 +51,7 @@ function Register() {
                     password: data.password,
                     confirm_password: data.confirmPassword,
                 })
-                .then((res: any) => {
+                .then((res: T_Auth) => {
                     if (res.message === 'success') {
                         console.log('DATA REGISTER: ' + res.data);
 

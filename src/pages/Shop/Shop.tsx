@@ -22,11 +22,7 @@ function Shop() {
     const isSubmitFilter = useRecoilValue(isFilter);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const apiService = new ApiService();
-
-    // update typescript later
     const [data, setData] = useState<T_Product[]>([]);
-
-    // fake page
     const [first, setFirst] = useState<number>(1);
     const [pageNumber, setPageNumber] = useState<number>(1);
 
@@ -91,7 +87,7 @@ function Shop() {
                         dataRender.length > 0 &&
                         dataRender
                             .slice((pageNumber - 1) * 8, pageNumber * 8)
-                            .map((item: any) => (
+                            .map((item: T_Product) => (
                                 <CardItemFlip
                                     key={item.id}
                                     name={item.name}

@@ -5,8 +5,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSessionContext } from '../../context/SessionContext';
 import { ApiService } from '../../axios/ApiService';
 import { useSocketContext } from '../../context/SocketContext';
-import { _Addresses } from './ProfileAddress';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
+import { Address, TPostCreateAddress, TPostUpdateAddress } from '../../models';
 
 const cx = classNames.bind(styles);
 
@@ -20,7 +20,7 @@ type TForm = {
 type _T_Props = {
     visible: boolean;
     setIsVisible: (visible: boolean) => void;
-    data: _Addresses | undefined;
+    data: Address | undefined;
     type: string;
     setType: (action: string) => void;
     setData: Function;
@@ -46,16 +46,15 @@ function FormAddAddress(props: _T_Props) {
     } = useForm<TForm>();
 
     const onSubmit: SubmitHandler<TForm> = (data: TForm) => {
-        const dataPost = {
-            full_name: data.name,
-            id: props.data?.id,
-            phone_number: data.phone,
-            main_address: data.city,
-            detail_address: data.detail,
-            type: typeAddress,
-        };
-
         if (props.type === 'add') {
+            const dataPost: TPostCreateAddress = {
+                full_name: data.name,
+                customer_id: values.user?.id ?? 0,
+                phone_number: data.phone,
+                main_address: data.city,
+                detail_address: data.detail,
+                type: typeAddress,
+            };
             apiService.address
                 .createAddress(dataPost, values.user?.token ?? '')
                 .then((res) => {
@@ -84,6 +83,14 @@ function FormAddAddress(props: _T_Props) {
                     });
                 });
         } else if (props.type === 'update') {
+            const dataPost: TPostUpdateAddress = {
+                full_name: data.name,
+                id: props.data?.id ?? 0,
+                phone_number: data.phone,
+                main_address: data.city,
+                detail_address: data.detail,
+                type: typeAddress,
+            };
             apiService.address
                 .updateAddressById(values.user?.id.toString() ?? '', dataPost, values.user?.token ?? '')
                 .then((res) => {

@@ -148,9 +148,9 @@ function Profile() {
     const handleSubmit = () => {
         if (inputValue.trim().length > 0) {
             const dataSent = {
-                conversation_id: params.id,
-                sender_id: values.user?.id,
-                receiver_id: infoUser.id,
+                conversation_id: +paramSubmit,
+                sender_id: values.user?.id ?? 0,
+                receiver_id: infoUser.id ?? 0,
                 content: inputValue.trim(),
             };
 

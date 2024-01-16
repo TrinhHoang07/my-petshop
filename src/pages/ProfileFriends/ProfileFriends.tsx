@@ -13,6 +13,8 @@ import { IoMdClose } from 'react-icons/io';
 import { FriendRequest } from './FriendRequest';
 import { Loading } from '../../components/Loading';
 import { useSocketContext } from '../../context/SocketContext';
+import { Socket } from 'socket.io-client';
+import { Friended, TFriended, T_Customer, T_Customers, T_FriendGiveInvite } from '../../models';
 
 const cx = classNames.bind(styles);
 
@@ -25,12 +27,10 @@ function ProfileFriends() {
     const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
     const [countRequestFriend, setCountRequestFriend] = useState<number>(0);
     const debounced = useDebounce(value, App.DELAY_SEARCH);
-    const socketReal = useRef<any>();
+    const socketReal = useRef<Socket>();
     const socket = useSocketContext();
-
-    // NEED UPDATE TYPESCRYPT
-    const [dataCustomers, setDataCustomers] = useState<any[]>([]);
-    const [friends, setFriends] = useState<any[]>([]);
+    const [dataCustomers, setDataCustomers] = useState<T_Customer[]>([]);
+    const [friends, setFriends] = useState<Friended[]>([]);
     const [isOpenFriendRequest, setIsOpenFriendRequest] = useState<boolean>(false);
 
     useEffect(() => {
@@ -40,7 +40,7 @@ function ProfileFriends() {
     }, []);
 
     useEffect(() => {
-        socketReal.current?.on('accept-friend-give', (_: any) => {
+        socketReal.current?.on('accept-friend-give', () => {
             handleGetCountRequestFriend();
             handleGetFriends();
         });
@@ -60,7 +60,7 @@ function ProfileFriends() {
                     },
                     values.user?.token ?? '',
                 )
-                .then((res) => {
+                .then((res: T_Customers) => {
                     if (res.message === 'success') {
                         setDataCustomers(res.data);
                         setIsLoadingSearch(false);
@@ -89,7 +89,7 @@ function ProfileFriends() {
     const handleGetFriends = () => {
         apiService.friendship
             .getFriendedById((values.user?.id as number).toString(), values.user?.token ?? '')
-            .then((res: any) => {
+            .then((res: TFriended) => {
                 if (res.message === 'success') {
                     setFriends(res.data);
                     setIsLoading(false);
@@ -104,7 +104,7 @@ function ProfileFriends() {
     const handleGetCountRequestFriend = () => {
         apiService.friendship
             .getFriendGiveInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
-            .then((res: any) => {
+            .then((res: T_FriendGiveInvite) => {
                 if (res.message === 'success') {
                     setCountRequestFriend(res.data.length);
                 }
@@ -160,7 +160,7 @@ function ProfileFriends() {
                             </div>
                             <div className={cx('modal-items')}>
                                 {dataCustomers.length > 0 ? (
-                                    dataCustomers.map((item) => (
+                                    dataCustomers.map((item: T_Customer) => (
                                         <FriendItem
                                             key={item.id}
                                             avatar_friend={item.avatar_path}
@@ -182,8 +182,8 @@ function ProfileFriends() {
                 <div className={cx('list-friends')}>
                     {friends.length > 0 ? (
                         friends
-                            .filter((item) => item.customer_id !== values.user?.id)
-                            .map((item) => (
+                            .filter((item: Friended) => item.customer_id !== values.user?.id)
+                            .map((item: Friended) => (
                                 <FriendItem
                                     key={item.customer_id}
                                     avatar_friend={item.customer_avatar_path}

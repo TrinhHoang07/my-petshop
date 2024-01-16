@@ -14,26 +14,17 @@ import { Socket, io } from 'socket.io-client';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { App } from '../../const/App';
-import { T_ProfileAddress } from '../../models';
+import { Address, T_ProfileAddress } from '../../models';
 
 const cx = classNames.bind(styles);
-
-export type _Addresses = {
-    full_name: string;
-    id: number;
-    main_address: string;
-    detail_address: string;
-    phone_number: string;
-    type: string;
-};
 
 function ProfileAddress() {
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const [typeAction, setTypeAction] = useState<string>('');
-    const [dataAddress, setDataAddress] = useState<_Addresses>();
+    const [dataAddress, setDataAddress] = useState<Address>();
     const [init, setInit] = useState<boolean>(false);
     const setState = useSetRecoilState(isMenuMobile);
-    const [addresses, setAddresses] = useState<_Addresses[]>([]);
+    const [addresses, setAddresses] = useState<Address[]>([]);
     const [values] = useSessionContext();
     const message = useConfirmToast();
     const apiService = new ApiService();
@@ -63,7 +54,7 @@ function ProfileAddress() {
                             .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
                             .then((res: T_ProfileAddress) => {
                                 if (res.message === 'success') {
-                                    setAddresses((prev: _Addresses[]) => {
+                                    setAddresses((prev: Address[]) => {
                                         return [...prev, res.data[res.data.length - 1]];
                                     });
                                 }
@@ -100,7 +91,7 @@ function ProfileAddress() {
                 .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
                 .then((res: T_ProfileAddress) => {
                     if (res.message === 'success') {
-                        setAddresses((prev: _Addresses[]) => {
+                        setAddresses((prev: Address[]) => {
                             console.log('prev: ' + [...prev, ...res.data]);
 
                             return [...prev, ...res.data];

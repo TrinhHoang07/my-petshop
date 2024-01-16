@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import routesConfig from '../../config/routes';
 import { useEffect, useRef, useState } from 'react';
 import { useSessionContext } from '../../context/SessionContext';
-import { T_Login } from '../../models';
+import { T_Auth } from '../../models';
 import { ApiService } from '../../axios/ApiService';
 
 const cx = classNames.bind(styles);
@@ -41,7 +41,7 @@ function Login() {
                 username: data.name,
                 password: data.password,
             })
-            .then((res: T_Login) => {
+            .then((res: T_Auth) => {
                 if (res.message === 'success') {
                     console.log('token login: ', res.data.access_token);
 

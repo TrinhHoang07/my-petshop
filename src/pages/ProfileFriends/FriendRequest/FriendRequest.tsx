@@ -10,6 +10,7 @@ import { useSessionContext } from '../../../context/SessionContext';
 import { useSetRecoilState } from 'recoil';
 import { dataProfileUser } from '../../../store';
 import { useSocketContext } from '../../../context/SocketContext';
+import { FriendGiveInvite, T_FriendGiveInvite } from '../../../models';
 
 const cx = classNames.bind(styles);
 
@@ -18,10 +19,8 @@ type _T_Props = {
     setIsOpen: (value: boolean) => void;
 };
 
-// NEED UPDATE TYPESCRYPT
-
 function FriendRequest(props: _T_Props) {
-    const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<FriendGiveInvite[]>([]);
     const apiService = new ApiService();
     const setDataProfileUser = useSetRecoilState(dataProfileUser);
     const socket = useSocketContext();
@@ -30,7 +29,7 @@ function FriendRequest(props: _T_Props) {
     useEffect(() => {
         apiService.friendship
             .getFriendGiveInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
-            .then((res: any) => {
+            .then((res: T_FriendGiveInvite) => {
                 setData(res.data);
             })
             .catch((err) => console.error(err));
@@ -42,7 +41,7 @@ function FriendRequest(props: _T_Props) {
         props.setIsOpen(false);
     };
 
-    const handleUpdateDataProfileUser = (item: any) => {
+    const handleUpdateDataProfileUser = (item: FriendGiveInvite) => {
         setDataProfileUser({
             id: item.friendship_customerInvite_id,
             isFriend: false,
@@ -51,7 +50,7 @@ function FriendRequest(props: _T_Props) {
         });
     };
 
-    const handleAcceptFriendship = (item: any) => {
+    const handleAcceptFriendship = (item: FriendGiveInvite) => {
         apiService.friendship
             .acceptFriendship(
                 {
@@ -61,9 +60,11 @@ function FriendRequest(props: _T_Props) {
                 },
                 values.user?.token ?? '',
             )
-            .then((res: any) => {
+            .then((res: { message: string; statusCode: number }) => {
                 if (res.message === 'success') {
-                    setData((prev: any[]) => prev.filter((p) => p.friendship_id !== item.friendship_id));
+                    setData((prev: FriendGiveInvite[]) =>
+                        prev.filter((p: FriendGiveInvite) => p.friendship_id !== item.friendship_id),
+                    );
 
                     socket.current?.emit('accept-friend', {
                         id: item.friendship_customerInvite_id,
@@ -98,7 +99,7 @@ function FriendRequest(props: _T_Props) {
                 </div>
                 <div className={cx('request-contents')}>
                     {data.length > 0 ? (
-                        data.map((item: any) => (
+                        data.map((item: FriendGiveInvite) => (
                             <div key={item.friendship_id} className={cx('friend-item')}>
                                 <Link
                                     onClick={() => handleUpdateDataProfileUser(item)}

@@ -63,7 +63,7 @@ function Dog() {
                                 <div key={item.id} className={cx('dog-item')}>
                                     <CardItem
                                         name={item.name}
-                                        to={`product/dog/${item.id}`}
+                                        to={`/product/dog/${item.id}`}
                                         price={item.price}
                                         title="CHÓ CẢNH"
                                         src={item.previewUrl}

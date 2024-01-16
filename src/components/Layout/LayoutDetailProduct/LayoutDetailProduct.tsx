@@ -55,15 +55,15 @@ function LayoutDetailProduct(props: TProps) {
             behavior: 'smooth',
             top: 0,
         });
-    }, []);
+    }, [props.data]);
 
     const handleAddToCart = () => {
         if (infoUser.isAuth) {
             apiService.carts
                 .addToCart(
                     {
-                        product_id: props.data?.id,
-                        customer_id: infoUser.user?.id,
+                        product_id: props.data?.id ?? 0,
+                        customer_id: infoUser.user?.id ?? 0,
                         quantity: quantity,
                     },
                     infoUser.user?.token ?? '',

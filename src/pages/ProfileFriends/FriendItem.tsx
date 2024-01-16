@@ -12,6 +12,8 @@ import { toSeoURL } from '../../Helper';
 import { useSetRecoilState } from 'recoil';
 import { dataProfileUser } from '../../store';
 import { useSocketContext } from '../../context/SocketContext';
+import { FriendGiveInvite, Friended, TFriended, T_FriendGiveInvite } from '../../models';
+import { Socket } from 'socket.io-client';
 
 const cx = classNames.bind(styles);
 
@@ -23,8 +25,6 @@ type _T_Props = {
     status: string;
 };
 
-// NEED UPDATE TYPESCRYPT
-
 function FriendItem(props: _T_Props) {
     const [values] = useSessionContext();
     const message = useConfirmToast();
@@ -33,7 +33,7 @@ function FriendItem(props: _T_Props) {
     const [idsFriended, setIdsFriended] = useState<number[]>([]);
     const [idsGiveInvite, setIdsGiveInvite] = useState<number[]>([]);
     const setDataProfileUser = useSetRecoilState(dataProfileUser);
-    const socketReal = useRef<any>();
+    const socketReal = useRef<Socket>();
     const socket = useSocketContext();
 
     useEffect(() => {
@@ -43,7 +43,7 @@ function FriendItem(props: _T_Props) {
     }, []);
 
     useEffect(() => {
-        socketReal.current?.on('accept-friend-give', (_: any) => {
+        socketReal.current?.on('accept-friend-give', () => {
             handleGetIdsGiveInvited();
             handleGetIdsFriended();
         });
@@ -62,8 +62,8 @@ function FriendItem(props: _T_Props) {
     const handleGetIdsInvited = () => {
         apiService.friendship
             .getFriendInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
-            .then((res) => {
-                setIdsInvited(res.data.map((item: any) => item.friendship_customer_id));
+            .then((res: T_FriendGiveInvite) => {
+                setIdsInvited(res.data.map((item: FriendGiveInvite) => item.friendship_customer_id));
             })
             .catch((err) => console.error(err));
     };
@@ -71,9 +71,9 @@ function FriendItem(props: _T_Props) {
     const handleGetIdsGiveInvited = () => {
         apiService.friendship
             .getFriendGiveInviteById((values.user?.id as number).toString(), values.user?.token ?? '')
-            .then((res: any) => {
+            .then((res: T_FriendGiveInvite) => {
                 if (res.message === 'success') {
-                    setIdsGiveInvite(res.data.map((item: any) => item.friendship_customerInvite_id));
+                    setIdsGiveInvite(res.data.map((item: FriendGiveInvite) => item.friendship_customerInvite_id));
                 }
             });
     };
@@ -81,8 +81,8 @@ function FriendItem(props: _T_Props) {
     const handleGetIdsFriended = () => {
         apiService.friendship
             .getFriendedById((values.user?.id as number).toString(), values.user?.token ?? '')
-            .then((res: any) => {
-                setIdsFriended(res.data.map((item: any) => item.customer_id));
+            .then((res: TFriended) => {
+                setIdsFriended(res.data.map((item: Friended) => item.customer_id));
             })
             .catch((err) => console.error(err));
     };
@@ -92,12 +92,12 @@ function FriendItem(props: _T_Props) {
             .addNewInviteFriend(
                 {
                     status: 'waiting',
-                    customer_invite: values.user?.id,
+                    customer_invite: values.user?.id ?? 0,
                     customer_id: id,
                 },
                 values.user?.token ?? '',
             )
-            .then((res) => {
+            .then((res: { message: string; statusCode: number }) => {
                 if (res.message === 'success') {
                     handleGetIdsInvited();
 
@@ -131,12 +131,12 @@ function FriendItem(props: _T_Props) {
                 apiService.friendship
                     .deleteFriendshipById(
                         {
-                            customer_invite: values.user?.id,
+                            customer_invite: values.user?.id ?? 0,
                             customer_id: id,
                         },
                         values.user?.token ?? '',
                     )
-                    .then((res) => {
+                    .then((res: { message: string; statusCode: number }) => {
                         if (res.message === 'success') {
                             handleGetIdsInvited();
                             message?.toast?.current?.show({
@@ -173,12 +173,12 @@ function FriendItem(props: _T_Props) {
             .acceptFriendship(
                 {
                     customer_invite: props.id_friend,
-                    customer_id: values.user?.id,
+                    customer_id: values.user?.id ?? 0,
                     status: 'friended',
                 },
                 values.user?.token ?? '',
             )
-            .then((res: any) => {
+            .then((res: { message: string; statusCode: number }) => {
                 if (res.message === 'success') {
                     socket.current?.emit('accept-friend', {
                         id: props.id_friend,

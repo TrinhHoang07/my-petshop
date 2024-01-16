@@ -1,12 +1,8 @@
-// import classNames from 'classnames/bind';
-// import styles from './Detail.module.scss';
 import { LayoutDetailProduct } from '../../components/Layout/LayoutDetailProduct';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { T_Detail, T_Product } from '../../models';
 import { ApiService } from '../../axios/ApiService';
-
-// const cx = classNames.bind(styles);
 
 function Detail() {
     const params = useParams();
@@ -14,17 +10,19 @@ function Detail() {
     const apiService = new ApiService();
 
     useEffect(() => {
-        apiService.products
-            .getProduct(`${params.id}`)
-            .then((res: T_Detail) => {
-                if (res.message === 'success') {
-                    setData(res.data);
-                }
-            })
-            .catch((err) => console.error(err));
+        if (params.id) {
+            apiService.products
+                .getProduct(`${params.id}`)
+                .then((res: T_Detail) => {
+                    if (res.message === 'success') {
+                        setData(res.data);
+                    }
+                })
+                .catch((err) => console.error(err));
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [params]);
 
     return <LayoutDetailProduct data={data} />;
 }
