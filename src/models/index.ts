@@ -350,6 +350,7 @@ export type T_AddOrder = {
     message: string;
     statusCode: number;
     data: {
+        id: number;
         customer_id: number;
         product_id: number;
         quantity: number;

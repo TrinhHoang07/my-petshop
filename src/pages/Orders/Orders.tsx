@@ -1,11 +1,13 @@
 import classNames from 'classnames/bind';
 import styles from './Orders.module.scss';
 import { TiLocation } from 'react-icons/ti';
+import image from '../../assets/images/success-pay.png';
+import imagefail from '../../assets/images/fail-pay.png';
 import { Button } from '../../components/Button';
 import { RiCoupon3Fill } from 'react-icons/ri';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
 import { BiDetail } from 'react-icons/bi';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { orderItems } from '../../store';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
@@ -15,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { TData, T_AddOrder } from '../../models';
 import routesConfig from '../../config/routes';
 import { formatVND } from '../../Helper';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
@@ -25,6 +28,8 @@ function Orders() {
     const [values] = useSessionContext();
     const navigate = useNavigate();
     const [init, setInit] = useState<boolean>(false);
+    const [statePay, setStatePay] = useState<string>('');
+    const timer = useRef<any>();
 
     useEffect(() => {
         document.title = 'Mua sắm | Petshop chất lượng số 1 Việt Nam!';
@@ -46,7 +51,6 @@ function Orders() {
     }, [data]);
 
     useEffect(() => {
-        console.log('data: ', data);
         setInit(true);
 
         return () => {
@@ -56,8 +60,18 @@ function Orders() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [init]);
 
+    useEffect(() => {
+        if (data.length <= 0) {
+            navigate(routesConfig.categories);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data]);
+
     const handleOrders = () => {
         if (data.length > 0) {
+            setStatePay('paying');
+
             const dataPost = {
                 customer_id: values.user?.id,
                 product_id: data[0].id,
@@ -67,20 +81,69 @@ function Orders() {
 
             console.log('orders: ', dataPost);
 
+            // testttttt
             apiService.orders
                 .addOrder(dataPost, values.user?.token ?? '')
                 .then((res: T_AddOrder) => {
                     if (res.message === 'success') {
-                        message?.toast?.current?.show({
-                            severity: 'success',
-                            summary: 'Thành công',
-                            detail: 'Đặt hàng thành công!',
-                            life: 3000,
-                        });
+                        axios
+                            .post('http://localhost:3009/payment/test/create', {
+                                state: '00',
+                                order_id: res.data.id,
+                            })
+                            .then((res1) => {
+                                if (res1.data.message === 'success') {
+                                    axios
+                                        .post('http://localhost:3009/payment/create', {
+                                            amount: 1000000,
+                                            pay_id: res1.data.data.id,
+                                            // bankCode: 'VNPAYQR',
+                                            orderInfo: 'Test thanh toan VN PAY QR',
+                                        })
+                                        .then((res2) => {
+                                            if (res2.data.url) {
+                                                window.open(res2.data.url);
 
-                        setTimeout(() => {
-                            navigate(routesConfig.profile_buy);
-                        }, 1500);
+                                                timer.current = setInterval(() => {
+                                                    axios
+                                                        .get(`http://localhost:3009/payment/test/get/${res2.data.id}`)
+                                                        .then((res) => {
+                                                            if (
+                                                                res.data.message === 'success' &&
+                                                                res.data.data.state === '01'
+                                                            ) {
+                                                                setStatePay('success');
+                                                                message?.toast?.current?.show({
+                                                                    severity: 'success',
+                                                                    summary: 'Thành công',
+                                                                    detail: 'Thanh toán thành công!',
+                                                                    life: 4500,
+                                                                });
+                                                                clearInterval(timer.current);
+                                                            } else if (
+                                                                res.data.message === 'success' &&
+                                                                res.data.data.state === '03'
+                                                            ) {
+                                                                setStatePay('error');
+                                                                message?.toast?.current?.show({
+                                                                    severity: 'error',
+                                                                    summary: 'Có lỗi',
+                                                                    detail: 'Thanh toán thất bại!',
+                                                                    life: 4500,
+                                                                });
+                                                                clearInterval(timer.current);
+                                                            }
+                                                        })
+                                                        .catch(() => setStatePay('error'));
+                                                }, 1500);
+                                            }
+                                        })
+                                        .catch((err) => {
+                                            console.log('error VNPAY: ' + err);
+                                        });
+                                }
+                            })
+                            .catch((err) => console.error(err));
                     }
                 })
                 .catch((err) => {
@@ -104,6 +167,35 @@ function Orders() {
 
     return (
         <div className={cx('orders')}>
+            {!!statePay && (
+                <div className={cx('fixed-payment')}>
+                    <div className={cx('wrapper-payment')}>
+                        {statePay !== 'success' && statePay !== 'error' && <span className={cx('loader')}></span>}
+                        <div className={cx('image-pay-success')}>
+                            {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
+                            {statePay === 'success' && <img src={image} alt="success image" />}
+                            {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
+                            {statePay === 'error' && <img src={imagefail} alt="fail image" />}
+                        </div>
+                        <p>
+                            {statePay === 'success'
+                                ? 'Thanh toán thành công'
+                                : statePay === 'error'
+                                ? 'Thanh toán thất bại'
+                                : 'Đang tiến hành thanh toán...'}
+                        </p>
+                        <div className={cx('group-button-pay')}>
+                            {statePay === 'success' && (
+                                <>
+                                    <Button to={routesConfig.profile_buy}>Đến đơn mua</Button>
+                                    <Button to={routesConfig.home}>Về trang chủ</Button>
+                                </>
+                            )}
+                            {statePay === 'error' && <Button to={routesConfig.categories}>Quay lại giỏ hàng</Button>}
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className={cx('address')}>
                 <div className={cx('heading')}>
                     <span>
@@ -218,7 +310,7 @@ function Orders() {
                         <p>Tổng thanh toán</p>
                         <h6>68.000đ</h6>
                     </div>
-                    <button onClick={handleOrders}>Đặt hàng</button>
+                    <button onClick={handleOrders}>{!!statePay ? 'Đang thanh toán...' : 'Đặt hàng'}</button>
                 </div>
             </div>
         </div>
