@@ -14,12 +14,17 @@ import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { ApiService } from '../../axios/ApiService';
 import { useSessionContext } from '../../context/SessionContext';
 import { useNavigate } from 'react-router-dom';
-import { TData, T_AddOrder } from '../../models';
+import { TData, T_AddOrder, T_Payment } from '../../models';
 import routesConfig from '../../config/routes';
 import { formatVND } from '../../Helper';
-import axios from 'axios';
 
 const cx = classNames.bind(styles);
+
+// const VNP_TMNCODE = 'B1QK6DWP';
+// const VNP_HASHSECRET = 'EBORDBWITKXNTPPEKGIBHTURKFPILLUI';
+// const VNP_URL = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
+// const VNP_API = 'https://sandbox.vnpayment.vn/merchant_webapi/api/transaction';
+// const VNP_RETURNURL = 'http://localhost:3000/carts/orders';
 
 function Orders() {
     const [data, setData] = useRecoilState(orderItems);
@@ -29,6 +34,13 @@ function Orders() {
     const navigate = useNavigate();
     const [init, setInit] = useState<boolean>(false);
     const [statePay, setStatePay] = useState<string>('');
+    const [vouchers, setVouchers] = useState<{
+        ship: number;
+        shop: number;
+    }>({
+        shop: 100000,
+        ship: 0,
+    });
     const timer = useRef<any>();
 
     useEffect(() => {
@@ -50,6 +62,14 @@ function Orders() {
         }
     }, [data]);
 
+    const totalPay = useMemo(() => {
+        if (totalMoney?.price) {
+            return totalMoney.price - totalMoney.length * vouchers.ship - totalMoney.length * vouchers.shop;
+        }
+
+        return 0;
+    }, [totalMoney, vouchers]);
+
     useEffect(() => {
         setInit(true);
 
@@ -68,10 +88,146 @@ function Orders() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
+    const handleGetPaymentById = (res: { url: string; id: number }) => {
+        apiService.payments
+            .getPaymentById(`${res.id}`, values.user?.token ?? '')
+            .then((res: T_Payment) => {
+                if (res.message === 'success' && res.data.state === '00') {
+                    setStatePay('success');
+                    message?.toast?.current?.show({
+                        severity: 'success',
+                        summary: 'Thành công',
+                        detail: 'Thanh toán thành công!',
+                        life: 4500,
+                    });
+                    clearInterval(timer.current);
+                } else if (res.message === 'success' && res.data.state === '03') {
+                    setStatePay('error');
+                    message?.toast?.current?.show({
+                        severity: 'error',
+                        summary: 'Có lỗi',
+                        detail: 'Thanh toán thất bại!',
+                        life: 4500,
+                    });
+                    clearInterval(timer.current);
+                } else if (res.message === 'success' && res.data.state === '97') {
+                    setStatePay('checksumfail');
+                    message?.toast?.current?.show({
+                        severity: 'error',
+                        summary: 'Có lỗi',
+                        detail: 'Thanh toán thất bại, chữ ký không hợp lệ!',
+                        life: 4500,
+                    });
+                    clearInterval(timer.current);
+                }
+            })
+            .catch((_) => {
+                setStatePay('error');
+            });
+
+        // axios
+        //     .get(`http://localhost:3009/payment/order/${res.data.id}`)
+        //     .then((res: T_Payment) => {
+        //         if (res.data.message === 'success' && res.data.data.state === '00') {
+        //             setStatePay('success');
+        //             message?.toast?.current?.show({
+        //                 severity: 'success',
+        //                 summary: 'Thành công',
+        //                 detail: 'Thanh toán thành công!',
+        //                 life: 4500,
+        //             });
+        //             clearInterval(timer.current);
+        //         } else if (res.data.message === 'success' && res.data.data.state === '03') {
+        //             setStatePay('error');
+        //             message?.toast?.current?.show({
+        //                 severity: 'error',
+        //                 summary: 'Có lỗi',
+        //                 detail: 'Thanh toán thất bại!',
+        //                 life: 4500,
+        //             });
+        //             clearInterval(timer.current);
+        //         } else if (res.data.message === 'success' && res.data.data.state === '97') {
+        //             setStatePay('checksumfail');
+        //             message?.toast?.current?.show({
+        //                 severity: 'error',
+        //                 summary: 'Có lỗi',
+        //                 detail: 'Thanh toán thất bại, chữ ký không hợp lệ!',
+        //                 life: 4500,
+        //             });
+        //             clearInterval(timer.current);
+        //         }
+        //     })
+        //     .catch(() => setStatePay('error'));
+    };
+
+    // const handleTestApi = async () => {
+    //     const date = new Date();
+    //     const createDate = moment(date).format('YYYYMMDDHHmmss');
+    //     const tmnCode = VNP_TMNCODE;
+    //     const secretKey = VNP_HASHSECRET;
+    //     let vnpUrl = VNP_URL;
+    //     const returnUrl = VNP_RETURNURL;
+    //     const orderId = moment(date).format('DDHHmmss');
+    //     const amount = 1000000;
+    //     // const bankCode = data.bankCode;
+    //     const currCode = 'VND';
+    //     let vnp_Params: any = {};
+    //     vnp_Params['vnp_Version'] = '2.1.0';
+    //     vnp_Params['vnp_Command'] = 'pay';
+    //     vnp_Params['vnp_TmnCode'] = tmnCode;
+    //     vnp_Params['vnp_Locale'] = 'vn';
+    //     vnp_Params['vnp_CurrCode'] = currCode;
+    //     vnp_Params['vnp_TxnRef'] = orderId;
+    //     vnp_Params['vnp_OrderInfo'] = 'Noi dung thanh toan';
+    //     vnp_Params['vnp_OrderType'] = 'other';
+    //     vnp_Params['vnp_Amount'] = amount * 100;
+    //     vnp_Params['vnp_ReturnUrl'] = returnUrl;
+    //     vnp_Params['vnp_IpAddr'] = await publicIpv4();
+    //     vnp_Params['vnp_CreateDate'] = createDate;
+
+    //     // if (bankCode !== null && bankCode !== '') {
+    //     //     vnp_Params['vnp_BankCode'] = bankCode;
+    //     // }
+
+    //     vnp_Params = sortObject(vnp_Params);
+    //     const signData = querystring.stringify(vnp_Params, { encode: false });
+    //     const hmac = CryptoJS.HmacSHA512(signData, secretKey).toString();
+    //     // const signed = hmac.toString(new Buffer(signData, 'utf-8')).digest('hex');
+    //     vnp_Params['vnp_SecureHash'] = hmac;
+    //     vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+
+    //     setUrl(vnpUrl);
+    // };
+
+    // let sumQuery = querystring.parse(window.location.search);
+    // if (JSON.stringify(sumQuery) !== JSON.stringify({})) {
+    //     const secureHash = sumQuery['vnp_SecureHash'];
+    //     delete sumQuery['vnp_SecureHash'];
+    //     delete sumQuery['vnp_SecureHashType'];
+    //     sumQuery = sortObject(sumQuery);
+
+    //     // const tmnCode = VNP_TMNCODE;
+    //     const secretKey = VNP_HASHSECRET;
+    //     const signData = querystring.stringify(sumQuery, { encode: false });
+    //     const hmac = CryptoJS.HmacSHA512(signData, secretKey).toString();
+    //     // const signed = hmac.update(new Buffer(signData, 'utf-8')).digest('hex');
+
+    //     if (secureHash === hmac) {
+    //         if (sumQuery['vnp_ResponseCode'] === '00') {
+    //             console.log('success');
+    //         } else {
+    //             console.log('error');
+    //         }
+    //     } else {
+    //         console.log('checksum error');
+    //     }
+    // }
+
     const handleOrders = () => {
         if (data.length > 0) {
             setStatePay('paying');
 
+            // chưa handle mua nhiều mặt hàng một lúc
             const dataPost = {
                 customer_id: values.user?.id,
                 product_id: data[0].id,
@@ -81,70 +237,50 @@ function Orders() {
 
             console.log('orders: ', dataPost);
 
-            // testttttt
             apiService.orders
                 .addOrder(dataPost, values.user?.token ?? '')
                 .then((res: T_AddOrder) => {
                     if (res.message === 'success') {
-                        axios
-                            .post('http://localhost:3009/payment/test/create', {
-                                state: '00',
-                                order_id: res.data.id,
-                            })
-                            .then((res1) => {
-                                if (res1.data.message === 'success') {
-                                    axios
-                                        .post('http://localhost:3009/payment/create', {
-                                            amount: 1000000,
-                                            pay_id: res1.data.data.id,
-                                            // bankCode: 'VNPAYQR',
-                                            orderInfo: 'Test thanh toan VN PAY QR',
-                                        })
-                                        .then((res2) => {
-                                            if (res2.data.url) {
-                                                window.open(res2.data.url);
-
-                                                timer.current = setInterval(() => {
-                                                    axios
-                                                        .get(`http://localhost:3009/payment/test/get/${res2.data.id}`)
-                                                        .then((res) => {
-                                                            if (
-                                                                res.data.message === 'success' &&
-                                                                res.data.data.state === '01'
-                                                            ) {
-                                                                setStatePay('success');
-                                                                message?.toast?.current?.show({
-                                                                    severity: 'success',
-                                                                    summary: 'Thành công',
-                                                                    detail: 'Thanh toán thành công!',
-                                                                    life: 4500,
-                                                                });
-                                                                clearInterval(timer.current);
-                                                            } else if (
-                                                                res.data.message === 'success' &&
-                                                                res.data.data.state === '03'
-                                                            ) {
-                                                                setStatePay('error');
-                                                                message?.toast?.current?.show({
-                                                                    severity: 'error',
-                                                                    summary: 'Có lỗi',
-                                                                    detail: 'Thanh toán thất bại!',
-                                                                    life: 4500,
-                                                                });
-                                                                clearInterval(timer.current);
-                                                            }
-                                                        })
-                                                        .catch(() => setStatePay('error'));
-                                                }, 1500);
-                                            }
-                                        })
-                                        .catch((err) => {
-                                            console.log('error VNPAY: ' + err);
-                                        });
+                        return apiService.payments
+                            .addPayment(
+                                {
+                                    state: '99',
+                                    order_id: res.data.id,
+                                },
+                                values.user?.token ?? '',
+                            )
+                            .then((res: T_Payment) => {
+                                if (res.message === 'success') {
+                                    return res;
                                 }
                             })
+
                             .catch((err) => console.error(err));
                     }
+                })
+                .then((res) => {
+                    return apiService.payments
+                        .createVNPAY(
+                            {
+                                amount: 1000000,
+                                pay_id: res?.data.id,
+                                // bankCode: 'VNPAYQR',
+                                orderInfo: 'Test thanh toan VN PAY QR',
+                            },
+                            values.user?.token ?? '',
+                        )
+                        .then((res: { url: string; id: number }) => {
+                            if (res.url) {
+                                window.open(res.url);
+
+                                timer.current = setInterval(() => {
+                                    handleGetPaymentById(res);
+                                }, 1500);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log('error VNPAY: ' + err);
+                        });
                 })
                 .catch((err) => {
                     console.error(err);
@@ -170,7 +306,9 @@ function Orders() {
             {!!statePay && (
                 <div className={cx('fixed-payment')}>
                     <div className={cx('wrapper-payment')}>
-                        {statePay !== 'success' && statePay !== 'error' && <span className={cx('loader')}></span>}
+                        {statePay !== 'success' && statePay !== 'error' && statePay !== 'checksumfail' && (
+                            <span className={cx('loader')}></span>
+                        )}
                         <div className={cx('image-pay-success')}>
                             {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
                             {statePay === 'success' && <img src={image} alt="success image" />}
@@ -182,6 +320,8 @@ function Orders() {
                                 ? 'Thanh toán thành công'
                                 : statePay === 'error'
                                 ? 'Thanh toán thất bại'
+                                : statePay === 'checksumfail'
+                                ? 'Thanh toán thất bại, chữ ký không hợp lệ'
                                 : 'Đang tiến hành thanh toán...'}
                         </p>
                         <div className={cx('group-button-pay')}>
@@ -261,7 +401,7 @@ function Orders() {
                     <span>
                         <RiCoupon3Fill />
                     </span>
-                    <p>Voucher Shopee</p>
+                    <p>Voucher của shop</p>
                 </div>
                 <p className={cx('select-voucher')}>Chọn hoặc nhập mã</p>
             </div>
@@ -287,20 +427,20 @@ function Orders() {
                         <p>{formatVND.format(totalMoney?.price ?? 0)}</p>
                     </div>
                     <div className={cx('item-pay')}>
-                        <p>Giảm giá của Shopee</p>
-                        <p>12.000đ</p>
+                        <p>Giảm giá của Shop</p>
+                        <p>{formatVND.format((totalMoney?.length ?? 1) * vouchers.shop)}</p>
                     </div>
                     <div className={cx('item-pay')}>
                         <p>Tổng tiền phí vận chuyển</p>
-                        <p>30.000đ</p>
+                        <p>{formatVND.format(vouchers.ship)}</p>
                     </div>
                     <div className={cx('item-pay')}>
                         <p>Giảm giá phí vận chuyển</p>
-                        <p>30.000đ</p>
+                        <p>{formatVND.format(vouchers.ship)}</p>
                     </div>
                     <div className={cx('item-total')}>
                         <p>Tổng thanh toán</p>
-                        <p>68.000đ</p>
+                        <p>{formatVND.format(totalPay)}</p>
                     </div>
                 </div>
             </div>
@@ -308,7 +448,7 @@ function Orders() {
                 <div className={cx('buys-container')}>
                     <div className={cx('info-total')}>
                         <p>Tổng thanh toán</p>
-                        <h6>68.000đ</h6>
+                        <h6>{formatVND.format(totalPay)}</h6>
                     </div>
                     <button onClick={handleOrders}>{!!statePay ? 'Đang thanh toán...' : 'Đặt hàng'}</button>
                 </div>

@@ -379,3 +379,17 @@ export type T_Blogs = {
     statusCode: number;
     data: Blog[];
 };
+
+// payment
+export type T_Payment = {
+    message: string;
+    statusCode: number;
+    data: {
+        id: number;
+        state: string;
+    };
+};
+
+// testttttt
+
+// testt
