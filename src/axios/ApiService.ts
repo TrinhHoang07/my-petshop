@@ -94,6 +94,42 @@ export class ApiService {
         };
     }
 
+    get payments() {
+        const route = {
+            createVNPAY: 'payment/create',
+            addPayment: 'payment/order/create',
+            getPaymentById: (id: string) => `payment/order/${id}`,
+            updatePaymentById: (id: string) => `payment/order/update/${id}`,
+        };
+
+        return {
+            createVNPAY: (data: any, token: string) =>
+                AxiosClientApi.post(route.createVNPAY, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            addPayment: (data: any, token: string) =>
+                AxiosClientApi.post(route.addPayment, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            getPaymentById: (id: string, token: string) =>
+                AxiosClientApi.get(route.getPaymentById(id), null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            updatePaymentById: (id: string, data: any, token: string) =>
+                AxiosClientApi.put(route.updatePaymentById(id), data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+        };
+    }
+
     get blogs() {
         const route = {
             getBlogById: (blogId: string) => `blogs/blog/${blogId}`,
