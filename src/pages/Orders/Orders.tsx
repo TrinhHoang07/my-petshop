@@ -388,7 +388,7 @@ function Orders() {
                         <p>Nhận hàng vào 22/2 - 25/2</p>
                         <p style={{ color: 'orange' }}>Option áp mã vận chuyển</p>
                     </div>
-                    <p style={{ color: '#000' }}>Phí giao hàng: 1.000.000đ</p>
+                    <p style={{ color: '#000' }}>Phí giao hàng: {formatVND.format(vouchers.ship)}</p>
                     <Button small={'true'}>Thay đổi</Button>
                 </div>
             </div>

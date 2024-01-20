@@ -236,7 +236,7 @@ export type T_Message = {
 export type Address = {
     id: number;
     full_name: string;
-    customer_: number;
+    customer_id: number;
     phone_number: string;
     main_address: string;
     detail_address: string;
