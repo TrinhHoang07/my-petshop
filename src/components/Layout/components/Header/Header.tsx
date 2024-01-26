@@ -10,11 +10,13 @@ import Menu from './Menu';
 import { Search } from '../Search';
 import { Carts } from './Carts';
 import { useState } from 'react';
+import { useSessionContext } from '../../../../context/SessionContext';
 
 const cx = classNames.bind(styles);
 
 function Header() {
     const [openSearch, setOpenSearch] = useState<boolean>(false);
+    const [values] = useSessionContext();
 
     const handleOpenSearch = () => {
         setOpenSearch(true);
@@ -35,7 +37,13 @@ function Header() {
                     <BiSearch fontSize={'2.5rem'} />
                 </span>
                 <Link className={cx('action-item', 'user-icon')} to={routesConfig.profile}>
-                    <FaUser fontSize={'2.5rem'} />
+                    {values.user && values.user.avatar ? (
+                        <div className={cx('user-avatar')}>
+                            <img src={values.user.avatar} alt="avatar user" />
+                        </div>
+                    ) : (
+                        <FaUser fontSize={'2.5rem'} />
+                    )}
                 </Link>
                 <Carts />
             </div>

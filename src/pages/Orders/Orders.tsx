@@ -14,9 +14,10 @@ import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { ApiService } from '../../axios/ApiService';
 import { useSessionContext } from '../../context/SessionContext';
 import { useNavigate } from 'react-router-dom';
-import { TData, T_AddOrder, T_Payment } from '../../models';
+import { Address, TData, T_AddOrder, T_Payment, T_ProfileAddress } from '../../models';
 import routesConfig from '../../config/routes';
 import { formatVND } from '../../Helper';
+import { AddressScreen } from '../../components/Layout/components/Address';
 
 const cx = classNames.bind(styles);
 
@@ -33,6 +34,7 @@ function Orders() {
     const [values] = useSessionContext();
     const navigate = useNavigate();
     const [init, setInit] = useState<boolean>(false);
+    const [isChangeAddress, setIsChangeAddress] = useState<boolean>(false);
     const [statePay, setStatePay] = useState<string>('');
     const [vouchers, setVouchers] = useState<{
         ship: number;
@@ -41,7 +43,27 @@ function Orders() {
         shop: 100000,
         ship: 0,
     });
+    const [addresses, setAddresses] = useState<Address[]>([]);
+    const [addressChoose, setAddressChoose] = useState<Address>();
+
     const timer = useRef<any>();
+
+    useEffect(() => {
+        apiService.address
+            .getAddressesById((values.user?.id as number).toString(), values.user?.token ?? '')
+            .then((res: T_ProfileAddress) => {
+                if (res.message === 'success') {
+                    setAddresses(res.data);
+
+                    if (res.data.length > 0) {
+                        setAddressChoose(res.data[0]);
+                    }
+                }
+            })
+            .catch((err) => console.error(err));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         document.title = 'Mua sắm | Petshop chất lượng số 1 Việt Nam!';
@@ -303,6 +325,13 @@ function Orders() {
 
     return (
         <div className={cx('orders')}>
+            <AddressScreen
+                data={addresses}
+                open={isChangeAddress}
+                setOpen={setIsChangeAddress}
+                setChoose={setAddressChoose}
+                choose={addressChoose}
+            />
             {!!statePay && (
                 <div className={cx('fixed-payment')}>
                     <div className={cx('wrapper-payment')}>
@@ -343,13 +372,25 @@ function Orders() {
                     </span>
                     <div className={cx('detail-info')}>
                         <h5 style={{ fontWeight: 'bold' }}>Địa chỉ nhận hàng</h5>
-                        <div className="detail-info">
-                            <h5 style={{ margin: '4px 0' }}>Trịnh Hoàng | 0396254427</h5>
-                            <p>11 Ngõ 132/66 Nguyên Xá, Minh Khai, Bắc Từ Liêm, Hà Nội</p>
-                        </div>
+                        {addresses.length > 0 ? (
+                            <div className="detail-info">
+                                <h5 style={{ margin: '4px 0' }}>
+                                    {addressChoose?.full_name} | {addressChoose?.phone_number}
+                                </h5>
+                                <p>
+                                    {addressChoose?.detail_address}, {addressChoose?.main_address}
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="detail-info">
+                                <p>Bạn chưa có địa chỉ, vui lòng thêm địa chỉ!</p>
+                            </div>
+                        )}
                     </div>
                 </div>
-                <Button medium={'true'}>Thay đổi địa chỉ</Button>
+                <Button onClick={() => setIsChangeAddress(true)} medium={'true'}>
+                    Thay đổi địa chỉ
+                </Button>
             </div>
             <div className={cx('products')}>
                 <h3 className={cx('heading')}>TrinhHoang Shop</h3>
