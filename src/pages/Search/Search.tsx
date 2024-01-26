@@ -9,6 +9,7 @@ import { CardItemFlip } from '../../components/CardItemFlip';
 import { T_Product, T_Search } from '../../models';
 import { ApiService } from '../../axios/ApiService';
 import { App } from '../../const/App';
+import { getNameFromType } from '../../Helper';
 
 const cx = classNames.bind(styles);
 
@@ -31,7 +32,7 @@ function Search() {
 
             apiService.products
                 .searchProducts({
-                    search: debounced,
+                    search: debounced.trim(),
                 })
                 .then((res: T_Search) => {
                     setLoading(false);
@@ -77,8 +78,8 @@ function Search() {
                             data.map((item: T_Product) => (
                                 <CardItemFlip
                                     key={item.id}
-                                    to={`/product/cat/${item.id}`}
-                                    title="MÈO CẢNH"
+                                    to={`/product/${item.type}/${item.id}`}
+                                    title={getNameFromType(item.type)}
                                     name={item.name}
                                     src={item.preview_url}
                                     price={item.price}

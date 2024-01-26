@@ -6,7 +6,7 @@ import { AiOutlineLoading } from 'react-icons/ai';
 import img from '../../../../assets/images/cat_item_1.jpg';
 import { useDebounce } from '../../../../hooks';
 import { formatVND } from '../../../../Helper';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { T_Product, T_Search } from '../../../../models';
 import { ApiService } from '../../../../axios/ApiService';
 import { App } from '../../../../const/App';
@@ -33,7 +33,7 @@ function Search(props: T_Props) {
 
             apiService.products
                 .searchProducts({
-                    search: debounced,
+                    search: debounced.trim(),
                 })
                 .then((res: T_Search) => {
                     if (res.message === 'success') {
@@ -108,7 +108,12 @@ function Search(props: T_Props) {
                     <div className={cx('result-search')}>
                         {fakeData.length > 0 ? (
                             fakeData.map((item) => (
-                                <div key={item.id} className={cx('result-item')}>
+                                <Link
+                                    to={`/product/${item.type}/${item.id}`}
+                                    onClick={() => props.setOpen(false)}
+                                    key={item.id}
+                                    className={cx('result-item')}
+                                >
                                     <div className={cx('item-info')}>
                                         <div className={cx('preview')}>
                                             <img src={item.preview_url ?? img} alt="images preview" />
@@ -116,7 +121,7 @@ function Search(props: T_Props) {
                                         <p className={cx('name-item')}>{item.name}</p>
                                     </div>
                                     <p className={cx('price-item')}>{formatVND.format(item.price)}</p>
-                                </div>
+                                </Link>
                             ))
                         ) : (
                             <p className={cx('message-noti')}>{message}</p>

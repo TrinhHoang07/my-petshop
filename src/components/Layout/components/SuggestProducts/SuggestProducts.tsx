@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { formatVND } from '../../../../Helper';
 import { T_Product, T_Suggest } from '../../../../models';
 import { ApiService } from '../../../../axios/ApiService';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -32,11 +33,13 @@ function SuggestProducts() {
                     data.map((item: T_Product) => (
                         <div key={item.id}>
                             <div className={cx('suggest-item')}>
-                                <div className={cx('preview-suggest')}>
+                                <Link to={`/product/${item.type}/${item.id}`} className={cx('preview-suggest')}>
                                     <img src={item.preview_url} alt="preview product" />
-                                </div>
+                                </Link>
                                 <div className={cx('suggest-info')}>
-                                    <h6 className={cx('heading-suggest')}>{item.name}</h6>
+                                    <Link to={`/product/${item.type}/${item.id}`} className={cx('heading-suggest')}>
+                                        {item.name}
+                                    </Link>
                                     <p className={cx('price-suggest-item')}>{formatVND.format(item.price)}</p>
                                 </div>
                             </div>

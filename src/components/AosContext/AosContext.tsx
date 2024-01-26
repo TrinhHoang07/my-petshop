@@ -13,6 +13,8 @@ function AosContext(props: TProps) {
             AOS.init({
                 throttleDelay: 120,
                 duration: 800,
+                offset: 0,
+                once: true,
             });
 
         setInit(true);

@@ -91,6 +91,7 @@ function Shop() {
                                 <CardItemFlip
                                     key={item.id}
                                     name={item.name}
+                                    to={`/product/${item.type}/${item.id}`}
                                     price={item.price}
                                     title={getNameFromType(item.type)}
                                     src={item.preview_url}
