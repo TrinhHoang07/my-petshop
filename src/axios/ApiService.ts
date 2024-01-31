@@ -338,4 +338,33 @@ export class ApiService {
                 }),
         };
     }
+
+    get notifications() {
+        const route = {
+            getNotifications: 'notifications/all',
+            getNotificationsById: (id: string) => `notifications/notifications/${id}`,
+            createNotification: 'notifications/create',
+        };
+
+        return {
+            getNotifications: (token: string) =>
+                AxiosClientApi.get(route.getNotifications, null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            getNotificationsById: (id: string, token: string) =>
+                AxiosClientApi.get(route.getNotificationsById(id), null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            createNotification: (data: any, token: string) =>
+                AxiosClientApi.post(route.createNotification, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+        };
+    }
 }

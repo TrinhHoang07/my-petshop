@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ProfileNoti.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
@@ -6,12 +6,31 @@ import NotiItem from './NotiItem';
 import { HiMenu } from 'react-icons/hi';
 import { useSetRecoilState } from 'recoil';
 import { isMenuMobile } from '../../store';
+import { useSessionContext } from '../../context/SessionContext';
+import { ApiService } from '../../axios/ApiService';
 
 const cx = classNames.bind(styles);
 
 function ProfileNoti() {
     const [active, setActive] = useState<number>(1);
     const setState = useSetRecoilState(isMenuMobile);
+    const [values] = useSessionContext();
+    const [data, setData] = useState<any[]>([]);
+    const apiService = new ApiService();
+
+    useEffect(() => {
+        apiService.notifications
+            .getNotificationsById((values.user?.id as number).toString(), values.user?.token ?? '')
+            .then((res: any) => {
+                if (res.message === 'success') {
+                    setData(res.data);
+                }
+            })
+
+            .catch((err) => console.error(err));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <LayoutProfile>
@@ -50,19 +69,26 @@ function ProfileNoti() {
                             <div className={cx('noti-new')}>
                                 <h3>Mới</h3>
                                 <div>
-                                    {[1, 2, 3].map((item) => (
-                                        <NotiItem key={item} />
-                                    ))}
+                                    {data.length > 0 &&
+                                        data.map((item) => (
+                                            <NotiItem
+                                                seen={item.seen}
+                                                avatar_path={item.avatar_path}
+                                                content={item.content}
+                                                created_at={item.created_at}
+                                                key={item.id}
+                                            />
+                                        ))}
                                 </div>
                             </div>
-                            <div className={cx('noti-new')}>
+                            {/* <div className={cx('noti-new')}>
                                 <h3>Trước đó</h3>
                                 <div>
                                     {[1, 2, 3].map((item) => (
                                         <NotiItem key={item} />
                                     ))}
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

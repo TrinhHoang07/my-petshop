@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const formatMoney = (amount: any) => {
     if (typeof amount === 'string') {
         return Number(parseFloat(amount)).toLocaleString();
@@ -97,4 +99,17 @@ export const sortObject = (obj: any) => {
         sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, '+');
     }
     return sorted;
+};
+
+export const formatTimeDate = (date: string): string => {
+    const oldDate = new Date(date);
+    const now = new Date();
+
+    console.log('change: ' + moment('2024-01-31 08:22:51.114189').format('HH:mm:ss'));
+
+    // const minutes = Math.floor((now - oldDate) / (1000 * 60));
+
+    const time = Math.floor((now.getTime() - oldDate.getTime()) / (1000 * 60 * 24));
+
+    return `${time} phút trước`;
 };

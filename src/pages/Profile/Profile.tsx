@@ -328,7 +328,7 @@ function Profile() {
                                                 }));
                                             }}
                                             type="radio"
-                                            value={'male'}
+                                            value="male"
                                             id="male"
                                             name="gender"
                                         />
@@ -343,7 +343,7 @@ function Profile() {
                                                     gender: e.target.value,
                                                 }));
                                             }}
-                                            value={'female'}
+                                            value="female"
                                             type="radio"
                                             id="female"
                                             name="gender"
