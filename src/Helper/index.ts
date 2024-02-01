@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export const formatMoney = (amount: any) => {
     if (typeof amount === 'string') {
         return Number(parseFloat(amount)).toLocaleString();
@@ -101,15 +99,33 @@ export const sortObject = (obj: any) => {
     return sorted;
 };
 
+export const convertMinutesToHoursAndDays = (minutes: number) => {
+    if (minutes < 1) {
+        return 'Vừa xong';
+    } else {
+        if (minutes < 60) {
+            return minutes + ' phút trước';
+        } else {
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) {
+                return hours + ' giờ trước';
+            } else {
+                const days = Math.floor(hours / 24);
+                return days + ' ngày trước';
+            }
+        }
+    }
+};
+
 export const formatTimeDate = (date: string): string => {
-    const oldDate = new Date(date);
-    const now = new Date();
+    const dateOld: any = new Date(date);
 
-    console.log('change: ' + moment('2024-01-31 08:22:51.114189').format('HH:mm:ss'));
+    console.log('old: ' + dateOld);
+    const dateNow: any = new Date();
+    console.log('dateNow: ' + dateNow);
 
-    // const minutes = Math.floor((now - oldDate) / (1000 * 60));
+    let ms = (dateNow - dateOld) % 86400000;
+    let minutes = Math.floor((ms % 3600000) / 60000);
 
-    const time = Math.floor((now.getTime() - oldDate.getTime()) / (1000 * 60 * 24));
-
-    return `${time} phút trước`;
+    return convertMinutesToHoursAndDays(minutes);
 };

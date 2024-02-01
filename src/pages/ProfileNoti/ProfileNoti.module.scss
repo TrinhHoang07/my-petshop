@@ -74,6 +74,11 @@ $tablet-width: 1023px;
                 font-weight: 500;
                 font-size: 1.8rem;
             }
+
+            .wrapper-noti-item {
+                max-height: 500px;
+                overflow-y: auto;
+            }
         }
     }
 }

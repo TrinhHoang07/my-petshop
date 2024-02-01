@@ -16,6 +16,7 @@ function ProfileNoti() {
     const setState = useSetRecoilState(isMenuMobile);
     const [values] = useSessionContext();
     const [data, setData] = useState<any[]>([]);
+    const [dataRender, setDataRender] = useState<any[]>([]);
     const apiService = new ApiService();
 
     useEffect(() => {
@@ -31,6 +32,44 @@ function ProfileNoti() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        setDataRender(data);
+    }, [data]);
+
+    useEffect(() => {
+        if (active === 2) {
+            setDataRender(data.filter((item) => !item.seen));
+        } else {
+            setDataRender(data);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [active]);
+
+    const handleSeen = (id: number) => {
+        apiService.notifications
+            .updateSeen(id.toString(), values.user?.token ?? '')
+            .then((res: any) => {
+                if (res.message === 'success') {
+                    setData((item) => {
+                        const data = [...item];
+                        const itemId = data.findIndex((item) => item.id === id);
+                        if (itemId !== -1) {
+                            data[itemId] = {
+                                ...data[itemId],
+                                seen: true,
+                            };
+
+                            return data;
+                        } else {
+                            return data;
+                        }
+                    });
+                }
+            })
+            .catch((err) => console.error(err));
+    };
 
     return (
         <LayoutProfile>
@@ -68,17 +107,21 @@ function ProfileNoti() {
                         <div className={cx('noti-container')}>
                             <div className={cx('noti-new')}>
                                 <h3>Mới</h3>
-                                <div>
-                                    {data.length > 0 &&
-                                        data.map((item) => (
-                                            <NotiItem
-                                                seen={item.seen}
-                                                avatar_path={item.avatar_path}
-                                                content={item.content}
-                                                created_at={item.created_at}
-                                                key={item.id}
-                                            />
-                                        ))}
+                                <div className={cx('wrapper-noti-item')}>
+                                    {dataRender.length > 0 &&
+                                        dataRender
+                                            .reverse()
+                                            .map((item) => (
+                                                <NotiItem
+                                                    id={item.id}
+                                                    seen={item.seen}
+                                                    avatar_path={item.avatar_path}
+                                                    content={item.content}
+                                                    created_at={item.created_at}
+                                                    key={item.id}
+                                                    handler={handleSeen}
+                                                />
+                                            ))}
                                 </div>
                             </div>
                             {/* <div className={cx('noti-new')}>

@@ -344,6 +344,7 @@ export class ApiService {
             getNotifications: 'notifications/all',
             getNotificationsById: (id: string) => `notifications/notifications/${id}`,
             createNotification: 'notifications/create',
+            updateSeen: (id: string) => `notifications/seen/${id}`,
         };
 
         return {
@@ -361,6 +362,12 @@ export class ApiService {
                 }),
             createNotification: (data: any, token: string) =>
                 AxiosClientApi.post(route.createNotification, data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            updateSeen: (id: string, token: string) =>
+                AxiosClientApi.get(route.updateSeen(id), null, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
