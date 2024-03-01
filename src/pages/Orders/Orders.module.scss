@@ -1,5 +1,30 @@
+$mobile-width: 739px;
+$tablet-width: 1023px;
+
+@mixin mobileAndTablet {
+    @media (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
 .orders {
     padding: 32px 64px;
+
+    @include mobile {
+        padding: 32px 16px 0 16px;
+    }
 
     .address {
         display: flex;
@@ -15,14 +40,36 @@
                 margin-right: 16px;
                 font-size: 2.8rem;
                 color: orange;
+
+                @include mobile {
+                    margin-right: 8px;
+                }
             }
 
             .detail-info {
                 color: #333;
+
+                @include mobile {
+                    font-size: 1.4rem;
+                }
                 h5 {
                     font-size: 1.6rem;
                     font-weight: 500;
+
+                    @include mobile {
+                        font-size: 1.4rem;
+                    }
                 }
+            }
+        }
+
+        a {
+            text-decoration: none;
+
+            @include mobile {
+                min-width: 120px;
+                font-size: 1.4rem;
+                padding: 4px 8px;
             }
         }
     }
@@ -52,6 +99,11 @@
                     display: flex;
                     margin-right: 16px;
 
+                    @include mobile {
+                        width: 120px;
+                        height: 92px;
+                    }
+
                     img {
                         width: 100%;
                         height: 100%;
@@ -63,6 +115,10 @@
                 .info-product {
                     color: #333;
                     font-size: 1.6rem;
+
+                    @include mobile {
+                        font-size: 1.4rem;
+                    }
                     h3 {
                         font-size: 1.6rem;
                         color: #333;
@@ -83,6 +139,10 @@
             color: orange;
             font-size: 1.6rem;
             font-weight: 500;
+
+            @include mobile {
+                font-size: 1.4rem;
+            }
         }
 
         .info-ship {
@@ -91,15 +151,28 @@
             align-items: center;
             justify-content: space-between;
 
+            @include mobile {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
             h5 {
                 font-size: 1.6rem;
                 font-weight: 500;
+
+                @include mobile {
+                    font-size: 1.4rem;
+                }
             }
 
             p {
                 font-size: 1.4rem;
                 color: #888;
                 margin-top: 4px;
+
+                @include mobile {
+                    margin-bottom: 14px;
+                }
             }
         }
     }
@@ -120,6 +193,10 @@
             color: orange;
             font-weight: bold;
             font-size: 1.6rem;
+
+            @include mobile {
+                font-size: 1.4rem;
+            }
         }
     }
 
@@ -143,6 +220,10 @@
                 font-size: 1.6rem;
                 font-weight: 500;
                 color: #333;
+
+                @include mobile {
+                    font-size: 1.4rem;
+                }
             }
         }
 
@@ -156,6 +237,10 @@
                     font-size: 1.6rem;
                     color: #333;
                     margin-top: 4px;
+
+                    @include mobile {
+                        font-size: 1.4rem;
+                    }
                 }
             }
 
@@ -195,6 +280,10 @@
                     color: orange;
                     font-size: 1.8rem;
                     text-align: right;
+
+                    @include mobile {
+                        font-size: 1.6rem;
+                    }
                 }
             }
 
@@ -242,6 +331,10 @@
             font-size: 1.6rem;
             font-weight: 500;
             color: #333;
+
+            @include mobile {
+                font-size: 1.4rem;
+            }
         }
     }
 
@@ -250,6 +343,10 @@
         cursor: pointer;
         font-size: 1.6rem;
         color: #333;
+
+        @include mobile {
+            font-size: 1.4rem;
+        }
     }
 }
 

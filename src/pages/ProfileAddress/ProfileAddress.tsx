@@ -178,6 +178,16 @@ function ProfileAddress() {
                             <IoAdd />
                             Thêm Địa Chỉ Mới
                         </p>
+                        <p
+                            onClick={() => {
+                                setTypeAction('add');
+                                setIsVisible(true);
+                            }}
+                            className={cx('btn-credit-mobile')}
+                        >
+                            <IoAdd />
+                            Thêm
+                        </p>
                     </div>
                     <div className={cx('contents')}>
                         {addresses.length > 0 ? (

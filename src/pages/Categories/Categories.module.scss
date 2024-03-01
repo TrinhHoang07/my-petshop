@@ -405,6 +405,7 @@ $tablet-width: 1023px;
 
             @include mobile {
                 padding: 10px 16px;
+                min-width: 94px;
             }
 
             &:hover {

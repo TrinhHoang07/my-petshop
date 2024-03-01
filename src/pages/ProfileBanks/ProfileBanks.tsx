@@ -33,6 +33,10 @@ function ProfileBanks() {
                             <IoAdd />
                             Thêm Thẻ Mới
                         </p>
+                        <p onClick={() => setIsVisibleCredit(true)} className={cx('btn-credit-mobile')}>
+                            <IoAdd />
+                            Thêm
+                        </p>
                     </div>
                     <div className={cx('contents')}>
                         <p className={cx('detail-no-credit')}>Bạn chưa liên kết thẻ.</p>
@@ -44,6 +48,10 @@ function ProfileBanks() {
                         <p onClick={() => setIsVisibleBank(true)} className={cx('btn-credit')}>
                             <IoAdd />
                             Thêm Tài Khoản Ngân Hàng
+                        </p>
+                        <p onClick={() => setIsVisibleBank(true)} className={cx('btn-credit-mobile')}>
+                            <IoAdd />
+                            Thêm
                         </p>
                     </div>
                     <div className={cx('contents')}>

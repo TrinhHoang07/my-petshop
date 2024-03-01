@@ -61,6 +61,25 @@ $tablet-width: 1023px;
             padding: 10px;
             font-size: 1.5rem;
             border-radius: 5px;
+
+            @include mobile {
+                display: none;
+            }
+        }
+
+        .btn-credit-mobile {
+            display: none;
+            cursor: pointer;
+            align-items: center;
+            background-color: orange;
+            color: #fff;
+            padding: 10px;
+            font-size: 1.5rem;
+            border-radius: 5px;
+
+            @include mobile {
+                display: flex;
+            }
         }
     }
 
@@ -97,8 +116,13 @@ $tablet-width: 1023px;
     border-radius: 6px;
     z-index: 10;
     padding: 32px;
-    transform: scale(0);
+    left: 50%;
+    transform: translateX(-50%) scale(0);
     transition: all ease-in-out 0.25s;
+
+    @include mobile {
+        width: calc(100vw - 48px);
+    }
 }
 
 .description {
@@ -221,4 +245,26 @@ $tablet-width: 1023px;
     background-color: #f2f2f5;
     color: #999;
     margin-left: 4px;
+
+    display: block;
+
+    @include mobile {
+        display: none;
+    }
+}
+
+.verify-phone-mobile {
+    cursor: pointer;
+    padding: 10px 16px;
+    border: 1px solid #d7d7d7;
+    font-size: 1.4rem;
+    border-radius: 6px;
+    background-color: #f2f2f5;
+    color: #999;
+    margin-left: 4px;
+    display: none;
+
+    @include mobile {
+        display: block;
+    }
 }

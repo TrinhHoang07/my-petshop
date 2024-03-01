@@ -388,9 +388,15 @@ function Orders() {
                         )}
                     </div>
                 </div>
-                <Button onClick={() => setIsChangeAddress(true)} medium={'true'}>
-                    Thay đổi địa chỉ
-                </Button>
+                {addresses.length > 0 ? (
+                    <Button onClick={() => setIsChangeAddress(true)} medium={'true'}>
+                        Thay đổi địa chỉ
+                    </Button>
+                ) : (
+                    <Button to={routesConfig.profile_address} medium={'true'}>
+                        Thêm địa chỉ
+                    </Button>
+                )}
             </div>
             <div className={cx('products')}>
                 <h3 className={cx('heading')}>TrinhHoang Shop</h3>

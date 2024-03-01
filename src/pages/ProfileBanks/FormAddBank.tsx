@@ -83,7 +83,7 @@ function FormAdBank(props: _T_Props) {
             <div
                 className={cx('form-contents')}
                 style={{
-                    transform: props.visible ? 'scale(1)' : 'scale(0)',
+                    transform: props.visible ? 'translateX(-50%) scale(1)' : 'translateX(-50%) scale(0)',
                 }}
             >
                 <h3 className={cx('heading-form-add')}>Thêm số điện thoại</h3>
@@ -104,6 +104,9 @@ function FormAdBank(props: _T_Props) {
                                     />
                                     <button type="button" className={cx('verify-phone')}>
                                         Gửi mã xác minh
+                                    </button>
+                                    <button type="button" className={cx('verify-phone-mobile')}>
+                                        Mã xác minh
                                     </button>
                                 </div>
                                 {errors.phoneNumber && <p className={cx('error-field')}>This field is required!</p>}

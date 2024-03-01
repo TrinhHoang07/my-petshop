@@ -213,7 +213,7 @@ function FormAddAddress(props: _T_Props) {
             <div
                 className={cx('form-contents')}
                 style={{
-                    transform: props.visible ? 'scale(1)' : 'scale(0)',
+                    transform: props.visible ? 'translateX(-50%) scale(1)' : 'translateX(-50%) scale(0)',
                 }}
             >
                 <h3 className={cx('heading-form-add')}>Thêm địa chỉ</h3>
