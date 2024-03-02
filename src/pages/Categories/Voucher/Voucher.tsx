@@ -33,7 +33,8 @@ function Voucher(props: T_Props) {
                 <div className={cx('header')}>
                     <h3>Petshop Vouchers</h3>
                     <div className={cx('search-vouchers')}>
-                        <span>Mã voucher: </span>
+                        <span className={cx('span-d')}>Mã voucher: </span>
+                        <span className={cx('span-mobile')}>Mã: </span>
                         <input type="text" placeholder="Aa..." />
                         <button>ÁP DỤNG</button>
                     </div>

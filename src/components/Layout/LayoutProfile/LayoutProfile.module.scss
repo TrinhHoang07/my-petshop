@@ -30,6 +30,11 @@ $tablet-width: 1023px;
     @include mobileAndTablet {
         width: unset;
     }
+
+    @include mobile {
+        padding: 0;
+        padding-top: 32px;
+    }
 }
 
 // navbar

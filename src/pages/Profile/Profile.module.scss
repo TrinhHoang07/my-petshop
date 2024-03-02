@@ -22,6 +22,10 @@ $tablet-width: 1023px;
 .profile {
     margin: 16px 24px;
     width: 100%;
+
+    @include mobile {
+        margin: 16px;
+    }
     .header {
         width: 100%;
         padding-bottom: 16px;
@@ -57,6 +61,7 @@ $tablet-width: 1023px;
 
             @include mobile {
                 margin-left: 32px;
+                font-size: 1.3rem;
             }
         }
     }
@@ -64,6 +69,10 @@ $tablet-width: 1023px;
     .contents {
         display: flex;
         padding-top: 32px;
+
+        @include mobile {
+            flex-direction: column-reverse;
+        }
 
         .form-profile {
             flex: 2;
@@ -129,7 +138,7 @@ $tablet-width: 1023px;
             align-items: center;
 
             @include mobile {
-                display: none;
+                margin-bottom: 32px;
             }
 
             .change-avatar {
