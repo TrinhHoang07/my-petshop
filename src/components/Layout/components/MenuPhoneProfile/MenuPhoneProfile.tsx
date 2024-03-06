@@ -9,6 +9,8 @@ import { MdOutlineDiscount } from 'react-icons/md';
 import { IoClose } from 'react-icons/io5';
 import { useRecoilState } from 'recoil';
 import { isMenuMobile } from '../../../../store';
+import { FaUserFriends } from 'react-icons/fa';
+import { TbMessageCircle2 } from 'react-icons/tb';
 
 const cx = classNames.bind(styles);
 
@@ -84,6 +86,22 @@ function MenuPhoneProfile() {
                         </NavLink>
                     </div>
                     <div className={cx('more-actions')}>
+                        <NavLink
+                            onClick={() => setState(false)}
+                            to={routesConfig.profile_friends}
+                            className={(nav) => cx('title-info-private', { active: nav.isActive })}
+                        >
+                            <FaUserFriends size={'2rem'} style={{ color: 'dodgerblue' }} />
+                            <span>Bạn bè</span>
+                        </NavLink>
+                        <NavLink
+                            onClick={() => setState(false)}
+                            to={routesConfig.profile_chats}
+                            className={(nav) => cx('title-info-private', { active: nav.isActive })}
+                        >
+                            <TbMessageCircle2 size={'2rem'} style={{ color: 'dodgerblue' }} />
+                            <span>Tin nhắn</span>
+                        </NavLink>
                         <NavLink
                             onClick={() => setState(false)}
                             to={routesConfig.profile_buy}

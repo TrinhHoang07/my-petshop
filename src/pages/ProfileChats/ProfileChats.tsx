@@ -3,7 +3,7 @@ import styles from './Profile.module.scss';
 import img from '../../assets/images/beyeu.jpg';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
 import { IoSend } from 'react-icons/io5';
-import { MdOutlineSearch } from 'react-icons/md';
+import { MdOutlineKeyboardArrowLeft, MdOutlineSearch } from 'react-icons/md';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ApiService } from '../../axios/ApiService';
@@ -13,6 +13,9 @@ import { useDebounce } from '../../hooks';
 import { App } from '../../const/App';
 import { useSocketContext } from '../../context/SocketContext';
 import { Conversation, Message, T_Conversation, T_Message } from '../../models';
+import { HiMenu } from 'react-icons/hi';
+import { useSetRecoilState } from 'recoil';
+import { isMenuMobile } from '../../store';
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +24,7 @@ function Profile() {
     const navigate = useNavigate();
     const apiService = new ApiService();
     const [values] = useSessionContext();
+    const setState = useSetRecoilState(isMenuMobile);
     const [inputValue, setInputValue] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [init, setInit] = useState<boolean>(false);
@@ -197,7 +201,12 @@ function Profile() {
             <div className={cx('profile-chats')}>
                 <div className={cx('bar-chats')}>
                     <div className={cx('container-bar')}>
-                        <h5>Đoạn chat</h5>
+                        <div className={cx('bar-chat-mobile-container')}>
+                            <span onClick={() => setState(true)} className={cx('back-btn-profile')}>
+                                <HiMenu />
+                            </span>
+                            <h5>Đoạn chat</h5>
+                        </div>
                         <div className={cx('search-user')}>
                             <MdOutlineSearch size={'2rem'} />
                             <input type="text" placeholder="Tìm kiếm trong đoạn chat" />
@@ -236,6 +245,9 @@ function Profile() {
                     {!!infoUser.name && (
                         <>
                             <div className={cx('head-chat')}>
+                                <span className={cx('back-mobile')}>
+                                    <MdOutlineKeyboardArrowLeft />
+                                </span>
                                 <div className={cx('image-user')}>
                                     <img src={infoUser.avatar} alt="name user" />
                                 </div>

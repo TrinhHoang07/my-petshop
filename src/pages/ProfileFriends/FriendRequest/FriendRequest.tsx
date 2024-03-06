@@ -123,7 +123,9 @@ function FriendRequest(props: _T_Props) {
                             </div>
                         ))
                     ) : (
-                        <p style={{ textAlign: 'center' }}>Bạn chưa có lời mời kết bạn nào!</p>
+                        <p className={cx('not-request')} style={{ textAlign: 'center' }}>
+                            Bạn chưa có lời mời kết bạn nào!
+                        </p>
                     )}
                 </div>
             </div>

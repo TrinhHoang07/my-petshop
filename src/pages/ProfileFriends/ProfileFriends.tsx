@@ -15,12 +15,16 @@ import { Loading } from '../../components/Loading';
 import { useSocketContext } from '../../context/SocketContext';
 import { Socket } from 'socket.io-client';
 import { Friended, TFriended, T_Customer, T_Customers, T_FriendGiveInvite } from '../../models';
+import { HiMenu } from 'react-icons/hi';
+import { useSetRecoilState } from 'recoil';
+import { isMenuMobile } from '../../store';
 
 const cx = classNames.bind(styles);
 
 function ProfileFriends() {
     const apiService = new ApiService();
     const [values] = useSessionContext();
+    const setState = useSetRecoilState(isMenuMobile);
     const [value, setValue] = useState<string>('');
     const [isModal, setIsModal] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -121,7 +125,11 @@ function ProfileFriends() {
             <div className={cx('profile-friend')}>
                 <div className={cx('friends-header')}>
                     <FriendRequest isOpen={isOpenFriendRequest} setIsOpen={setIsOpenFriendRequest} />
-                    <div className={cx('f-empty')}></div>
+                    <div className={cx('f-empty')}>
+                        <span onClick={() => setState(true)} className={cx('back-btn-profile')}>
+                            <HiMenu />
+                        </span>
+                    </div>
                     <h1>Tất cả bạn bè</h1>
                     <div onClick={handleOpenFriendRequest} className={cx('icon-request')}>
                         <span>

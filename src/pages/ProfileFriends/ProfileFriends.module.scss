@@ -1,3 +1,24 @@
+$mobile-width: 739px;
+$tablet-width: 1023px;
+
+@mixin mobileAndTablet {
+    @media (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
 .profile-friend {
     padding: 16px;
     width: 100%;
@@ -9,6 +30,15 @@
 
         .f-empty {
             flex: 1;
+
+            .back-btn-profile {
+                cursor: pointer;
+                display: none;
+
+                @include mobile {
+                    display: flex;
+                }
+            }
         }
 
         h1 {
@@ -17,6 +47,10 @@
             font-weight: 500;
             text-align: center;
             color: #333;
+
+            @include mobile {
+                font-size: 1.6rem;
+            }
         }
 
         .icon-request {
@@ -42,6 +76,11 @@
 
                 p {
                     margin-left: 6px;
+                    display: block;
+
+                    @include mobile {
+                        display: none;
+                    }
                 }
 
                 .count-request {
@@ -52,6 +91,10 @@
                     color: #fff;
                     padding: 2px 6px;
                     border-radius: 999px;
+
+                    @include mobile {
+                        top: -21px;
+                    }
                 }
             }
         }
@@ -147,6 +190,11 @@
 
     .list-friends {
         margin-top: 16px;
+        padding-bottom: 0;
+
+        @include mobile {
+            padding-bottom: 120px;
+        }
 
         .no-friends {
             margin-top: 16px;
@@ -157,6 +205,10 @@
                 font-weight: 400;
                 color: #333;
                 opacity: 0.75;
+
+                @include mobile {
+                    font-size: 1.4rem;
+                }
             }
         }
     }
@@ -177,6 +229,11 @@
             display: flex;
             width: 48px;
             height: 48px;
+
+            @include mobile {
+                width: 36px;
+                height: 36px;
+            }
 
             img {
                 width: 100%;
@@ -201,6 +258,14 @@
                 font-size: 1.6rem;
                 color: #333;
                 font-weight: 500;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                line-clamp: 1;
+                -webkit-box-orient: vertical;
+
+                @include mobile {
+                    font-size: 1.4rem;
+                }
             }
 
             p {
@@ -208,6 +273,10 @@
                 font-size: 1.4rem;
                 color: #333;
                 opacity: 0.75;
+
+                @include mobile {
+                    font-size: 1.3rem;
+                }
             }
 
             span {
