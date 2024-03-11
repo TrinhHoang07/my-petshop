@@ -16,6 +16,7 @@ import { Conversation, Message, T_Conversation, T_Message } from '../../models';
 import { HiMenu } from 'react-icons/hi';
 import { useSetRecoilState } from 'recoil';
 import { isMenuMobile } from '../../store';
+import ProfileChatMobile from './ProfileChatMobile';
 
 const cx = classNames.bind(styles);
 
@@ -27,6 +28,7 @@ function Profile() {
     const setState = useSetRecoilState(isMenuMobile);
     const [inputValue, setInputValue] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isChatMobile, setIsChatMobile] = useState<boolean>(false);
     const [init, setInit] = useState<boolean>(false);
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -198,6 +200,14 @@ function Profile() {
 
     return (
         <LayoutProfile>
+            <ProfileChatMobile
+                infoUser={infoUser}
+                testData={testData}
+                paramSubmit={paramSubmit}
+                socketReal={socketReal}
+                isChatMobile={isChatMobile}
+                setIsChatMobile={setIsChatMobile}
+            />
             <div className={cx('profile-chats')}>
                 <div className={cx('bar-chats')}>
                     <div className={cx('container-bar')}>
@@ -219,6 +229,7 @@ function Profile() {
                                         className={cx('item-chat')}
                                         onClick={() => {
                                             navigate(`/profile/chats/${item.conver_id}`);
+                                            setIsChatMobile(true);
                                         }}
                                     >
                                         <div className={cx('item-avatar')}>
