@@ -4,9 +4,10 @@ import styles from './ProfileAddress.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSessionContext } from '../../context/SessionContext';
 import { ApiService } from '../../axios/ApiService';
-import { useSocketContext } from '../../context/SocketContext';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { Address, TPostCreateAddress, TPostUpdateAddress } from '../../models';
+import { useAppContext } from '../../providers/AppProvider';
+import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -35,7 +36,7 @@ function FormAddAddress(props: _T_Props) {
     const [values] = useSessionContext();
     const [typeAddress, setTypeAddress] = useState<string>('home');
     const apiService = new ApiService();
-    const socket = useSocketContext();
+    const { isConnected } = useAppContext();
 
     const {
         register,
@@ -68,10 +69,12 @@ function FormAddAddress(props: _T_Props) {
                             life: 3000,
                         });
 
-                        socket.current?.emit('create-address', {
-                            id: values.user?.id,
-                            status: 'success',
-                        });
+                        if (isConnected) {
+                            socketContext.emit('create-address', {
+                                id: values.user?.id,
+                                status: 'success',
+                            });
+                        }
                     }
                 })
                 .catch((_) => {
@@ -104,10 +107,12 @@ function FormAddAddress(props: _T_Props) {
                             life: 3000,
                         });
 
-                        socket.current?.emit('update-address', {
-                            id: values.user?.id,
-                            status: 'success',
-                        });
+                        if (isConnected) {
+                            socketContext.emit('update-address', {
+                                id: values.user?.id,
+                                status: 'success',
+                            });
+                        }
                     }
                 })
                 .catch((_) => {

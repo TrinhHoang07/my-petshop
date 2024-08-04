@@ -51,6 +51,7 @@ export class ApiService {
         const route = {
             getCartsByUserId: (userId: string) => `carts/cart-by-customer/${userId}`,
             addToCart: 'carts/add-to-cart',
+            deleteToCart: (id: string) => `carts/delete-cart/${id}`,
         };
 
         return {
@@ -67,6 +68,13 @@ export class ApiService {
                     },
                 }),
 
+            deleteToCart: (id: string, token: string) =>
+                AxiosClientApi.delete(route.deleteToCart(id), {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+
             route,
         };
     }
@@ -78,7 +86,7 @@ export class ApiService {
         };
 
         return {
-            addOrder: (data: TPostOrders, token: string) =>
+            addOrder: (data: TPostOrders[], token: string) =>
                 AxiosClientApi.post(route.addOrder, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,
@@ -109,7 +117,7 @@ export class ApiService {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
-            addPayment: (data: any, token: string) =>
+            addPayment: (data: any[], token: string) =>
                 AxiosClientApi.post(route.addPayment, data, {
                     headers: {
                         Authorization: 'Bearer ' + token,

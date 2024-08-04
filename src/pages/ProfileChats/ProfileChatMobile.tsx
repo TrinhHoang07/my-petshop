@@ -6,6 +6,8 @@ import { Message } from '../../models';
 import { useEffect, useRef, useState } from 'react';
 import { useSessionContext } from '../../context/SessionContext';
 import { ApiService } from '../../axios/ApiService';
+import { useAppContext } from '../../providers/AppProvider';
+import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -16,7 +18,6 @@ type T_Props = {
         avatar?: string;
     };
     testData: Message[];
-    socketReal: any;
     paramSubmit: string;
     isChatMobile: boolean;
     setIsChatMobile: (value: boolean) => void;
@@ -28,6 +29,7 @@ function ProfileChatMobile(props: T_Props) {
     const inputRef = useRef<HTMLInputElement>(null);
     const [inputValue, setInputValue] = useState<string>('');
     const apiService = new ApiService();
+    const { isConnected } = useAppContext();
 
     useEffect(() => {
         props.testData.length > 0 && scrollToBottom();
@@ -58,10 +60,12 @@ function ProfileChatMobile(props: T_Props) {
                         };
                     }) => {
                         if (res.message === 'success') {
-                            props.socketReal.current?.emit(`chat-message-user`, {
-                                ...res.data,
-                                cus_avatar_path: values.user?.avatar,
-                            });
+                            if (isConnected) {
+                                socketContext.emit(`chat-message-user`, {
+                                    ...res.data,
+                                    cus_avatar_path: values.user?.avatar,
+                                });
+                            }
 
                             setInputValue('');
                         }

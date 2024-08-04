@@ -11,12 +11,13 @@ import { useSessionContext } from '../../context/SessionContext';
 import { Loading } from '../../components/Loading';
 import { useDebounce } from '../../hooks';
 import { App } from '../../const/App';
-import { useSocketContext } from '../../context/SocketContext';
 import { Conversation, Message, T_Conversation, T_Message } from '../../models';
 import { HiMenu } from 'react-icons/hi';
 import { useSetRecoilState } from 'recoil';
 import { isMenuMobile } from '../../store';
 import ProfileChatMobile from './ProfileChatMobile';
+import { useAppContext } from '../../providers/AppProvider';
+import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -37,22 +38,15 @@ function Profile() {
     const [stateParam, setStateParam] = useState<string>('');
     const paramSubmit = useDebounce(stateParam, App.DELAY_SEARCH);
     const [testData, setTestData] = useState<Message[]>([]);
-    const socketReal = useRef<any>();
-    const socket = useSocketContext();
+    const { isConnected } = useAppContext();
 
     useEffect(() => {
         setStateParam(params.id ?? '');
     }, [params]);
 
     useEffect(() => {
-        socketReal.current = socket.current;
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        if (init) {
-            socketReal.current?.on(
+        if (init && isConnected) {
+            socketContext.on(
                 `chat-message-user-give`,
                 (data: {
                     id: number;
@@ -175,10 +169,12 @@ function Profile() {
                         };
                     }) => {
                         if (res.message === 'success') {
-                            socketReal.current?.emit(`chat-message-user`, {
-                                ...res.data,
-                                cus_avatar_path: values.user?.avatar,
-                            });
+                            if (isConnected) {
+                                socketContext.emit(`chat-message-user`, {
+                                    ...res.data,
+                                    cus_avatar_path: values.user?.avatar,
+                                });
+                            }
 
                             setInputValue('');
                         }
@@ -204,7 +200,6 @@ function Profile() {
                 infoUser={infoUser}
                 testData={testData}
                 paramSubmit={paramSubmit}
-                socketReal={socketReal}
                 isChatMobile={isChatMobile}
                 setIsChatMobile={setIsChatMobile}
             />

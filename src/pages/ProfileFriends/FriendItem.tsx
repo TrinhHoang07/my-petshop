@@ -5,15 +5,15 @@ import { useSessionContext } from '../../context/SessionContext';
 import routesConfig from '../../config/routes';
 import { ApiService } from '../../axios/ApiService';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { Link } from 'react-router-dom';
 import { toSeoURL } from '../../Helper';
 import { useSetRecoilState } from 'recoil';
 import { dataProfileUser } from '../../store';
-import { useSocketContext } from '../../context/SocketContext';
 import { FriendGiveInvite, Friended, TFriended, T_FriendGiveInvite } from '../../models';
-import { Socket } from 'socket.io-client';
+import { useAppContext } from '../../providers/AppProvider';
+import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -33,20 +33,15 @@ function FriendItem(props: _T_Props) {
     const [idsFriended, setIdsFriended] = useState<number[]>([]);
     const [idsGiveInvite, setIdsGiveInvite] = useState<number[]>([]);
     const setDataProfileUser = useSetRecoilState(dataProfileUser);
-    const socketReal = useRef<Socket>();
-    const socket = useSocketContext();
+    const { isConnected } = useAppContext();
 
     useEffect(() => {
-        socketReal.current = socket.current;
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        socketReal.current?.on('accept-friend-give', () => {
-            handleGetIdsGiveInvited();
-            handleGetIdsFriended();
-        });
+        if (isConnected) {
+            socketContext.on('accept-friend-give', () => {
+                handleGetIdsGiveInvited();
+                handleGetIdsFriended();
+            });
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -180,10 +175,12 @@ function FriendItem(props: _T_Props) {
             )
             .then((res: { message: string; statusCode: number }) => {
                 if (res.message === 'success') {
-                    socket.current?.emit('accept-friend', {
-                        id: props.id_friend,
-                        status: 'success',
-                    });
+                    if (isConnected) {
+                        socketContext.emit('accept-friend', {
+                            id: props.id_friend,
+                            status: 'success',
+                        });
+                    }
                 }
             })
             .catch((err) => console.error(err));

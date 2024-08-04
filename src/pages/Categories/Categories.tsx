@@ -47,8 +47,9 @@ function Categories() {
                     console.log('data:', res.data);
 
                     if (res.data.length > 0) {
-                        const result = res.data.map((item: T_Cart) => ({
-                            id: item.carts_product_id,
+                        const result: TData[] = res.data.map((item: T_Cart) => ({
+                            id: item.carts_id,
+                            id_product: item.carts_product_id,
                             name: item.product_name,
                             color: item.product_color,
                             price: item.product_price ?? 'Không',

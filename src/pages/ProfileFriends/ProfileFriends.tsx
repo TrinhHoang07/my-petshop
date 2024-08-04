@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect, useRef } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ProfileFriends.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
@@ -12,12 +12,12 @@ import { FaUserPlus } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 import { FriendRequest } from './FriendRequest';
 import { Loading } from '../../components/Loading';
-import { useSocketContext } from '../../context/SocketContext';
-import { Socket } from 'socket.io-client';
 import { Friended, TFriended, T_Customer, T_Customers, T_FriendGiveInvite } from '../../models';
 import { HiMenu } from 'react-icons/hi';
 import { useSetRecoilState } from 'recoil';
 import { isMenuMobile } from '../../store';
+import { useAppContext } from '../../providers/AppProvider';
+import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -31,23 +31,18 @@ function ProfileFriends() {
     const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
     const [countRequestFriend, setCountRequestFriend] = useState<number>(0);
     const debounced = useDebounce(value, App.DELAY_SEARCH);
-    const socketReal = useRef<Socket>();
-    const socket = useSocketContext();
     const [dataCustomers, setDataCustomers] = useState<T_Customer[]>([]);
     const [friends, setFriends] = useState<Friended[]>([]);
     const [isOpenFriendRequest, setIsOpenFriendRequest] = useState<boolean>(false);
+    const { isConnected } = useAppContext();
 
     useEffect(() => {
-        socketReal.current = socket.current;
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        socketReal.current?.on('accept-friend-give', () => {
-            handleGetCountRequestFriend();
-            handleGetFriends();
-        });
+        if (isConnected) {
+            socketContext.on('accept-friend-give', () => {
+                handleGetCountRequestFriend();
+                handleGetFriends();
+            });
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

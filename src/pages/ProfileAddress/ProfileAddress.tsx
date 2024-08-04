@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ProfileAddress.module.scss';
 import { LayoutProfile } from '../../components/Layout/LayoutProfile';
@@ -10,11 +10,11 @@ import { useSetRecoilState } from 'recoil';
 import { isMenuMobile } from '../../store';
 import { ApiService } from '../../axios/ApiService';
 import { useSessionContext } from '../../context/SessionContext';
-import { Socket, io } from 'socket.io-client';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
-import { App } from '../../const/App';
 import { Address, T_ProfileAddress } from '../../models';
+import { useAppContext } from '../../providers/AppProvider';
+import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -28,57 +28,36 @@ function ProfileAddress() {
     const [values] = useSessionContext();
     const message = useConfirmToast();
     const apiService = new ApiService();
-    const socketRef = useRef<Socket>();
+    const { isConnected } = useAppContext();
 
     useEffect(() => {
-        const socket = io(App.URL_EVENT, {
-            timeout: 5000,
-            autoConnect: true,
-        });
-
-        socketRef.current = socket;
-
-        return () => {
-            socketRef.current?.disconnect();
-        };
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        if (socketRef.current) {
-            socketRef.current.on('connect', () => {
-                socketRef.current?.on('create-address-give', (_) => {
-                    if (values.isAuth) {
-                        apiService.address
-                            .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
-                            .then((res: T_ProfileAddress) => {
-                                if (res.message === 'success') {
-                                    setAddresses((prev: Address[]) => {
-                                        return [...prev, res.data[res.data.length - 1]];
-                                    });
-                                }
-                            })
-                            .catch((err) => console.error(err));
-                    }
-                });
-
-                socketRef.current?.on('update-address-give', (_) => {
-                    if (values.isAuth) {
-                        apiService.address
-                            .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
-                            .then((res: T_ProfileAddress) => {
-                                if (res.message === 'success') {
-                                    setAddresses(res.data);
-                                }
-                            })
-                            .catch((err) => console.error(err));
-                    }
-                });
+        if (isConnected) {
+            socketContext.on('create-address-give', (_) => {
+                if (values.isAuth) {
+                    apiService.address
+                        .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
+                        .then((res: T_ProfileAddress) => {
+                            if (res.message === 'success') {
+                                setAddresses((prev: Address[]) => {
+                                    return [...prev, res.data[res.data.length - 1]];
+                                });
+                            }
+                        })
+                        .catch((err) => console.error(err));
+                }
             });
 
-            socketRef.current.on('disconnect', () => {
-                console.log('id disconnected: ', socketRef.current?.id);
+            socketContext.on('update-address-give', (_) => {
+                if (values.isAuth) {
+                    apiService.address
+                        .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
+                        .then((res: T_ProfileAddress) => {
+                            if (res.message === 'success') {
+                                setAddresses(res.data);
+                            }
+                        })
+                        .catch((err) => console.error(err));
+                }
             });
         }
 

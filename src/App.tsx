@@ -1,51 +1,54 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { privateRoutes, publicRoutes } from './routes';
 import { PrivateRoute } from './components/PrivateRoute';
+import AppProvider from './providers/AppProvider';
 
 function App() {
     return (
-        <BrowserRouter>
-            <Routes>
-                {publicRoutes.map((route) => {
-                    const Layout = route.layout;
-                    const Page = route.component;
+        <AppProvider>
+            <BrowserRouter>
+                <Routes>
+                    {publicRoutes.map((route) => {
+                        const Layout = route.layout;
+                        const Page = route.component;
 
-                    return (
-                        <Route
-                            key={route.id}
-                            path={route.path}
-                            element={
-                                <Layout>
-                                    <Page />
-                                </Layout>
-                            }
-                        />
-                    );
-                })}
+                        return (
+                            <Route
+                                key={route.id}
+                                path={route.path}
+                                element={
+                                    <Layout>
+                                        <Page />
+                                    </Layout>
+                                }
+                            />
+                        );
+                    })}
 
-                {privateRoutes.map((route) => {
-                    const Layout = route.layout;
-                    const Page = route.component;
+                    {privateRoutes.map((route) => {
+                        const Layout = route.layout;
+                        const Page = route.component;
 
-                    return (
-                        <Route
-                            key={route.id}
-                            path={route.path}
-                            element={
-                                <PrivateRoute
-                                    redirect={route.path}
-                                    component={() => (
-                                        <Layout>
-                                            <Page />
-                                        </Layout>
-                                    )}
-                                />
-                            }
-                        />
-                    );
-                })}
-            </Routes>
-        </BrowserRouter>
+                        return (
+                            <Route
+                                key={route.id}
+                                path={route.path}
+                                element={
+                                    <PrivateRoute
+                                        redirect={route.path}
+                                        component={() => (
+                                            <Layout>
+                                                <Page />
+                                            </Layout>
+                                        )}
+                                    />
+                                }
+                            />
+                        );
+                    })}
+                </Routes>
+            </BrowserRouter>
+        </AppProvider>
     );
 }
 

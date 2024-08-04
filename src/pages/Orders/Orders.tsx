@@ -14,18 +14,14 @@ import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { ApiService } from '../../axios/ApiService';
 import { useSessionContext } from '../../context/SessionContext';
 import { useNavigate } from 'react-router-dom';
-import { Address, TData, T_AddOrder, T_Payment, T_ProfileAddress } from '../../models';
+import { Address, TData, T_AddOrder, T_Payment, T_Payments, T_ProfileAddress } from '../../models';
 import routesConfig from '../../config/routes';
 import { formatVND } from '../../Helper';
 import { AddressScreen } from '../../components/Layout/components/Address';
+import { useAppContext } from '../../providers/AppProvider';
+import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
-
-// const VNP_TMNCODE = 'B1QK6DWP';
-// const VNP_HASHSECRET = 'EBORDBWITKXNTPPEKGIBHTURKFPILLUI';
-// const VNP_URL = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-// const VNP_API = 'https://sandbox.vnpayment.vn/merchant_webapi/api/transaction';
-// const VNP_RETURNURL = 'http://localhost:3000/carts/orders';
 
 function Orders() {
     const [data, setData] = useRecoilState(orderItems);
@@ -45,6 +41,7 @@ function Orders() {
     });
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [addressChoose, setAddressChoose] = useState<Address>();
+    const { isConnected } = useAppContext();
 
     const timer = useRef<any>();
 
@@ -110,168 +107,120 @@ function Orders() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
-    const handleGetPaymentById = (res: { url: string; id: number }) => {
-        apiService.payments
-            .getPaymentById(`${res.id}`, values.user?.token ?? '')
-            .then((res: T_Payment) => {
-                if (res.message === 'success' && res.data.state === '00') {
-                    setStatePay('success');
-                    message?.toast?.current?.show({
-                        severity: 'success',
-                        summary: 'Thành công',
-                        detail: 'Thanh toán thành công!',
-                        life: 4500,
-                    });
-                    clearInterval(timer.current);
-                } else if (res.message === 'success' && res.data.state === '03') {
-                    setStatePay('error');
-                    message?.toast?.current?.show({
-                        severity: 'error',
-                        summary: 'Có lỗi',
-                        detail: 'Thanh toán thất bại!',
-                        life: 4500,
-                    });
-                    clearInterval(timer.current);
-                } else if (res.message === 'success' && res.data.state === '97') {
-                    setStatePay('checksumfail');
-                    message?.toast?.current?.show({
-                        severity: 'error',
-                        summary: 'Có lỗi',
-                        detail: 'Thanh toán thất bại, chữ ký không hợp lệ!',
-                        life: 4500,
-                    });
-                    clearInterval(timer.current);
-                }
-            })
-            .catch((_) => {
-                setStatePay('error');
-            });
+    const handleGetPaymentById = (response: { url: string; id: number[] }) => {
+        console.log(response.id);
 
-        // axios
-        //     .get(`http://localhost:3009/payment/order/${res.data.id}`)
-        //     .then((res: T_Payment) => {
-        //         if (res.data.message === 'success' && res.data.data.state === '00') {
-        //             setStatePay('success');
-        //             message?.toast?.current?.show({
-        //                 severity: 'success',
-        //                 summary: 'Thành công',
-        //                 detail: 'Thanh toán thành công!',
-        //                 life: 4500,
-        //             });
-        //             clearInterval(timer.current);
-        //         } else if (res.data.message === 'success' && res.data.data.state === '03') {
-        //             setStatePay('error');
-        //             message?.toast?.current?.show({
-        //                 severity: 'error',
-        //                 summary: 'Có lỗi',
-        //                 detail: 'Thanh toán thất bại!',
-        //                 life: 4500,
-        //             });
-        //             clearInterval(timer.current);
-        //         } else if (res.data.message === 'success' && res.data.data.state === '97') {
-        //             setStatePay('checksumfail');
-        //             message?.toast?.current?.show({
-        //                 severity: 'error',
-        //                 summary: 'Có lỗi',
-        //                 detail: 'Thanh toán thất bại, chữ ký không hợp lệ!',
-        //                 life: 4500,
-        //             });
-        //             clearInterval(timer.current);
-        //         }
-        //     })
-        //     .catch(() => setStatePay('error'));
+        let total: { is_success: boolean; message: string }[] = [];
+        if (response.id.length > 0) {
+            response.id.forEach((item) => {
+                apiService.payments
+                    .getPaymentById(`${item}`, values.user?.token ?? '')
+                    .then((res: T_Payment) => {
+                        if (res.message === 'success') {
+                            if (res.data.state === '00') {
+                                total.push({
+                                    is_success: true,
+                                    message: 'success',
+                                });
+                            } else if (res.data.state === '03') {
+                                total.push({
+                                    is_success: false,
+                                    message: 'error',
+                                });
+                            } else if (res.data.state === '97') {
+                                total.push({
+                                    is_success: false,
+                                    message: 'failed',
+                                });
+                            }
+                        }
+                    })
+                    .catch((_) => {
+                        setStatePay('error');
+                    });
+            });
+        }
+
+        if (total.length === response.id.length) {
+            const checking = total.every((item: { is_success: boolean; message: string }) => item.is_success);
+
+            if (checking) {
+                setStatePay('success');
+                message?.toast?.current?.show({
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: 'Thanh toán thành công!',
+                    life: 4500,
+                });
+                clearInterval(timer.current);
+            } else {
+                setStatePay('error');
+                message?.toast?.current?.show({
+                    severity: 'error',
+                    summary: 'Có lỗi',
+                    detail: 'Thanh toán thất bại!',
+                    life: 4500,
+                });
+                clearInterval(timer.current);
+            }
+        }
     };
 
-    // const handleTestApi = async () => {
-    //     const date = new Date();
-    //     const createDate = moment(date).format('YYYYMMDDHHmmss');
-    //     const tmnCode = VNP_TMNCODE;
-    //     const secretKey = VNP_HASHSECRET;
-    //     let vnpUrl = VNP_URL;
-    //     const returnUrl = VNP_RETURNURL;
-    //     const orderId = moment(date).format('DDHHmmss');
-    //     const amount = 1000000;
-    //     // const bankCode = data.bankCode;
-    //     const currCode = 'VND';
-    //     let vnp_Params: any = {};
-    //     vnp_Params['vnp_Version'] = '2.1.0';
-    //     vnp_Params['vnp_Command'] = 'pay';
-    //     vnp_Params['vnp_TmnCode'] = tmnCode;
-    //     vnp_Params['vnp_Locale'] = 'vn';
-    //     vnp_Params['vnp_CurrCode'] = currCode;
-    //     vnp_Params['vnp_TxnRef'] = orderId;
-    //     vnp_Params['vnp_OrderInfo'] = 'Noi dung thanh toan';
-    //     vnp_Params['vnp_OrderType'] = 'other';
-    //     vnp_Params['vnp_Amount'] = amount * 100;
-    //     vnp_Params['vnp_ReturnUrl'] = returnUrl;
-    //     vnp_Params['vnp_IpAddr'] = await publicIpv4();
-    //     vnp_Params['vnp_CreateDate'] = createDate;
+    const handleRemoveFromCart = (id: number[]) => {
+        if (id.length > 0) {
+            id.forEach((item) => {
+                apiService.carts
+                    .deleteToCart(`${item}`, `${values.user?.token}`)
+                    .then((res: { message: string; code: number }) => {
+                        if (res.message === 'success') {
+                            if (isConnected) {
+                                socketContext.emit('delete-to-cart', {
+                                    id: item,
+                                    status: 'success',
+                                });
+                            }
+                        }
+                    })
 
-    //     // if (bankCode !== null && bankCode !== '') {
-    //     //     vnp_Params['vnp_BankCode'] = bankCode;
-    //     // }
-
-    //     vnp_Params = sortObject(vnp_Params);
-    //     const signData = querystring.stringify(vnp_Params, { encode: false });
-    //     const hmac = CryptoJS.HmacSHA512(signData, secretKey).toString();
-    //     // const signed = hmac.toString(new Buffer(signData, 'utf-8')).digest('hex');
-    //     vnp_Params['vnp_SecureHash'] = hmac;
-    //     vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
-
-    //     setUrl(vnpUrl);
-    // };
-
-    // let sumQuery = querystring.parse(window.location.search);
-    // if (JSON.stringify(sumQuery) !== JSON.stringify({})) {
-    //     const secureHash = sumQuery['vnp_SecureHash'];
-    //     delete sumQuery['vnp_SecureHash'];
-    //     delete sumQuery['vnp_SecureHashType'];
-    //     sumQuery = sortObject(sumQuery);
-
-    //     // const tmnCode = VNP_TMNCODE;
-    //     const secretKey = VNP_HASHSECRET;
-    //     const signData = querystring.stringify(sumQuery, { encode: false });
-    //     const hmac = CryptoJS.HmacSHA512(signData, secretKey).toString();
-    //     // const signed = hmac.update(new Buffer(signData, 'utf-8')).digest('hex');
-
-    //     if (secureHash === hmac) {
-    //         if (sumQuery['vnp_ResponseCode'] === '00') {
-    //             console.log('success');
-    //         } else {
-    //             console.log('error');
-    //         }
-    //     } else {
-    //         console.log('checksum error');
-    //     }
-    // }
+                    .catch((_) => {
+                        message?.toast?.current?.show({
+                            severity: 'error',
+                            summary: 'Có lỗi',
+                            detail: 'Xảy ra lỗi, vui lòng thử lại',
+                            life: 4500,
+                        });
+                    });
+            });
+        }
+    };
 
     const handleOrders = () => {
         if (data.length > 0) {
             setStatePay('paying');
 
-            // chưa handle mua nhiều mặt hàng một lúc
-            const dataPost = {
+            const dataPost = data.map((item) => ({
                 customer_id: values.user?.id,
-                product_id: data[0].id,
-                quantity: data[0].quantity,
-                price: data[0].price,
-            };
-
-            console.log('orders: ', dataPost);
+                product_id: item.id_product,
+                quantity: item.quantity,
+                price: item.price,
+            }));
 
             apiService.orders
                 .addOrder(dataPost, values.user?.token ?? '')
                 .then((res: T_AddOrder) => {
                     if (res.message === 'success') {
+                        // delete from carts
+                        const idCarts = data.map((item) => item.id);
+                        handleRemoveFromCart(idCarts);
+
+                        const dataPayments = res.data.map((item) => ({
+                            state: '99',
+                            order_id: item.id,
+                        }));
+
                         return apiService.payments
-                            .addPayment(
-                                {
-                                    state: '99',
-                                    order_id: res.data.id,
-                                },
-                                values.user?.token ?? '',
-                            )
-                            .then((res: T_Payment) => {
+                            .addPayment(dataPayments, values.user?.token ?? '')
+                            .then((res: T_Payments) => {
                                 if (res.message === 'success') {
                                     return res;
                                 }
@@ -281,17 +230,18 @@ function Orders() {
                     }
                 })
                 .then((res) => {
+                    const idPayments = res?.data.map((item) => item.id);
+
                     return apiService.payments
                         .createVNPAY(
                             {
                                 amount: 1000000,
-                                pay_id: res?.data.id,
+                                pay_id: idPayments,
                                 // bankCode: 'VNPAYQR',
-                                orderInfo: 'Test thanh toan VN PAY QR',
                             },
                             values.user?.token ?? '',
                         )
-                        .then((res: { url: string; id: number }) => {
+                        .then((res: { url: string; id: number[] }) => {
                             if (res.url) {
                                 window.open(res.url);
 

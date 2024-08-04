@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Carts.module.scss';
 import routesConfig from '../../../../../config/routes';
@@ -9,8 +9,8 @@ import { T_Cart, T_Categorys } from '../../../../../models';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { ApiService } from '../../../../../axios/ApiService';
-import { Socket, io } from 'socket.io-client';
-import { App } from '../../../../../const/App';
+import { useAppContext } from '../../../../../providers/AppProvider';
+import { socketContext } from '../../../../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -18,42 +18,36 @@ function Carts() {
     const [values] = useSessionContext();
     const [data, setData] = useState<T_Cart[]>([]);
     const apiService = new ApiService();
-    const socketRef = useRef<Socket>();
+    const { isConnected } = useAppContext();
+
+    console.log('is connected: ', isConnected);
 
     useEffect(() => {
-        const socket = io(App.URL_EVENT, {
-            timeout: 5000,
-            autoConnect: true,
-        });
-
-        socketRef.current = socket;
-
-        return () => {
-            socketRef.current?.disconnect();
-        };
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        if (socketRef.current) {
-            socketRef.current.on('connect', () => {
-                socketRef.current?.on('add-to-cart-give', (data: any) => {
-                    if (values.isAuth) {
-                        apiService.carts
-                            .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')
-                            .then((res: T_Categorys) => {
-                                if (res.message === 'success') {
-                                    setData(res.data);
-                                }
-                            })
-                            .catch((err) => console.error(err));
-                    }
-                });
+        if (isConnected) {
+            socketContext.on('add-to-cart-give', (_) => {
+                if (values.isAuth) {
+                    apiService.carts
+                        .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')
+                        .then((res: T_Categorys) => {
+                            if (res.message === 'success') {
+                                setData(res.data);
+                            }
+                        })
+                        .catch((err) => console.error(err));
+                }
             });
 
-            socketRef.current.on('disconnect', () => {
-                console.log('id disconnected: ', socketRef.current?.id);
+            socketContext.on('delete-to-cart-give', (_) => {
+                if (values.isAuth) {
+                    apiService.carts
+                        .getCartsByUserId(`${values.user?.id}`, values.user?.token ?? '')
+                        .then((res: T_Categorys) => {
+                            if (res.message === 'success') {
+                                setData(res.data);
+                            }
+                        })
+                        .catch((err) => console.error(err));
+                }
             });
         }
 

@@ -80,6 +80,7 @@ export type TPostCheckConversation = {
 
 export type TData = {
     id: number;
+    id_product: number;
     name: string;
     color: string;
     price: number;
@@ -356,7 +357,7 @@ export type T_AddOrder = {
         quantity: number;
         price: number;
         status: string;
-    };
+    }[];
 };
 
 // type blogs
@@ -381,6 +382,15 @@ export type T_Blogs = {
 };
 
 // payment
+export type T_Payments = {
+    message: string;
+    statusCode: number;
+    data: {
+        id: number;
+        state: string;
+    }[];
+};
+
 export type T_Payment = {
     message: string;
     statusCode: number;

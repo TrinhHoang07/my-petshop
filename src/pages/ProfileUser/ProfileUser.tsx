@@ -9,8 +9,9 @@ import { ApiService } from '../../axios/ApiService';
 import { useSessionContext } from '../../context/SessionContext';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
-import { useSocketContext } from '../../context/SocketContext';
 import { useNavigate } from 'react-router-dom';
+import { socketContext } from '../../context/SocketContext';
+import { useAppContext } from '../../providers/AppProvider';
 
 const cx = classNames.bind(styles);
 
@@ -21,8 +22,8 @@ function ProfileUser() {
     const [idsGiveInvite, setIdsGiveInvite] = useState<number[]>([]);
     const apiService = new ApiService();
     const navigate = useNavigate();
-    const socket = useSocketContext();
     const [values] = useSessionContext();
+    const { isConnected } = useAppContext();
 
     useEffect(() => {
         handleGetIdsInvited();
@@ -139,10 +140,12 @@ function ProfileUser() {
                         isFriend: true,
                     }));
 
-                    socket.current?.emit('accept-friend', {
-                        id: data.id,
-                        status: 'success',
-                    });
+                    if (isConnected) {
+                        socketContext.emit('accept-friend', {
+                            id: data.id,
+                            status: 'success',
+                        });
+                    }
                 }
             })
             .catch((err) => console.error(err));

@@ -7,9 +7,9 @@ import chatbox from '../../../../assets/images/chat-box.png';
 import logo from '../../../../assets/images/logo-petshop.jpg';
 import cat from '../../../../assets/images/meoww.jpg';
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { io, Socket } from 'socket.io-client';
 import { TypingAdmin } from '../TypingAdmin';
-import { App } from '../../../../const/App';
+import { useAppContext } from '../../../../providers/AppProvider';
+import { socketContext } from '../../../../context/SocketContext';
 
 const cx = classNames.bind(styles);
 
@@ -21,13 +21,13 @@ type TMes = {
 };
 
 function ChatBox() {
-    const socketRef = useRef<Socket>();
     const [open, setOpen] = useState<boolean>(false);
     const [visible, setVisible] = useState<boolean>(false);
     const [value, setValue] = useState<string>('');
     const mesRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const { isConnected } = useAppContext();
     const [messages, setMessages] = useState<TMes[]>([
         {
             role: 'admin',
@@ -47,82 +47,60 @@ function ChatBox() {
     }, [messages, open]);
 
     useEffect(() => {
-        const socket = io(App.URL_EVENT, {
-            timeout: 5000,
-            autoConnect: true,
-        });
+        if (isConnected) {
+            socketContext?.once(`init_user_${socketContext.id}`, (_) => {
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        message:
+                            'Chúng tôi sẽ trả lời bạn sớm nhất có thể. Nếu chờ lâu bạn hãy liên hệ: 0396254427! Xin cảm ơn.',
+                        name: 'Van Hoang',
+                        role: 'admin',
+                    },
+                ]);
+            });
 
-        socketRef.current = socket;
+            if (socketContext.id) {
+                socketContext.on(`${socketContext.id}`, (data) => {
+                    setMessages((prev) => [
+                        ...prev,
+                        {
+                            message: data.message,
+                            name: data.name,
+                            role: data.role,
+                            id: data.id,
+                        },
+                    ]);
+                });
 
-        return () => {
-            socketRef.current?.disconnect();
-        };
+                socketContext.on(`typing_admin_${socketContext.id}`, (data) => {
+                    if (data.isType === socketContext?.id) {
+                        setVisible(true);
+                    } else {
+                        setVisible(false);
+                    }
+                });
+
+                socketContext.on(`clear_typing_admin_${socketContext.id}`, (data) => {
+                    if (data.isType === socketContext.id) {
+                        setVisible(false);
+                    }
+                });
+            }
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        if (socketRef.current) {
-            socketRef.current.on('connect', () => {
-                console.log('id connected USER: ', socketRef.current?.id);
-
-                socketRef.current?.once(`init_user_${socketRef.current.id}`, (_) => {
-                    setMessages((prev) => [
-                        ...prev,
-                        {
-                            message:
-                                'Chúng tôi sẽ trả lời bạn sớm nhất có thể. Nếu chờ lâu bạn hãy liên hệ: 0396254427! Xin cảm ơn.',
-                            name: 'Van Hoang',
-                            role: 'admin',
-                        },
-                    ]);
-                });
-
-                if (socketRef.current?.id) {
-                    socketRef.current?.on(`${socketRef.current?.id}`, (data) => {
-                        setMessages((prev) => [
-                            ...prev,
-                            {
-                                message: data.message,
-                                name: data.name,
-                                role: data.role,
-                                id: data.id,
-                            },
-                        ]);
-                    });
-
-                    socketRef.current.on(`typing_admin_${socketRef.current.id}`, (data) => {
-                        if (data.isType === socketRef.current?.id) {
-                            setVisible(true);
-                        } else {
-                            setVisible(false);
-                        }
-                    });
-
-                    socketRef.current.on(`clear_typing_admin_${socketRef.current.id}`, (data) => {
-                        if (data.isType === socketRef.current?.id) {
-                            setVisible(false);
-                        }
-                    });
-                }
-            });
-
-            socketRef.current.on('disconnect', () => {
-                console.log('id disconnected: ', socketRef.current?.id);
-            });
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [socketRef.current]);
-
-    useEffect(() => {
-        if (socketRef.current?.id) {
+        if (isConnected) {
             if (value.trim().length > 0) {
-                socketRef.current?.emit('typing_user', socketRef.current?.id);
+                socketContext?.emit('typing_user', socketContext.id);
             } else {
-                socketRef.current?.emit('clear_typing_user', socketRef.current?.id);
+                socketContext.emit('clear_typing_user', socketContext.id);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
 
     const scrollToBottom = () => {
@@ -131,16 +109,13 @@ function ChatBox() {
 
     const handleSubmit = () => {
         if (value.trim().length > 0) {
-            socketRef.current?.emit('messageToAdmin', {
-                id: socketRef.current?.id,
+            socketContext.emit('messageToAdmin', {
+                id: socketContext.id,
                 name: 'Thuy cute',
                 role: 'user',
                 message: value,
             });
-            setMessages((prev) => [
-                ...prev,
-                { message: value, role: 'user', name: 'Thuy cute', id: socketRef.current?.id },
-            ]);
+            setMessages((prev) => [...prev, { message: value, role: 'user', name: 'Thuy cute', id: socketContext.id }]);
             setValue('');
             inputRef.current && inputRef.current.focus();
         }
