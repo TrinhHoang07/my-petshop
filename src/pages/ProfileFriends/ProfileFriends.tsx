@@ -16,7 +16,6 @@ import { Friended, TFriended, T_Customer, T_Customers, T_FriendGiveInvite } from
 import { HiMenu } from 'react-icons/hi';
 import { useSetRecoilState } from 'recoil';
 import { isMenuMobile } from '../../store';
-import { useAppContext } from '../../providers/AppProvider';
 import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
@@ -34,15 +33,16 @@ function ProfileFriends() {
     const [dataCustomers, setDataCustomers] = useState<T_Customer[]>([]);
     const [friends, setFriends] = useState<Friended[]>([]);
     const [isOpenFriendRequest, setIsOpenFriendRequest] = useState<boolean>(false);
-    const { isConnected } = useAppContext();
 
     useEffect(() => {
-        if (isConnected) {
-            socketContext.on('accept-friend-give', () => {
-                handleGetCountRequestFriend();
-                handleGetFriends();
-            });
-        }
+        socketContext.on('accept-friend-give', () => {
+            handleGetCountRequestFriend();
+            handleGetFriends();
+        });
+
+        return () => {
+            socketContext.off('accept-friend-give');
+        };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

@@ -29,17 +29,20 @@ function Description() {
             <div className={cx('contents')}>
                 <DescriptionItem
                     logo={dogImage}
-                    heading="Pets Shop"
+                    path="/dog"
+                    heading="Chó cảnh"
                     description="Bạn là người yêu quý động vật, hãy đến Mona shop nơi cung cấp các loại thú nuôi. Với đa dạng vật nuôi rất mong các bạn ghé thăm và tìm kiếm được con vật bạn yêu thích, rất mong được phục vụ quý khách."
                 />
                 <DescriptionItem
+                    path="/cat"
                     logo={catImage}
-                    heading="Pets Shop"
+                    heading="Mèo cảnh"
                     description="Dịch vụ chăm sóc thú nuôi với tác phong chuyên nghiệp các bạn hoàn toàn có thể yên tâm khi giao vật nuôi của các bạn cho chúng tôi. Chúng tôi rất mong được phục vụ quý khách."
                 />
                 <DescriptionItem
+                    path="/food"
                     logo={foodImage}
-                    heading="Pets Shop"
+                    heading="Đồ ăn"
                     description="Chuyên cung cấp các loại thức ăn cho vật nuôi đa dang phong phú. Cung cấp phụ kiện, đồ chơi cho từng loài vật nuôi khác nhau."
                 />
             </div>

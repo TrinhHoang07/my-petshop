@@ -6,7 +6,6 @@ import { useSessionContext } from '../../context/SessionContext';
 import { ApiService } from '../../axios/ApiService';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { Address, TPostCreateAddress, TPostUpdateAddress } from '../../models';
-import { useAppContext } from '../../providers/AppProvider';
 import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
@@ -36,7 +35,6 @@ function FormAddAddress(props: _T_Props) {
     const [values] = useSessionContext();
     const [typeAddress, setTypeAddress] = useState<string>('home');
     const apiService = new ApiService();
-    const { isConnected } = useAppContext();
 
     const {
         register,
@@ -69,12 +67,10 @@ function FormAddAddress(props: _T_Props) {
                             life: 3000,
                         });
 
-                        if (isConnected) {
-                            socketContext.emit('create-address', {
-                                id: values.user?.id,
-                                status: 'success',
-                            });
-                        }
+                        socketContext.emit('create-address', {
+                            id: values.user?.id,
+                            status: 'success',
+                        });
                     }
                 })
                 .catch((_) => {
@@ -107,12 +103,10 @@ function FormAddAddress(props: _T_Props) {
                             life: 3000,
                         });
 
-                        if (isConnected) {
-                            socketContext.emit('update-address', {
-                                id: values.user?.id,
-                                status: 'success',
-                            });
-                        }
+                        socketContext.emit('update-address', {
+                            id: values.user?.id,
+                            status: 'success',
+                        });
                     }
                 })
                 .catch((_) => {

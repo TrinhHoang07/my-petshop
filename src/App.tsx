@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { privateRoutes, publicRoutes } from './routes';
 import { PrivateRoute } from './components/PrivateRoute';
 import AppProvider from './providers/AppProvider';
+import { ChatBox } from './components/Layout/components/ChatBox';
 
 function App() {
     return (
@@ -48,6 +49,7 @@ function App() {
                     })}
                 </Routes>
             </BrowserRouter>
+            <ChatBox />
         </AppProvider>
     );
 }

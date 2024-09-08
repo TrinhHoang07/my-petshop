@@ -10,7 +10,6 @@ import { useSessionContext } from '../../../context/SessionContext';
 import { useSetRecoilState } from 'recoil';
 import { dataProfileUser } from '../../../store';
 import { FriendGiveInvite, T_FriendGiveInvite } from '../../../models';
-import { useAppContext } from '../../../providers/AppProvider';
 import { socketContext } from '../../../context/SocketContext';
 
 const cx = classNames.bind(styles);
@@ -25,7 +24,16 @@ function FriendRequest(props: _T_Props) {
     const apiService = new ApiService();
     const setDataProfileUser = useSetRecoilState(dataProfileUser);
     const [values] = useSessionContext();
-    const { isConnected } = useAppContext();
+
+    useEffect(() => {
+        socketContext.on('connect', () => {
+            /////
+        });
+
+        return () => {
+            socketContext.off('connect');
+        };
+    }, []);
 
     useEffect(() => {
         apiService.friendship
@@ -67,12 +75,10 @@ function FriendRequest(props: _T_Props) {
                         prev.filter((p: FriendGiveInvite) => p.friendship_id !== item.friendship_id),
                     );
 
-                    if (isConnected) {
-                        socketContext.emit('accept-friend', {
-                            id: item.friendship_customerInvite_id,
-                            status: 'success',
-                        });
-                    }
+                    socketContext.emit('accept-friend', {
+                        id: item.friendship_customerInvite_id,
+                        status: 'success',
+                    });
                 }
             })
             .catch((err) => console.error(err));

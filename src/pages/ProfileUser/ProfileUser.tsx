@@ -11,7 +11,6 @@ import { confirmDialog } from 'primereact/confirmdialog';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { useNavigate } from 'react-router-dom';
 import { socketContext } from '../../context/SocketContext';
-import { useAppContext } from '../../providers/AppProvider';
 
 const cx = classNames.bind(styles);
 
@@ -23,7 +22,6 @@ function ProfileUser() {
     const apiService = new ApiService();
     const navigate = useNavigate();
     const [values] = useSessionContext();
-    const { isConnected } = useAppContext();
 
     useEffect(() => {
         handleGetIdsInvited();
@@ -140,12 +138,10 @@ function ProfileUser() {
                         isFriend: true,
                     }));
 
-                    if (isConnected) {
-                        socketContext.emit('accept-friend', {
-                            id: data.id,
-                            status: 'success',
-                        });
-                    }
+                    socketContext.emit('accept-friend', {
+                        id: data.id,
+                        status: 'success',
+                    });
                 }
             })
             .catch((err) => console.error(err));

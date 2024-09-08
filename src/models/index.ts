@@ -366,6 +366,7 @@ export type Blog = {
     title: string;
     preview_url: string;
     description: string;
+    content: string;
     created_at: string;
 };
 

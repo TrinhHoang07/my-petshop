@@ -20,7 +20,6 @@ function DefaultLayout(props: TProps) {
                 <Footer />
             </div>
             <ScrollTop />
-            <ChatBox />
         </div>
     );
 }

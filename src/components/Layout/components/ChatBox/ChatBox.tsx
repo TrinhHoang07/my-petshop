@@ -8,8 +8,8 @@ import logo from '../../../../assets/images/logo-petshop.jpg';
 import cat from '../../../../assets/images/meoww.jpg';
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { TypingAdmin } from '../TypingAdmin';
-import { useAppContext } from '../../../../providers/AppProvider';
 import { socketContext } from '../../../../context/SocketContext';
+import { useAppContext } from '../../../../providers/AppProvider';
 
 const cx = classNames.bind(styles);
 
@@ -27,7 +27,6 @@ function ChatBox() {
     const mesRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const { isConnected } = useAppContext();
     const [messages, setMessages] = useState<TMes[]>([
         {
             role: 'admin',
@@ -35,6 +34,7 @@ function ChatBox() {
             message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Hoàng Trịnh!',
         },
     ]);
+    const { isConnected } = useAppContext();
 
     const lastMessage = useMemo(() => {
         return messages[messages.length - 1];
@@ -47,58 +47,63 @@ function ChatBox() {
     }, [messages, open]);
 
     useEffect(() => {
-        if (isConnected) {
-            socketContext?.once(`init_user_${socketContext.id}`, (_) => {
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        message:
-                            'Chúng tôi sẽ trả lời bạn sớm nhất có thể. Nếu chờ lâu bạn hãy liên hệ: 0396254427! Xin cảm ơn.',
-                        name: 'Van Hoang',
-                        role: 'admin',
-                    },
-                ]);
-            });
+        console.log(socketContext.id);
 
-            if (socketContext.id) {
-                socketContext.on(`${socketContext.id}`, (data) => {
-                    setMessages((prev) => [
-                        ...prev,
-                        {
-                            message: data.message,
-                            name: data.name,
-                            role: data.role,
-                            id: data.id,
-                        },
-                    ]);
-                });
+        socketContext?.once(`init_user_${socketContext.id}`, (_) => {
+            setMessages((prev) => [
+                ...prev,
+                {
+                    message:
+                        'Chúng tôi sẽ trả lời bạn sớm nhất có thể. Nếu chờ lâu bạn hãy liên hệ: 0396254427! Xin cảm ơn.',
+                    name: 'Van Hoang',
+                    role: 'admin',
+                },
+            ]);
+        });
 
-                socketContext.on(`typing_admin_${socketContext.id}`, (data) => {
-                    if (data.isType === socketContext?.id) {
-                        setVisible(true);
-                    } else {
-                        setVisible(false);
-                    }
-                });
+        socketContext.on(`${socketContext.id}`, (data) => {
+            console.log(data);
 
-                socketContext.on(`clear_typing_admin_${socketContext.id}`, (data) => {
-                    if (data.isType === socketContext.id) {
-                        setVisible(false);
-                    }
-                });
+            setMessages((prev) => [
+                ...prev,
+                {
+                    message: data.message,
+                    name: data.name,
+                    role: data.role,
+                    id: data.id,
+                },
+            ]);
+        });
+
+        socketContext.on(`typing_admin_${socketContext.id}`, (data) => {
+            if (data.isType === socketContext?.id) {
+                setVisible(true);
+            } else {
+                setVisible(false);
             }
-        }
+        });
+
+        socketContext.on(`clear_typing_admin_${socketContext.id}`, (data) => {
+            if (data.isType === socketContext.id) {
+                setVisible(false);
+            }
+        });
+
+        return () => {
+            socketContext.off(`init_user_${socketContext.id}`);
+            socketContext.off(`${socketContext.id}`);
+            socketContext.off(`typing_admin_${socketContext.id}`);
+            socketContext.off(`clear_typing_admin_${socketContext.id}`);
+        };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isConnected]);
 
     useEffect(() => {
-        if (isConnected) {
-            if (value.trim().length > 0) {
-                socketContext?.emit('typing_user', socketContext.id);
-            } else {
-                socketContext.emit('clear_typing_user', socketContext.id);
-            }
+        if (value.trim().length > 0) {
+            socketContext?.emit('typing_user', socketContext.id);
+        } else {
+            socketContext.emit('clear_typing_user', socketContext.id);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);

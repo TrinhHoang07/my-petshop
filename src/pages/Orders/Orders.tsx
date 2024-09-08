@@ -18,7 +18,6 @@ import { Address, TData, T_AddOrder, T_Payment, T_Payments, T_ProfileAddress } f
 import routesConfig from '../../config/routes';
 import { formatVND } from '../../Helper';
 import { AddressScreen } from '../../components/Layout/components/Address';
-import { useAppContext } from '../../providers/AppProvider';
 import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
@@ -32,6 +31,8 @@ function Orders() {
     const [init, setInit] = useState<boolean>(false);
     const [isChangeAddress, setIsChangeAddress] = useState<boolean>(false);
     const [statePay, setStatePay] = useState<string>('');
+    const [idsChecking, setIdsChecking] = useState<number[]>([]);
+    const [dataDones, setDataDones] = useState<any>({});
     const [vouchers, setVouchers] = useState<{
         ship: number;
         shop: number;
@@ -41,7 +42,6 @@ function Orders() {
     });
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [addressChoose, setAddressChoose] = useState<Address>();
-    const { isConnected } = useAppContext();
 
     const timer = useRef<any>();
 
@@ -61,6 +61,37 @@ function Orders() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        console.log('idddd: ', idsChecking);
+        console.log('data: ', dataDones);
+        if (idsChecking.length > 0 && Object.keys(dataDones).length === idsChecking.length) {
+            console.log('idsChecking: ', idsChecking);
+            console.log('dataDones: ', dataDones);
+
+            const checking = Object.values(dataDones).every((item: any) => item.is_success);
+
+            if (checking) {
+                setStatePay('success');
+                message?.toast?.current?.show({
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: 'Thanh toán thành công!',
+                    life: 4500,
+                });
+                clearInterval(timer.current);
+            } else {
+                setStatePay('error');
+                message?.toast?.current?.show({
+                    severity: 'error',
+                    summary: 'Có lỗi',
+                    detail: 'Thanh toán thất bại!',
+                    life: 4500,
+                });
+                clearInterval(timer.current);
+            }
+        }
+    }, [dataDones, idsChecking]);
 
     useEffect(() => {
         document.title = 'Mua sắm | Petshop chất lượng số 1 Việt Nam!';
@@ -108,62 +139,45 @@ function Orders() {
     }, [data]);
 
     const handleGetPaymentById = (response: { url: string; id: number[] }) => {
-        console.log(response.id);
-
-        let total: { is_success: boolean; message: string }[] = [];
-        if (response.id.length > 0) {
-            response.id.forEach((item) => {
-                apiService.payments
-                    .getPaymentById(`${item}`, values.user?.token ?? '')
-                    .then((res: T_Payment) => {
-                        if (res.message === 'success') {
-                            if (res.data.state === '00') {
-                                total.push({
+        response.id.forEach((item) => {
+            apiService.payments
+                .getPaymentById(`${item}`, values.user?.token ?? '')
+                .then((res: T_Payment) => {
+                    console.log('zzz', res);
+                    if (res.message === 'success') {
+                        console.log('es meseesserse');
+                        if (res.data.state === '00') {
+                            console.log('zzzz OKOKOKOK', res.data.state);
+                            setDataDones((prev: any) => ({
+                                ...prev,
+                                [res.data.id]: {
                                     is_success: true,
                                     message: 'success',
-                                });
-                            } else if (res.data.state === '03') {
-                                total.push({
+                                },
+                            }));
+                        } else if (res.data.state === '03') {
+                            setDataDones((prev: any) => ({
+                                ...prev,
+                                [res.data.id]: {
                                     is_success: false,
                                     message: 'error',
-                                });
-                            } else if (res.data.state === '97') {
-                                total.push({
+                                },
+                            }));
+                        } else if (res.data.state === '97') {
+                            setDataDones((prev: any) => ({
+                                ...prev,
+                                [res.data.id]: {
                                     is_success: false,
                                     message: 'failed',
-                                });
-                            }
+                                },
+                            }));
                         }
-                    })
-                    .catch((_) => {
-                        setStatePay('error');
-                    });
-            });
-        }
-
-        if (total.length === response.id.length) {
-            const checking = total.every((item: { is_success: boolean; message: string }) => item.is_success);
-
-            if (checking) {
-                setStatePay('success');
-                message?.toast?.current?.show({
-                    severity: 'success',
-                    summary: 'Thành công',
-                    detail: 'Thanh toán thành công!',
-                    life: 4500,
+                    }
+                })
+                .catch((_) => {
+                    setStatePay('error');
                 });
-                clearInterval(timer.current);
-            } else {
-                setStatePay('error');
-                message?.toast?.current?.show({
-                    severity: 'error',
-                    summary: 'Có lỗi',
-                    detail: 'Thanh toán thất bại!',
-                    life: 4500,
-                });
-                clearInterval(timer.current);
-            }
-        }
+        });
     };
 
     const handleRemoveFromCart = (id: number[]) => {
@@ -173,12 +187,10 @@ function Orders() {
                     .deleteToCart(`${item}`, `${values.user?.token}`)
                     .then((res: { message: string; code: number }) => {
                         if (res.message === 'success') {
-                            if (isConnected) {
-                                socketContext.emit('delete-to-cart', {
-                                    id: item,
-                                    status: 'success',
-                                });
-                            }
+                            socketContext.emit('delete-to-cart', {
+                                id: item,
+                                status: 'success',
+                            });
                         }
                     })
 
@@ -245,9 +257,11 @@ function Orders() {
                             if (res.url) {
                                 window.open(res.url);
 
+                                setIdsChecking(res.id);
+
                                 timer.current = setInterval(() => {
                                     handleGetPaymentById(res);
-                                }, 1500);
+                                }, 2000);
                             }
                         })
                         .catch((err) => {

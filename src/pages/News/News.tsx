@@ -1,23 +1,40 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './News.module.scss';
 import logo_1 from '../../assets/images/new_1.png';
-import logo_2 from '../../assets/images/new_2.jpg';
-import logo_3 from '../../assets/images/new_3.jpg';
-import logo_4 from '../../assets/images/new_4.jpg';
 import NewItem from './NewItem';
 import Search from './Search';
 import { NavBarNewsPage } from '../../components/Layout/components/NavBarNewsPage';
+import { ApiService } from '../../axios/ApiService';
+import { Blog, T_Blogs } from '../../models';
 
 const cx = classNames.bind(styles);
 
 function News() {
+    const apiService = new ApiService();
+    const [blogs, setBlogs] = useState<Blog[]>([]);
+
     useEffect(() => {
         document.title = 'Tin tức | Petshop chất lượng số 1 Việt Nam!';
         window.scrollTo({
             behavior: 'smooth',
             top: 0,
         });
+    }, []);
+
+    useEffect(() => {
+        apiService.blogs
+            .getBlogs()
+            .then((res: T_Blogs) => {
+                if (res.message === 'success') {
+                    setBlogs(res.data);
+                }
+            })
+            .catch((err) => {
+                console.error('Error: ', err);
+            });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -30,36 +47,15 @@ function News() {
                         <NavBarNewsPage />
                     </div>
                     <div className={cx('list-news')}>
-                        <NewItem
-                            logo={logo_1}
-                            title="Duis luctus elit nisi, et cursus magna pellentesque non."
-                            description="Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...]"
-                        />
-                        <NewItem
-                            logo={logo_2}
-                            title="Duis luctus elit nisi, et cursus magna pellentesque non. uctus elit nisi, et cursus magna pe"
-                            description="Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...] Chó con từ 2 tháng tuổi đến 6 t"
-                        />
-                        <NewItem
-                            logo={logo_3}
-                            title="Duis luctus elit nisi, et cursus magna pellentesque non."
-                            description="Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...]"
-                        />
-                        <NewItem
-                            logo={logo_4}
-                            title="Duis luctus elit nisi, et cursus magna pellentesque non."
-                            description="Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...]"
-                        />
-                        <NewItem
-                            logo={logo_4}
-                            title="Duis luctus elit nisi, et cursus magna pellentesque non."
-                            description="Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...]"
-                        />
-                        <NewItem
-                            logo={logo_4}
-                            title="Duis luctus elit nisi, et cursus magna pellentesque non."
-                            description="Chế độ ăn cho chó con Chó con từ 2 tháng tuổi đến 6 tháng [...]"
-                        />
+                        {blogs.map((item) => (
+                            <NewItem
+                                key={item.id}
+                                id={item.id}
+                                logo={item.preview_url ?? logo_1}
+                                title={item.title}
+                                description={item.description}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>

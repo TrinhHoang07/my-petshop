@@ -25,6 +25,11 @@
     text-decoration: none;
     color: #333;
     transition: all 0.2s ease-in-out;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
 
     &:hover {
         color: orange;

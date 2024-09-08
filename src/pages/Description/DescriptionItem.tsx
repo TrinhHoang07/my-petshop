@@ -1,12 +1,14 @@
 import classNames from 'classnames/bind';
 import styles from './Description.module.scss';
 import { Button } from '../../components/Button';
+import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 type TProps = {
     logo: any;
     heading: string;
     description: string;
+    path: string;
 };
 
 function DescriptionItem(props: TProps) {
@@ -17,9 +19,11 @@ function DescriptionItem(props: TProps) {
             </div>
             <h3 className={cx('heading-description-item')}>{props.heading}</h3>
             <p className={cx('description-p')}>{props.description}</p>
-            <div className={cx('btn')}>
-                <Button small={'true'}>CLICK ME</Button>
-            </div>
+            <Link to={props.path}>
+                <div className={cx('btn')}>
+                    <Button small={'true'}>CLICK ME</Button>
+                </div>
+            </Link>
         </div>
     );
 }

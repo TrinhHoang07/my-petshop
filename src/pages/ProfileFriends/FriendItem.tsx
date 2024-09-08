@@ -12,7 +12,6 @@ import { toSeoURL } from '../../Helper';
 import { useSetRecoilState } from 'recoil';
 import { dataProfileUser } from '../../store';
 import { FriendGiveInvite, Friended, TFriended, T_FriendGiveInvite } from '../../models';
-import { useAppContext } from '../../providers/AppProvider';
 import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
@@ -33,15 +32,16 @@ function FriendItem(props: _T_Props) {
     const [idsFriended, setIdsFriended] = useState<number[]>([]);
     const [idsGiveInvite, setIdsGiveInvite] = useState<number[]>([]);
     const setDataProfileUser = useSetRecoilState(dataProfileUser);
-    const { isConnected } = useAppContext();
 
     useEffect(() => {
-        if (isConnected) {
-            socketContext.on('accept-friend-give', () => {
-                handleGetIdsGiveInvited();
-                handleGetIdsFriended();
-            });
-        }
+        socketContext.on('accept-friend-give', () => {
+            handleGetIdsGiveInvited();
+            handleGetIdsFriended();
+        });
+
+        return () => {
+            socketContext.off('accept-friend-give');
+        };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -175,12 +175,10 @@ function FriendItem(props: _T_Props) {
             )
             .then((res: { message: string; statusCode: number }) => {
                 if (res.message === 'success') {
-                    if (isConnected) {
-                        socketContext.emit('accept-friend', {
-                            id: props.id_friend,
-                            status: 'success',
-                        });
-                    }
+                    socketContext.emit('accept-friend', {
+                        id: props.id_friend,
+                        status: 'success',
+                    });
                 }
             })
             .catch((err) => console.error(err));

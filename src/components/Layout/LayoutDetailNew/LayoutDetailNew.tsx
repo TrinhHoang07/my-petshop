@@ -75,7 +75,7 @@ function LayoutDetailNew() {
                                 <div
                                     className={cx('descriptions')}
                                     dangerouslySetInnerHTML={{
-                                        __html: data?.description ?? '',
+                                        __html: data?.content ?? '',
                                     }}
                                 ></div>
                             ) : (

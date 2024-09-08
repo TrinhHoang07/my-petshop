@@ -16,7 +16,6 @@ import { HiMenu } from 'react-icons/hi';
 import { useSetRecoilState } from 'recoil';
 import { isMenuMobile } from '../../store';
 import ProfileChatMobile from './ProfileChatMobile';
-import { useAppContext } from '../../providers/AppProvider';
 import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
@@ -30,7 +29,6 @@ function Profile() {
     const [inputValue, setInputValue] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isChatMobile, setIsChatMobile] = useState<boolean>(false);
-    const [init, setInit] = useState<boolean>(false);
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -38,56 +36,55 @@ function Profile() {
     const [stateParam, setStateParam] = useState<string>('');
     const paramSubmit = useDebounce(stateParam, App.DELAY_SEARCH);
     const [testData, setTestData] = useState<Message[]>([]);
-    const { isConnected } = useAppContext();
 
     useEffect(() => {
         setStateParam(params.id ?? '');
     }, [params]);
 
     useEffect(() => {
-        if (init && isConnected) {
-            socketContext.on(
-                `chat-message-user-give`,
-                (data: {
-                    id: number;
-                    conversation_: number;
-                    content: string;
-                    sender_: number;
-                    receiver_: number;
-                    cus_avatar_path: string;
-                }) => {
-                    setTestData((prev: Message[]) => [
-                        ...prev,
-                        {
-                            message_id: data.id,
-                            message_sender_id: data.sender_,
-                            cus_avatar_path: data.cus_avatar_path,
-                            message_content: data.content,
-                        },
-                    ]);
+        socketContext.on(
+            `chat-message-user-give`,
+            (data: {
+                id: number;
+                conversation_: number;
+                content: string;
+                sender_: number;
+                receiver_: number;
+                cus_avatar_path: string;
+            }) => {
+                setTestData((prev: Message[]) => [
+                    ...prev,
+                    {
+                        message_id: data.id,
+                        message_sender_id: data.sender_,
+                        cus_avatar_path: data.cus_avatar_path,
+                        message_content: data.content,
+                    },
+                ]);
 
-                    setConversations((prev: Conversation[]) => {
-                        const user = prev.find((item: Conversation) => item.conver_id === +data.conversation_);
-                        if (user) {
-                            return [
-                                {
-                                    ...user,
-                                    messages_content: data.content,
-                                },
-                                ...prev.filter((item: Conversation) => item.conver_id !== +data.conversation_),
-                            ];
-                        }
+                setConversations((prev: Conversation[]) => {
+                    const user = prev.find((item: Conversation) => item.conver_id === +data.conversation_);
+                    if (user) {
+                        return [
+                            {
+                                ...user,
+                                messages_content: data.content,
+                            },
+                            ...prev.filter((item: Conversation) => item.conver_id !== +data.conversation_),
+                        ];
+                    }
 
-                        return prev;
-                    });
-                },
-            );
-        }
+                    return prev;
+                });
+            },
+        );
 
-        setInit(true);
+        return () => {
+            socketContext.off(`chat-message-user-give`);
+        };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [init]);
+    }, []);
 
     useEffect(() => {
         apiService.chats
@@ -169,12 +166,10 @@ function Profile() {
                         };
                     }) => {
                         if (res.message === 'success') {
-                            if (isConnected) {
-                                socketContext.emit(`chat-message-user`, {
-                                    ...res.data,
-                                    cus_avatar_path: values.user?.avatar,
-                                });
-                            }
+                            socketContext.emit(`chat-message-user`, {
+                                ...res.data,
+                                cus_avatar_path: values.user?.avatar,
+                            });
 
                             setInputValue('');
                         }

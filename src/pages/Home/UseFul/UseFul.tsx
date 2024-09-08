@@ -10,14 +10,32 @@ import classNames from 'classnames/bind';
 import logo from '../../../assets/images/sleigh-bell.svg';
 import UseFulItem from './UseFulItem';
 import { Button } from '../../../components/Button';
-import avatar from '../../../assets/images/useful_1.jpg';
-import avatar_2 from '../../../assets/images/useful_2.jpg';
-import avatar_3 from '../../../assets/images/useful_3.jpg';
 import routesConfig from '../../../config/routes';
+import { ApiService } from '../../../axios/ApiService';
+import { useEffect, useState } from 'react';
+import { Blog, T_Blogs } from '../../../models';
 
 const cx = classNames.bind(styles);
 
 function UseFul() {
+    const apiService = new ApiService();
+    const [blogs, setBlogs] = useState<Blog[]>([]);
+
+    useEffect(() => {
+        apiService.blogs
+            .random()
+            .then((res: T_Blogs) => {
+                if (res.message === 'success') {
+                    setBlogs(res.data);
+                }
+            })
+            .catch((err) => {
+                console.error('Error: ', err);
+            });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <div className={cx('wrapper-useful')}>
             <Title logo={logo} title="THÔNG TIN HỮU ÍCH" />
@@ -47,54 +65,16 @@ function UseFul() {
                     modules={[Autoplay]}
                     className="mySwiper"
                 >
-                    <SwiperSlide>
-                        <UseFulItem
-                            path="news/detail/4"
-                            img={avatar}
-                            heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <UseFulItem
-                            path="news/detail/5"
-                            img={avatar_2}
-                            heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <UseFulItem
-                            path="news/detail/6"
-                            img={avatar_3}
-                            heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <UseFulItem
-                            path="news/detail/4"
-                            img={avatar}
-                            heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <UseFulItem
-                            path="news/detail/5"
-                            img={avatar_2}
-                            heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <UseFulItem
-                            path="news/detail/6"
-                            img={avatar_3}
-                            heading="IN RUTRUM TEMPUS PURUS, UT hsfhsdhfdshfhsdfsh"
-                            description="Kinh nghiệm nuôi chó con: Chọn chó con khỏe mạnh để nuôi Mọi người khi đi [...]"
-                        />
-                    </SwiperSlide>
+                    {blogs.map((item) => (
+                        <SwiperSlide key={item.id}>
+                            <UseFulItem
+                                path={`news/detail/${item.id}`}
+                                img={item.preview_url}
+                                heading={item.title}
+                                description={item.description}
+                            />
+                        </SwiperSlide>
+                    ))}
                 </Swiper>
             </div>
             <div className={cx('btn-more')}>

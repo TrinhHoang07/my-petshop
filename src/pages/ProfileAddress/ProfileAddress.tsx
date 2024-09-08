@@ -13,7 +13,6 @@ import { useSessionContext } from '../../context/SessionContext';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { Address, T_ProfileAddress } from '../../models';
-import { useAppContext } from '../../providers/AppProvider';
 import { socketContext } from '../../context/SocketContext';
 
 const cx = classNames.bind(styles);
@@ -28,38 +27,40 @@ function ProfileAddress() {
     const [values] = useSessionContext();
     const message = useConfirmToast();
     const apiService = new ApiService();
-    const { isConnected } = useAppContext();
 
     useEffect(() => {
-        if (isConnected) {
-            socketContext.on('create-address-give', (_) => {
-                if (values.isAuth) {
-                    apiService.address
-                        .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
-                        .then((res: T_ProfileAddress) => {
-                            if (res.message === 'success') {
-                                setAddresses((prev: Address[]) => {
-                                    return [...prev, res.data[res.data.length - 1]];
-                                });
-                            }
-                        })
-                        .catch((err) => console.error(err));
-                }
-            });
+        socketContext.on('create-address-give', (_) => {
+            if (values.isAuth) {
+                apiService.address
+                    .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
+                    .then((res: T_ProfileAddress) => {
+                        if (res.message === 'success') {
+                            setAddresses((prev: Address[]) => {
+                                return [...prev, res.data[res.data.length - 1]];
+                            });
+                        }
+                    })
+                    .catch((err) => console.error(err));
+            }
+        });
 
-            socketContext.on('update-address-give', (_) => {
-                if (values.isAuth) {
-                    apiService.address
-                        .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
-                        .then((res: T_ProfileAddress) => {
-                            if (res.message === 'success') {
-                                setAddresses(res.data);
-                            }
-                        })
-                        .catch((err) => console.error(err));
-                }
-            });
-        }
+        socketContext.on('update-address-give', (_) => {
+            if (values.isAuth) {
+                apiService.address
+                    .getAddressesById(values.user?.id.toString() ?? '', values.user?.token ?? '')
+                    .then((res: T_ProfileAddress) => {
+                        if (res.message === 'success') {
+                            setAddresses(res.data);
+                        }
+                    })
+                    .catch((err) => console.error(err));
+            }
+        });
+
+        return () => {
+            socketContext.off('create-address-give');
+            socketContext.off('update-address-give');
+        };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
