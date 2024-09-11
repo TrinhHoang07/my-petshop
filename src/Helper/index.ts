@@ -17,7 +17,7 @@ export const getNameFromStatus = (status: string) => {
     if (status === 'processing') return 'Đang xử lý';
     else if (status === 'shipping') return 'Đang giao';
     else if (status === 'finished') return 'Đã giao';
-    else if (status === 'refund') return 'Hoàn tiền';
+    else if (status === 'cancel') return 'Đã hủy';
     else return 'Xảy ra lỗi';
 };
 

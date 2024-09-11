@@ -82,7 +82,9 @@ export class ApiService {
     get orders() {
         const route = {
             addOrder: 'orders/create',
+            updateStatus: (orderId: string) => `orders/status/${orderId}`,
             getOrderById: (userId: string) => `orders/get-order-id/${userId}`,
+            getOrder: (orderId: string) => `orders/get-order/${orderId}`,
         };
 
         return {
@@ -92,8 +94,20 @@ export class ApiService {
                         Authorization: 'Bearer ' + token,
                     },
                 }),
+            updateStatus: (orderId: string, data: any, token: string) =>
+                AxiosClientApi.put(route.updateStatus(orderId), data, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
             getOrderById: (userId: string, token: string) =>
                 AxiosClientApi.get(route.getOrderById(userId), null, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                }),
+            getOrder: (orderId: string, token: string) =>
+                AxiosClientApi.get(route.getOrder(orderId), null, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
