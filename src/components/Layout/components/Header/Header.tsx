@@ -1,4 +1,4 @@
-import logo from '../../../../assets/images/logo-petshop.jpg';
+import logo from '../../../../assets/images/logo.png';
 import { BiSearch } from 'react-icons/bi';
 import { FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';

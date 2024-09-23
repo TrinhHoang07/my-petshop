@@ -26,7 +26,7 @@ function SliderItem(props: TProps) {
                         <p className={cx('description')}>{props.description}</p>
                     </div>
                     <Link to={routesConfig.shop} className={cx('btn')}>
-                        <Button large={'true'}>SHOP NOW</Button>
+                        <Button large={'true'}>CỬA HÀNG</Button>
                     </Link>
                 </div>
             </div>

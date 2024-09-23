@@ -21,7 +21,7 @@ function DescriptionItem(props: TProps) {
             <p className={cx('description-p')}>{props.description}</p>
             <Link to={props.path}>
                 <div className={cx('btn')}>
-                    <Button small={'true'}>CLICK ME</Button>
+                    <Button small={'true'}>XEM THÊM</Button>
                 </div>
             </Link>
         </div>

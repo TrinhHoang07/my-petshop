@@ -19,6 +19,7 @@ import routesConfig from '../../config/routes';
 import { formatVND } from '../../Helper';
 import { AddressScreen } from '../../components/Layout/components/Address';
 import { socketContext } from '../../context/SocketContext';
+import { OptionPayScreen } from '../../components/Layout/components/OptionPay';
 
 const cx = classNames.bind(styles);
 
@@ -30,6 +31,7 @@ function Orders() {
     const navigate = useNavigate();
     const [init, setInit] = useState<boolean>(false);
     const [isChangeAddress, setIsChangeAddress] = useState<boolean>(false);
+    const [isChangePay, setIsChangePay] = useState<boolean>(false);
     const [statePay, setStatePay] = useState<string>('');
     const [idsChecking, setIdsChecking] = useState<number[]>([]);
     const [dataDones, setDataDones] = useState<any>({});
@@ -38,10 +40,14 @@ function Orders() {
         shop: number;
     }>({
         shop: 100000,
-        ship: 0,
+        ship: 300000,
     });
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [addressChoose, setAddressChoose] = useState<Address>();
+    const [optionPay, setOptionPay] = useState<{ code: string; title: string }>({
+        code: 'hand_pay',
+        title: 'Thanh toán khi nhận hàng',
+    });
 
     const timer = useRef<any>();
 
@@ -63,12 +69,7 @@ function Orders() {
     }, []);
 
     useEffect(() => {
-        console.log('idddd: ', idsChecking);
-        console.log('data: ', dataDones);
         if (idsChecking.length > 0 && Object.keys(dataDones).length === idsChecking.length) {
-            console.log('idsChecking: ', idsChecking);
-            console.log('dataDones: ', dataDones);
-
             const checking = Object.values(dataDones).every((item: any) => item.is_success);
 
             if (checking) {
@@ -91,6 +92,8 @@ function Orders() {
                 clearInterval(timer.current);
             }
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataDones, idsChecking]);
 
     useEffect(() => {
@@ -114,7 +117,7 @@ function Orders() {
 
     const totalPay = useMemo(() => {
         if (totalMoney?.price) {
-            return totalMoney.price - totalMoney.length * vouchers.ship - totalMoney.length * vouchers.shop;
+            return totalMoney.price - totalMoney.length * vouchers.shop;
         }
 
         return 0;
@@ -214,69 +217,94 @@ function Orders() {
                 customer_id: values.user?.id,
                 product_id: item.id_product,
                 quantity: item.quantity,
+                address_id: addressChoose?.id,
                 price: item.price,
             }));
 
-            apiService.orders
-                .addOrder(dataPost, values.user?.token ?? '')
-                .then((res: T_AddOrder) => {
-                    if (res.message === 'success') {
-                        // delete from carts
-                        const idCarts = data.map((item) => item.id);
-                        handleRemoveFromCart(idCarts);
+            if (optionPay.code === 'online') {
+                apiService.orders
+                    .addOrder(dataPost, values.user?.token ?? '')
+                    .then((res: T_AddOrder) => {
+                        if (res.message === 'success') {
+                            // delete from carts
+                            const idCarts = data.map((item) => item.id);
+                            handleRemoveFromCart(idCarts);
 
-                        const dataPayments = res.data.map((item) => ({
-                            state: '99',
-                            order_id: item.id,
-                        }));
+                            const dataPayments = res.data.map((item) => ({
+                                state: '99',
+                                order_id: item.id,
+                            }));
+
+                            return apiService.payments
+                                .addPayment(dataPayments, values.user?.token ?? '')
+                                .then((res: T_Payments) => {
+                                    if (res.message === 'success') {
+                                        return res;
+                                    }
+                                })
+
+                                .catch((err) => console.error(err));
+                        }
+                    })
+                    .then((res) => {
+                        const idPayments = res?.data.map((item) => item.id);
 
                         return apiService.payments
-                            .addPayment(dataPayments, values.user?.token ?? '')
-                            .then((res: T_Payments) => {
-                                if (res.message === 'success') {
-                                    return res;
+                            .createVNPAY(
+                                {
+                                    amount: 1000000,
+                                    pay_id: idPayments,
+                                    // bankCode: 'VNPAYQR',
+                                },
+                                values.user?.token ?? '',
+                            )
+                            .then((res: { url: string; id: number[] }) => {
+                                if (res.url) {
+                                    window.open(res.url);
+
+                                    setIdsChecking(res.id);
+
+                                    timer.current = setInterval(() => {
+                                        handleGetPaymentById(res);
+                                    }, 2000);
                                 }
                             })
-
-                            .catch((err) => console.error(err));
-                    }
-                })
-                .then((res) => {
-                    const idPayments = res?.data.map((item) => item.id);
-
-                    return apiService.payments
-                        .createVNPAY(
-                            {
-                                amount: 1000000,
-                                pay_id: idPayments,
-                                // bankCode: 'VNPAYQR',
-                            },
-                            values.user?.token ?? '',
-                        )
-                        .then((res: { url: string; id: number[] }) => {
-                            if (res.url) {
-                                window.open(res.url);
-
-                                setIdsChecking(res.id);
-
-                                timer.current = setInterval(() => {
-                                    handleGetPaymentById(res);
-                                }, 2000);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log('error VNPAY: ' + err);
+                            .catch((err) => {
+                                console.log('error VNPAY: ' + err);
+                            });
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        message?.toast?.current?.show({
+                            severity: 'error',
+                            summary: 'Thất bại',
+                            detail: 'Đã xảy ra lỗi, vui lòng thử lại!',
+                            life: 3000,
                         });
-                })
-                .catch((err) => {
-                    console.error(err);
-                    message?.toast?.current?.show({
-                        severity: 'error',
-                        summary: 'Thất bại',
-                        detail: 'Đã xảy ra lỗi, vui lòng thử lại!',
-                        life: 3000,
                     });
-                });
+            } else {
+                apiService.orders
+                    .addOrder(dataPost, values.user?.token ?? '')
+                    .then((res: T_AddOrder) => {
+                        if (res.message === 'success') {
+                            // delete from carts
+                            const idCarts = data.map((item) => item.id);
+                            handleRemoveFromCart(idCarts);
+
+                            setStatePay('success');
+                        }
+                    })
+                    .catch((err) => {
+                        setStatePay('error');
+                        console.error(err);
+                        message?.toast?.current?.show({
+                            severity: 'error',
+                            summary: 'Thất bại',
+                            detail: 'Đã xảy ra lỗi, vui lòng thử lại!',
+                            life: 3000,
+                        });
+                    });
+            }
         } else {
             message?.toast?.current?.show({
                 severity: 'error',
@@ -296,6 +324,7 @@ function Orders() {
                 setChoose={setAddressChoose}
                 choose={addressChoose}
             />
+            <OptionPayScreen choose={optionPay} setChoose={setOptionPay} open={isChangePay} setOpen={setIsChangePay} />
             {!!statePay && (
                 <div className={cx('fixed-payment')}>
                     <div className={cx('wrapper-payment')}>
@@ -388,7 +417,7 @@ function Orders() {
                         </span>
                         <p>Voucher của Shop</p>
                     </div>
-                    <p className={cx('select-voucher')}>Chọn hoặc nhập mã</p>
+                    <p className={cx('select-voucher')}>{formatVND.format(vouchers.shop)}</p>
                 </div>
             </div>
             <div className={cx('shippp')}>
@@ -414,7 +443,7 @@ function Orders() {
                     </span>
                     <p>Voucher của shop</p>
                 </div>
-                <p className={cx('select-voucher')}>Chọn hoặc nhập mã</p>
+                <p className={cx('select-voucher')}>{formatVND.format(vouchers.shop)}</p>
             </div>
             <div className={cx('voucher-shop')}>
                 <div className={cx('heading')}>
@@ -423,7 +452,12 @@ function Orders() {
                     </span>
                     <p>Phương thức thanh toán</p>
                 </div>
-                <p className={cx('select-voucher')}>Chọn phương thức</p>
+                <p className={cx('select-voucher')}>
+                    {optionPay.title}{' '}
+                    <Button onClick={() => setIsChangePay(true)} small={'true'}>
+                        Thay đổi
+                    </Button>
+                </p>
             </div>
             <div className={cx('details-payments')}>
                 <div className={cx('heading-pay')}>

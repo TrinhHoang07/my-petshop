@@ -15,19 +15,19 @@ function Contact() {
                     <span>
                         <MdLocationPin color="orange" size="2.2rem" />
                     </span>
-                    <a href="#abc">72 Đường thiếu em, Quận ế, Hà Nội</a>
+                    <a href="#abc">72 Đường Giải Phóng, Hai Bà Trưng, Hà Nội</a>
                 </div>
                 <div className={cx('item-contact')}>
                     <span>
                         <RiPhoneFill color="orange" size="2.2rem" />
                     </span>
-                    <a href="tel:0396254427">0396254427</a>
+                    <a href="tel:0396254427">0967437465</a>
                 </div>
                 <div className={cx('item-contact')}>
                     <span>
                         <MdMail color="orange" size="2.2rem" />
                     </span>
-                    <a href="mailto:hoang0702bmw@gmail.com">hoang0702bmw@gmail.com</a>
+                    <a href="mailto:huyvutu@gmail.com">huyvutu@gmail.com</a>
                 </div>
                 <div className={cx('item-contact')}>
                     <span>

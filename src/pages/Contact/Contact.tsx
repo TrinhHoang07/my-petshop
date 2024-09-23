@@ -89,14 +89,14 @@ function Contact() {
                         <Title logo={logo} title="LIÊN HỆ VỚI CHÚNG TÔI" />
                         <div className={cx('description')}>
                             <p className={cx('description-p')}>
-                                Mona Media là công ty thiết kế website cao cấp có tuổi đời 8+ năm trong ngành.
+                                Petscorp là công ty thiết kế website cao cấp có tuổi đời 8+ năm trong ngành.
                             </p>
                             <p className={cx('description-p')}>
-                                Ngay từ những ngày đầu hoạt động, Mona Media đã chọn cho mình một phân khúc riêng, khác
+                                Ngay từ những ngày đầu hoạt động, Petscorp đã chọn cho mình một phân khúc riêng, khác
                                 biệt với hàng ngàn công ty thiết kế website trên thị trường: phân khúc của sự hiệu quả.
                             </p>
                             <p className={cx('description-p')}>
-                                Những website/phần mềm từ Mona Media luôn được tư vấn, phát triển, tối ưu nhằm mang lại
+                                Những website/phần mềm từ Petscorp luôn được tư vấn, phát triển, tối ưu nhằm mang lại
                                 hiệu quả rõ rệt cho hoạt động kinh doanh của doanh nghiệp.
                             </p>
                         </div>

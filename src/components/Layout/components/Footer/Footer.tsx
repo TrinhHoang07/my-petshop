@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import images from '../../../../assets/images/footer.png';
+import images from '../../../../assets/images/footerz.jpg';
 import Nav from './Nav';
 import ActionFooter from './ActionFooter';
 import Contact from './Contact';
@@ -20,7 +20,7 @@ function Footer() {
             </div>
             <div className={cx('author')}>
                 <p>
-                    © 2023. Design by Hoang Trinh <span>❤</span>
+                    © 2023. Design by Tu Huy <span>❤</span>
                 </p>
             </div>
         </footer>

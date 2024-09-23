@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import logo from '../../assets/images/logo-petshop.jpg';
+import logo from '../../assets/images/logo.png';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import routesConfig from '../../config/routes';
 import { useEffect, useRef, useState } from 'react';

@@ -82,14 +82,14 @@ $tablet-width: 1023px;
 .form-item {
     display: flex;
     flex-direction: column;
-    color: orange;
+    color: #000;
     font-size: 15px;
     padding: 8px 0;
 
     input {
         margin-top: 4px;
-        caret-color: orange;
-        color: orange;
+        caret-color: #333;
+        color: #333;
         outline: none;
         border: 1px solid #d7d7d7;
         padding: 12px 0 12px 12px;
@@ -99,8 +99,8 @@ $tablet-width: 1023px;
     textarea {
         margin-top: 4px;
         border-radius: 6px;
-        caret-color: orange;
-        color: orange;
+        caret-color: #333;
+        color: #333;
         outline: none;
         border: 1px solid #d7d7d7;
         min-height: 88px;

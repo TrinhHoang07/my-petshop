@@ -30,6 +30,7 @@ function ProfileBuys() {
             .getOrderById(`${values.user?.id}`, values.user?.token as string)
             .then((res: T_Orders) => {
                 if (res.message === 'success') {
+                    console.log('data Z: ', res.data);
                     setData(res.data);
                     setIsLoading(false);
                 }
@@ -42,7 +43,7 @@ function ProfileBuys() {
     return (
         <LayoutProfile>
             <div className={cx('profile-buys')}>
-                <FormDetailProduct productId={idDetail} setProductId={setIdDetail} />
+                <FormDetailProduct productId={idDetail} setProductId={setIdDetail} setData={setData} />
                 <div>
                     <span onClick={() => setState(true)} className={cx('back-btn-profile')}>
                         <HiMenu />

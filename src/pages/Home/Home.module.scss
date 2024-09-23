@@ -8,6 +8,7 @@
 
     img {
         width: 100%;
+        max-height: 380px;
         object-fit: cover;
     }
 }
@@ -16,14 +17,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
 }
 
 .banner-cat-1 {
     flex: 1;
     overflow: hidden;
+    border-radius: 10px;
 
     img {
         width: 100%;
+        height: 420px;
+        border-radius: 10px;
         object-fit: cover;
         transition: all 0.25s linear;
         cursor: pointer;
@@ -36,9 +41,12 @@
 .banner-cat-2 {
     flex: 1;
     overflow: hidden;
+    border-radius: 10px;
 
     img {
         width: 100%;
+        border-radius: 10px;
+        height: 420px;
         object-fit: cover;
         transition: all 0.25s linear;
         cursor: pointer;

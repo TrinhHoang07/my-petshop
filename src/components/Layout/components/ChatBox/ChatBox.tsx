@@ -4,12 +4,13 @@ import { BiMinus, BiHappy } from 'react-icons/bi';
 import { IoSend } from 'react-icons/io5';
 import { BsFillImageFill, BsDot } from 'react-icons/bs';
 import chatbox from '../../../../assets/images/chat-box.png';
-import logo from '../../../../assets/images/logo-petshop.jpg';
+import logo from '../../../../assets/images/logo.png';
 import cat from '../../../../assets/images/meoww.jpg';
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { TypingAdmin } from '../TypingAdmin';
 import { socketContext } from '../../../../context/SocketContext';
 import { useAppContext } from '../../../../providers/AppProvider';
+import { useSessionContext } from '../../../../context/SessionContext';
 
 const cx = classNames.bind(styles);
 
@@ -27,11 +28,12 @@ function ChatBox() {
     const mesRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [values] = useSessionContext();
     const [messages, setMessages] = useState<TMes[]>([
         {
             role: 'admin',
-            name: 'Van Hoang',
-            message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Hoàng Trịnh!',
+            name: 'Tu Huy',
+            message: 'Xin chào! Tôi là Vader, trợ lý ảo được phát triển và thiết kế by Tú Huy!',
         },
     ]);
     const { isConnected } = useAppContext();
@@ -54,8 +56,8 @@ function ChatBox() {
                 ...prev,
                 {
                     message:
-                        'Chúng tôi sẽ trả lời bạn sớm nhất có thể. Nếu chờ lâu bạn hãy liên hệ: 0396254427! Xin cảm ơn.',
-                    name: 'Van Hoang',
+                        'Chúng tôi sẽ trả lời bạn sớm nhất có thể. Nếu chờ lâu bạn hãy liên hệ: 0967437465! Xin cảm ơn.',
+                    name: 'Tu Huy',
                     role: 'admin',
                 },
             ]);
@@ -116,11 +118,14 @@ function ChatBox() {
         if (value.trim().length > 0) {
             socketContext.emit('messageToAdmin', {
                 id: socketContext.id,
-                name: 'Thuy cute',
+                name: values.user?.name ?? 'User Guest',
                 role: 'user',
                 message: value,
             });
-            setMessages((prev) => [...prev, { message: value, role: 'user', name: 'Thuy cute', id: socketContext.id }]);
+            setMessages((prev) => [
+                ...prev,
+                { message: value, role: 'user', name: 'User Guest', id: socketContext.id },
+            ]);
             setValue('');
             inputRef.current && inputRef.current.focus();
         }
@@ -152,7 +157,7 @@ function ChatBox() {
                 <div className={cx('preview-chat-box')}>
                     <div className={cx('container-preview')}>
                         <div className={cx('triangle-sharp')}></div>
-                        <h3> Admin - Hoàng</h3>
+                        <h3> Admin - Huy</h3>
                         {lastMessage.role === 'user' ? (
                             <p>Bạn: {lastMessage.message}</p>
                         ) : (
@@ -173,7 +178,7 @@ function ChatBox() {
                             <div className={cx('wrap-img')}>
                                 <img src={logo} alt="logo shop" />
                             </div>
-                            <h3 className={cx('heading')}>Chat với Hoàng</h3>
+                            <h3 className={cx('heading')}>Chat với Huy</h3>
                         </div>
                         <div onClick={() => setOpen(false)} className={cx('close-btn')}>
                             <BiMinus color="#ffffff" size={'2.5rem'} />

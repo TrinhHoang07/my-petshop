@@ -8,12 +8,14 @@ import { useSessionContext } from '../../context/SessionContext';
 import { formatVND, getNameFromStatus } from '../../Helper';
 import { useConfirmToast } from '../../context/ConfirmAndToastContext';
 import { confirmDialog } from 'primereact/confirmdialog';
+import { Divider } from 'primereact/divider';
 
 const cx = classNames.bind(styles);
 
 type _T_Props = {
     productId: number;
     setProductId: (value: number) => void;
+    setData: (data: any) => void;
 };
 
 function FormDetailProduct(props: _T_Props) {
@@ -52,6 +54,16 @@ function FormDetailProduct(props: _T_Props) {
                         .updateStatus(data.orders_id.toString(), { status: 'cancel' }, values.user?.token ?? '')
                         .then((res) => {
                             if (res.message === 'success') {
+                                props.setData((prev: any) => {
+                                    const dataZ = [...prev];
+                                    const item = dataZ.find((item) => item.orders_id === data.orders_id);
+                                    const index = dataZ.findIndex((item) => item.orders_id === data.orders_id);
+
+                                    if (item && index !== -1) {
+                                        dataZ[index] = { ...item, orders_status: 'cancel' };
+                                    }
+                                    return dataZ;
+                                });
                                 message?.toast?.current?.show({
                                     severity: 'success',
                                     summary: 'Thành công',
@@ -102,6 +114,23 @@ function FormDetailProduct(props: _T_Props) {
                                 <IoClose />
                             </span>
                         </div>
+                        <Divider align="center">
+                            <h5 style={{ fontSize: '20px', fontWeight: '500' }}>Thông tin khách hàng</h5>
+                        </Divider>
+                        <div style={{ marginBottom: '32px' }}>
+                            <p>
+                                <strong>Họ tên:</strong> {data?.address_full_name}
+                            </p>
+                            <p>
+                                <strong>SĐT:</strong> {data?.address_phone_number}
+                            </p>
+                            <p>
+                                <strong>Địa chỉ:</strong> {data?.address_main} {data.address_detail}
+                            </p>
+                        </div>
+                        <Divider align="center">
+                            <h5 style={{ fontSize: '20px', fontWeight: '500' }}>Thông tin sản phẩm</h5>
+                        </Divider>
                         <div className={cx('detail-product')}>
                             <div className={cx('detail-image')}>
                                 <img src={data?.product_preview_url} alt={data?.product_name} />

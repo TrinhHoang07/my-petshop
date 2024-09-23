@@ -11,10 +11,10 @@ const cx = classNames.bind(styles);
 function Flash() {
     return (
         <div className={cx('flash')}>
-            <FlashItem icon={<RxRocket />} title="FREE SHIPPING" description="All Order Over $150" line={true} />
-            <FlashItem icon={<TbPigMoney />} title="20% DISCOUNT" description="For First Order" line={true} />
-            <FlashItem icon={<MdPayment />} title="SECURE PAYMENT" description="Confirmed" line={true} />
-            <FlashItem icon={<ImGift />} title="AWESOME GIFT" description="Every Month" />
+            <FlashItem icon={<RxRocket />} title="MIỄN VẬN CHUYỂN" description="Cho tất cả đơn hàng" line={true} />
+            <FlashItem icon={<TbPigMoney />} title="GIẢM GIÁ TỚI 20%" description="Cho đơn hàng đầu tiên" line={true} />
+            <FlashItem icon={<MdPayment />} title="THANH TOÁN LINH HOẠT" description="Xác thực giao dịch" line={true} />
+            <FlashItem icon={<ImGift />} title="NHIỀU QUÀ TẶNG" description="Vào mỗi tháng" />
         </div>
     );
 }

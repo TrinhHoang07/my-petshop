@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './NavBarNewsPage.module.scss';
 import { ApiService } from '../../../../axios/ApiService';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Blog, T_Blogs } from '../../../../models';
 
 const cx = classNames.bind(styles);
@@ -31,8 +31,8 @@ function NavBarNewsPage() {
             <h2 className={cx('bar-heading')}>BÀI VIẾT MỚI</h2>
             <div className={cx('bar-wrapper')}>
                 {blogs.map((item, index) => (
-                    <>
-                        <div key={item.id} className={cx('bar-item')}>
+                    <React.Fragment key={item.id}>
+                        <div className={cx('bar-item')}>
                             <div className={cx('thumbnail-bar')}>
                                 <img src={item.preview_url} alt="bar item" />
                             </div>
@@ -41,7 +41,7 @@ function NavBarNewsPage() {
                             </Link>
                         </div>
                         {index !== blogs.length - 1 && <div className={cx('spacer')}></div>}
-                    </>
+                    </React.Fragment>
                 ))}
             </div>
         </div>

@@ -23,9 +23,14 @@ type TProps = {
 
 function LayoutDetailProduct(props: TProps) {
     const [quantity, setQuantity] = useState<number>(1);
+    const [stateCount, setStateCount] = useState<string>('');
     const [infoUser] = useSessionContext();
     const message = useConfirmToast();
     const apiService = new ApiService();
+
+    useEffect(() => {
+        setStateCount(`Số lượng trong kho: ${props.data?.quantity ?? 0}`);
+    }, [props.data]);
 
     const data = [
         {
@@ -160,7 +165,21 @@ function LayoutDetailProduct(props: TProps) {
                                         <p className={cx('p_2')}>{quantity}</p>
                                         <p
                                             onClick={() => {
-                                                setQuantity((prev) => prev + 1);
+                                                setQuantity((prev) => {
+                                                    if (prev + 1 > (props.data?.quantity as number)) {
+                                                        message?.toast?.current?.show({
+                                                            severity: 'error',
+                                                            summary: 'Có lỗi',
+                                                            detail: 'Vượt quá số lượng sản phẩm có tron kho!',
+                                                            life: 1500,
+                                                        });
+                                                    }
+                                                    if (prev >= (props.data?.quantity as number)) {
+                                                        return prev;
+                                                    } else {
+                                                        return prev + 1;
+                                                    }
+                                                });
                                             }}
                                             className={cx('p_3')}
                                         >
@@ -171,6 +190,7 @@ function LayoutDetailProduct(props: TProps) {
                                         <button onClick={handleAddToCart}>THÊM VÀO GIỎ</button>
                                     </div>
                                 </div>
+                                <p style={{ paddingTop: '6px', fontSize: '12px' }}>{stateCount}</p>
                                 <div className={cx('line-hint')}></div>
                                 <p className={cx('note')}>Danh mục: {getNameFromType(props.data.type)}</p>
                             </div>

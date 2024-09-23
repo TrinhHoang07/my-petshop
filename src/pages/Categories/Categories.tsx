@@ -60,9 +60,9 @@ function Categories() {
                         }));
 
                         setData(result);
-                        setIsLoading(false);
                     }
                 }
+                setIsLoading(false);
             })
             .catch((err) => console.error(err));
 

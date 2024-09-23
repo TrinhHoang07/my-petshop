@@ -325,12 +325,14 @@ export type Orders = {
     orders_quantity: number;
     orders_status: string;
     orders_price: number;
-    customer_address: string;
     customer_avatar_path: string;
     customer_birth_date: string;
     customer_gender: string;
     customer_name: string;
-    customer_phone_number: string;
+    address_phone_number: string;
+    address_full_name: string;
+    address_main: string;
+    address_detail: string;
     product_color: string;
     product_description: string;
     product_name: string;

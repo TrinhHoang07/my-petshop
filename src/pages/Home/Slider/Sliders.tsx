@@ -45,28 +45,28 @@ function Sliders() {
                 <SwiperSlide>
                     <SliderItem
                         url={img_3}
-                        title="MY LIFE"
-                        heading="LOVE DOGS"
-                        subheading="BOSS LEAVES A LOT OF FOOTPRINTS"
-                        description="A man has 3 loyal friends in his life: a good wife, a dog raised since he was a baby and some money of his own"
+                        title="TÌNH YÊU"
+                        heading="THÚ CƯNG"
+                        subheading="BOSS ĐỂ LẠI NHIỀU DẤU DÂN"
+                        description="Một người đàn ông có 3 người bạn chung thủy trong đời: một người vợ hiền, một chú chó được nuôi từ nhỏ và một ít tiền riêng"
                     />
                 </SwiperSlide>
                 <SwiperSlide>
                     <SliderItem
                         url={img_1}
-                        title="EMPEROR STORY"
-                        heading="LOVE CATS"
-                        subheading="FROM 2002 TO 2015 AND NOW"
-                        description="The world would be filled with love if everyone had the ability to love unconditionally like dogs. Do you like cats?"
+                        title="ĐÁNG YÊU"
+                        heading="CHÚ CHÓ"
+                        subheading="TỪ 2002 ĐẾN 2024 VÀ HIỆN TẠI"
+                        description="Thế giới sẽ tràn ngập tình yêu nếu mọi người đều có khả năng yêu thương vô điều kiện như những chú chó. Bạn có thích mèo không?"
                     />
                 </SwiperSlide>
                 <SwiperSlide>
                     <SliderItem
                         url={img_2}
-                        title="FRIENDLY"
-                        heading="MY LOVE"
-                        subheading="ARE YOU WILLING TO LOVE ME"
-                        description="The dog by your side is the only thing on earth that loves you more than its own life. Do you like them?"
+                        title="THÂN THIỆN"
+                        heading="CHÚ MÈO"
+                        subheading="BẠN CÓ SẴN SÀNG YÊU TÔI KHÔNG"
+                        description="Con chó bên cạnh bạn là điều duy nhất trên trái đất yêu bạn hơn cả mạng sống của nó. Bạn có thích chúng không?"
                     />
                 </SwiperSlide>
             </Swiper>
